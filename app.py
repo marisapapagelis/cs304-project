@@ -3,30 +3,23 @@ from flask import (Flask, render_template, make_response, url_for, request,
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
-# one or the other of these. Defaults to MySQL (PyMySQL)
-# change comment characters to switch to SQLite
-
 import cs304dbi as dbi
-# import cs304dbi_sqlite3 as dbi
-#hi this is a test from marisa
 
 import random
 
-app.secret_key = 'your secret here'
-# replace that with a random key
+app.secret_key = 'DoorToDoor'
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                           '0123456789'))
                            for i in range(20) ])
 
-# This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 @app.route('/')
 def index():
-    return render_template('main.html',title='Hello')
+    return render_template('main.html',title='Welcome')
 
-@app.route('/greet/', methods=["GET", "POST"])
+@app.route('//', methods=["GET", "POST"])
 def greet():
     if request.method == 'GET':
         return render_template('greet.html', title='Customized Greeting')
