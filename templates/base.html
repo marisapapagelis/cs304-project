@@ -24,20 +24,27 @@
                 <option value="company">company</option>
             </select>
     </label>
+        <label for="industry">Industry</label></td>
+               <select id="industry" name="Industry" required>
+                        <option value="">select</option>
+                        <option value="ITH">Information Technology</option>
+                        <option value="HEL">Health Care</option>
+                        <option value="FIN">Financials</option>
+                        <option value="CON">Consumer Discretionary</option>
+                        <option value="COM">Communication Services</option>
+                        <option value="IND">Industrials</option>
+                        <option value="STA">Consumer Staples</option>
+                        <option value="ENG">Energy</option>
+                        <option value="UTL">Utilities</option>
+                        <option value="REA">Real Estate</option>
+                        <option value="MAT">Materials</option>
+            </select>
     <input type="submit" value="search"></p>
 </form>
     
-<form method=POST action="/query/">
-    <label for="menu-tt">Search by Industry:</label>
-    <select name="menu-tt">
-        
-        {% for item in list %}
-        <option value={{item[0]}}>{{item[0]}}</option>
-        {% endfor %}
-       
-    </select>
-    <input type="submit" name="submit-btn" value="Choose">
-</form>
+
+    
+  
     
 {% block content %} {% endblock %}  
 
