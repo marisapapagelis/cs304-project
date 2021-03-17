@@ -2,42 +2,46 @@
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
-    <!-- for mobile-friendly pages -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name=author content="">
-    <title>{{ page_title }}</title>
-    <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
-    {% block head_stuff %} {% endblock %}
+    <meta name=author content="Marisa, Luiza, Mehar, Nina">
+    <title>Welcome page</title>
+    <link rel='stylesheet' href="../static/style.css" type="text/css">
 </head>
 <body>
+<main>
+<div class = "box">
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div id="messages">
-  {% for msg in messages %}
-  <p>{{msg}}</p>
-  {% endfor %}
+<h1>DoorToDoor</h1>
+    <h2>I'll open your door if you open mine</h2>
+
+    <p> Search for almost anything!</p>
+    
+<form class="search" method="GET" action="/query/">
+    <p><label> Search by Name: <input type="text" required name="query"></label>
+    <label>kind
+            <select required name="kind">
+                <option value="">choose one</option>
+                <option value="person">person</option>
+                <option value="company">company</option>
+            </select>
+    </label>
+    <input type="submit" value="search"></p>
+</form>
+    
+<form method=POST action="/query/">
+    <label for="menu-tt">Search by Industry:</label>
+    <select name="menu-tt">
+        
+        {% for item in list %}
+        <option value={{item[0]}}>{{item[0]}}</option>
+        {% endfor %}
+       
+    </select>
+    <input type="submit" name="submit-btn" value="Choose">
+</form>
+    
+{% block content %} {% endblock %}  
+
 </div>
-{% endif %}
-{% endwith %}
-            
-{% block nav %}
-<nav>
-  <ul>
-    <li><a href="{{url_for('index')}}">home</a></li>
-    <li><a href="{{url_for('greet')}}">greet</a></li>
-    <li><a href="{{url_for('testform')}}">testform</a></li>
-  </ul>
-</nav>
-{% endblock %}
-
-{% block main_content %}
-<h1>Welcome!</h1>
-{% endblock %}
-
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  {% block end_scripts %}
-  {% endblock %}
-  
+</main>
 </body>
 </html>
