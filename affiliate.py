@@ -20,9 +20,7 @@ def affiliate(username):
     Org1= usernow['org1']
     Org2= usernow['org1']
     Org3= usernow['org1']
-    if request.method == 'GET':
-        return render_template('affiliate-page.html',  name=user_name, 
+    return render_template('affiliate-page.html',  name=user_name, 
                                 username=userid, org1=org1, org2=org2,org3=org3,
                                 description=None, reps=reps_iterate)
-    else:
-        return redirect(url_for('jobs', comp_id=comp_id))
+ 
