@@ -21,7 +21,9 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-@app.route('/company/<comp_id>')
+comp_id=1
+
+@app.route('/company/<comp_id>', methods=['GET', 'POST'])
 def company(comp_id):
     #Set up connection.
     conn = dbi.connect()
@@ -45,11 +47,15 @@ def company(comp_id):
     curs3.execute("select username, name from company_rep where comp_id=%s", [comp_id])
     reps_iterate = curs3.fetchall()
 
-    return render_template('company.html', name=comp_name, 
-                            iid=iid, location=location, ind_name=ind_name,
-                            description=None, reps=reps_iterate)
+    if request.method == 'GET':
+        return render_template('company.html', comp_id=comp_id, name=comp_name, 
+                                iid=iid, location=location, ind_name=ind_name,
+                                description=None, reps=reps_iterate)
+    else:
+        return redirect(url_for('jobs', comp_id=comp_id))
 
 @app.route('/company/<comp_id>/jobs/')
+def jobs(comp_id):
     #Set up connection.
     conn = dbi.connect()
     #Create cursor to pull data from the company table.
@@ -57,19 +63,19 @@ def company(comp_id):
     curs4.execute("select comp_name from company where comp_id = %s", [comp_id])
     res4 = curs4.fetchone()
     #Assign variables.
-    comp_name = res['comp_name']
+    comp_name = res4['comp_name']
     #Create table of Jobs.
     curs5 = dbi.dict_cursor(conn) 
     curs5.execute("select jid, title, qual1, qual2, qual3, app_link from jobs where comp_id=%s", [comp_id])
     jobs_iterate = curs5.fetchall()
 
-    return render_template('jobs.html', name=comp_name, jobs=jobs_iterate)
+    return render_template('jobs.html', comp_id=comp_id, name=comp_name, jobs=jobs_iterate)
     
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' 
+    db_to_use = 'ngoodman_db' 
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

@@ -1,14 +1,13 @@
-
 {% extends "base.html" %}
 
 {% block content %}
 
 <h1>{{name}}</h1>
 
-<p>Industry Tag: {{ind_name}} ({{iid}})</p>
+<p>Industry Tag: {{ind_name}} (Industry ID: {{iid}})</p>
 <p>Current Locations: {{location}}</p>
 
-<p>{{description}}</p>
+<p>Description: {{description}}</p>
 
 <p>Your company representatives are:</p>
 
@@ -25,7 +24,8 @@
     {% endfor %}
 </table>
 
-<p>Check out all jobs posted by {{name}}</p>
+<br>
+<p>Click below to see a list of all jobs posted by {{name}}.</p>
 <form method="post" action="">
     <p><input type="submit" value="See Jobs"></p>
 </form>
