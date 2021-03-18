@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{name}}</h1>
+
+<p>Industry Tag: {{ind_name}} ({{iid}})</p>
+<p>Current Locations: {{location}}</p>
+
+<p>{{description}}</p>
+
+<p>Your company representatives are:</p>
+
+<table style="width:100%">
+    <tr>
+      <th>Username</th>
+      <th>Name</th>
+    </tr>
+    {% for username, name in reps %}
+        <tr>
+            <td>{{username}}</td>
+            <td>{{name}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<p>Check out all jobs posted by {{name}}</p>
+<form method="post" action="">
+    <p><input type="submit" value="See Jobs"></p>
+</form>
+
+{% endblock %} 

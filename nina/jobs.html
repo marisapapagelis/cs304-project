@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{name}}</h1>
+
+<p>All job listings for {{name}}</p>
+
+<table style="width:100%">
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Education Level</th>
+      <th>Minimum GPA</th>
+      <th>Skills</th>
+      <th>Application Link</th>
+    </tr>
+    {% for jid, title, qual1, qual2, qual3, app_link in jobs %}
+        <tr>
+            <td>{{jid}}</td>
+            <td>{{title}}</td>
+            <td>{{qual1}}</td>
+            <td>{{qual2}}</td>
+            <td>{{qual3}}</td>
+            <td>{{app_link}}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %} 
