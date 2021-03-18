@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1>Add New Job Posting</h1>
+<p> <a href="{{ url_for ('recruiter', username = username)}}">Return to Profile</a>.</p>
+
+    
+    <tr> 
+    <td>
+    <label for="Event"> Event Name</label>
+    <input name="event" id="event" type="text" />
+    </td>
+
+    <td><label for="description"> Event Description</label>
+    <input name="desc" id="jobtitle" type="text" /> </td>
+
+    <td >
+    <label for="date">Highest Level of Education Achieved </label>
+    <input name="date" id="date" type="text" />
+    </td> 
+
+    <td> 
+    <label for="start_time">Minimum GPA </label>
+    <input name="stime" id="stime" type="text" />
+    </td> 
+
+    <td> <label for="end_time"> Technical Skills Required </label>
+    <input name="etime" id="etime" type="text" /> </td>
+
+    <td> <label for="location"> Technical Skills Required </label>
+    <input name="location" id="location" type="text" /> </td>
+
+    <td><input type="submit" value="submit"></td>
+</tr>       
+{% endblock %}
