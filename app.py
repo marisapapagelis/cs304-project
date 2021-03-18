@@ -3,64 +3,83 @@ from flask import (Flask, render_template, make_response, url_for, request,
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
+# one or the other of these. Defaults to MySQL (PyMySQL)
+# change comment characters to switch to SQLite
+
 import cs304dbi as dbi
+# import cs304dbi_sqlite3 as dbi
 
 import random
 
-app.secret_key = 'DoorToDoor'
+app.secret_key = 'your secret here'
+# replace that with a random key
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                           '0123456789'))
                            for i in range(20) ])
 
+# This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-@app.route('/')
-def index():
-    return render_template('main.html',title='Welcome')
+comp_id=1
 
-@app.route('//', methods=["GET", "POST"])
-def greet():
+@app.route('/company/<comp_id>', methods=['GET', 'POST'])
+def company(comp_id):
+    #Set up connection.
+    conn = dbi.connect()
+    #Create cursor to pull data from the company table.
+    curs = dbi.dict_cursor(conn)
+    curs.execute("select * from company where comp_id = %s", [comp_id])
+    res = curs.fetchone()
+    #Assign variables.
+    comp_name = res['comp_name']
+    iid = res['iid']
+    location = res['locations']
+    #Create second cursor to find industry name.
+    curs1 = dbi.dict_cursor(conn)
+    curs1.execute("select ind_name from industry where iid = %s", [iid])
+    res1 = curs1.fetchone()
+    #Assign variables.
+    ind_name = res1['ind_name']
+
+    #Create table of Company Representatives.
+    curs3 = dbi.dict_cursor(conn)
+    curs3.execute("select username, name from company_rep where comp_id=%s", [comp_id])
+    reps_iterate = curs3.fetchall()
+
     if request.method == 'GET':
-        return render_template('greet.html', title='Customized Greeting')
+        return render_template('company.html', comp_id=comp_id, name=comp_name, 
+                                iid=iid, location=location, ind_name=ind_name,
+                                description=None, reps=reps_iterate)
     else:
-        try:
-            username = request.form['username'] # throws error if there's trouble
-            flash('form submission successful')
-            return render_template('greet.html',
-                                   title='Welcome '+username,
-                                   name=username)
+        return redirect(url_for('jobs', comp_id=comp_id))
 
-        except Exception as err:
-            flash('form submission error'+str(err))
-            return redirect( url_for('index') )
+@app.route('/company/<comp_id>/jobs/')
+def jobs(comp_id):
+    #Set up connection.
+    conn = dbi.connect()
+    #Create cursor to pull data from the company table.
+    curs4 = dbi.dict_cursor(conn)
+    curs4.execute("select comp_name from company where comp_id = %s", [comp_id])
+    res4 = curs4.fetchone()
+    #Assign variables.
+    comp_name = res4['comp_name']
+    #Create table of Jobs.
+    curs5 = dbi.dict_cursor(conn) 
+    curs5.execute("select jid, title, qual1, qual2, qual3, app_link from jobs where comp_id=%s", [comp_id])
+    jobs_iterate = curs5.fetchall()
 
-@app.route('/formecho/', methods=['GET','POST'])
-def formecho():
-    if request.method == 'GET':
-        return render_template('form_data.html',
-                               method=request.method,
-                               form_data=request.args)
-    elif request.method == 'POST':
-        return render_template('form_data.html',
-                               method=request.method,
-                               form_data=request.form)
-    else:
-        # maybe PUT?
-        return render_template('form_data.html',
-                               method=request.method,
-                               form_data={})
-
-@app.route('/testform/')
-def testform():
-    # these forms go to the formecho route
-    return render_template('testform.html')
+    return render_template('jobs.html', comp_id=comp_id, name=comp_name, jobs=jobs_iterate)
 
 
+    
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
-    dbi.use('wmdb') # or whatever db
+    # setting this variable to mehar's database since that is where we made the ddl
+    db_to_use = 'ngoodman_db' 
+    dbi.use(db_to_use)
+    print('will connect to {}'.format(db_to_use))
 
 if __name__ == '__main__':
     import sys, os
