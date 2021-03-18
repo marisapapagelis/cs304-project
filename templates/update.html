@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Please fill in the necessary fields and update/delete
+
+    This is my update form from crud, we can't change this until I see the forms created for our project
+</p>
+
+<form id = 'update-form' method=POST action="/update/{{movie_tt}}">
+    <table>
+      <tr>
+        <td><label for="movie-title">Title</label></td>
+        <td><input name='movie-title' value={{movie_title}}></td> 
+      </tr>
+      <tr>
+        <td><label for="movie-tt">Movie id</label></td>
+        <td><input name='movie-tt' value={{movie_tt}}></td>
+      </tr>
+      <tr>
+        <td><label for="movie-release">Release year</label></td>
+        <td><input name='movie-release' value={{movie_release}}></td>
+      </tr>
+      <tr>
+        <td><label for="movie-addedby">Added by</label></td>
+        <td><input name='movie-addedby' value={{movie_addedby}}></td>
+      </tr>
+      <tr>
+        <td><label for="movie-director">Director ID</label></td>
+        <td><input name='movie-director' value={{movie_director}}></td>
+      </tr>
+      <tr>
+        <td><label for="movie-director-name">Director</label></td>
+        <td><input name='movie-director-name' value={{movie_director_name}}></td>
+      </tr>
+    </table>
+    <input type="submit" name="submit" value="update">
+    <input type="submit" name="submit" value="delete">
+  </form>
+{% endblock %}
