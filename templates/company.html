@@ -7,8 +7,6 @@
 <p>Industry Tag: {{ind_name}} (Industry ID: {{iid}})</p>
 <p>Current Locations: {{location}}</p>
 
-<p>Description: {{description}}</p>
-
 <p>Your company representatives are:</p>
 
 <table style="width:100%">
@@ -16,10 +14,10 @@
       <td>Username</td>
       <td>Name</td>
     </tr>
-    {% for username, name in reps %}
+    {% for rep in reps %}
         <tr>
-            <td>{{username}}</td>
-            <td>{{name}}</td>
+            <td>{{rep.username}}</td>
+            <td>{{rep.name}}</td>
         </tr>
     {% endfor %}
 </table>

@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h1>{{name}}</h1>
+<h1>{{comp_name}}</h1>
 
-<p>All job listings for {{name}}</p>
+<p>All job listings for {{comp_name}}</p>
 
 <table style="width:100%">
     <tr>
@@ -14,15 +14,17 @@
       <td>Minimum GPA</td>
       <td>Skills</td>
       <td>Application Link</td>
+      <td>Status</td>
     </tr>
-    {% for jid, title, qual1, qual2, qual3, app_link in jobs %}
+    {% for job in jobs %}
         <tr>
             <td>{{jid}}</td>
             <td>{{title}}</td>
-            <td>{{qual1}}</td>
-            <td>{{qual2}}</td>
-            <td>{{qual3}}</td>
+            <td>{{q1}}</td>
+            <td>{{q2}}</td>
+            <td>{{q3}}</td>
             <td>{{app_link}}</td>
+            <td>{{status}}</td>
         </tr>
     {% endfor %}
 </table>

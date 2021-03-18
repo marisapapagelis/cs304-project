@@ -29,51 +29,33 @@ username_welles='mars'
 
 @app.route('/company/<comp_id>', methods=['GET', 'POST'])
 def company(comp_id):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the company table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from company where comp_id = %s", [comp_id])
-    res = curs.fetchone()
-    #Assign variables.
+    res= company.get_company(conn,comp_id)
     comp_name = res['comp_name']
     iid = res['iid']
     location = res['locations']
-    #Create second cursor to find industry name.
-    curs1 = dbi.dict_cursor(conn)
-    curs1.execute("select ind_name from industry where iid = %s", [iid])
-    res1 = curs1.fetchone()
-    #Assign variables.
-    ind_name = res1['ind_name']
-
-    #Create table of Company Representatives.
-    curs3 = dbi.dict_cursor(conn)
-    curs3.execute("select username, name from company_rep where comp_id=%s", [comp_id])
-    reps_iterate = curs3.fetchall()
-
+    ind_name = res['ind_name']
+    reps=company.get_rep()
     if request.method == 'GET':
-        return render_template('company.html', comp_id=comp_id, name=comp_name, 
-                                iid=iid, location=location, ind_name=ind_name,
-                                description=None, reps=reps_iterate)
+        return render_template('company.html', comp_id=comp_id, name=comp_name, ind_name=ind_name,
+                                iid=iid, location=location, ind_name=ind_name, reps=reps)
     else:
         return redirect(url_for('jobs', comp_id=comp_id))
 
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the company table.
-    curs4 = dbi.dict_cursor(conn)
-    curs4.execute("select comp_name from company where comp_id = %s", [comp_id])
-    res4 = curs4.fetchone()
-    #Assign variables.
-    comp_name = res4['comp_name']
+    jobs=jobs.get_jobs(conn,comp_id)
+    comp_name = jobs['comp_name']
+    jid=jobs['jid']
+    title = jobs['title']
+    jid = jobs['jid']
+    comp_id = jobs['comp_id']
+    status = jobs['job_status']
+    q1 = jobs['qual1']
+    q2 = jobs['qual2']
+    q3 = jobs['qual3']
+    app = jobs['app_link']
     #Create table of Jobs.
-    curs5 = dbi.dict_cursor(conn) 
-    curs5.execute("select jid, title, qual1, qual2, qual3, app_link from jobs where comp_id=%s", [comp_id])
-    jobs_iterate = curs5.fetchall()
-
-    return render_template('jobs.html', comp_id=comp_id, name=comp_name, jobs=jobs_iterate)
+    return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app=app_link)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
