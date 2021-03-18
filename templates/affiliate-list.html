@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{affiliate}}</h1>
+
+<article>
+    <p>People matching {{Affiliate}}: </p>
+    <ol>
+        {% for person in affiliate: %}
+        <li> 
+            <a href="{{url_for('username',username=affiliate.username)}}">{{person.name}} {{person.industry}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+</article>
+
+
+{% endblock %}
