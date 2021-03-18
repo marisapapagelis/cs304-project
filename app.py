@@ -59,32 +59,22 @@ def jobs(comp_id):
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the user table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from user where username = %s", [username])
-    usernow = curs.fetchone()
+    aff=affiliate.get_affiliate(conn,username)
     #Assign variables.
-    user_name = usernow['name']
-    userid = usernow['username']
-    major = usernow['major']
-    gpa = usernow['GPA']
-    Org1= usernow['org1']
-    Org2= usernow['org1']
-    Org3= usernow['org1']
+    # name = aff['name']
+    username = aff['username']
+    major = aff['major']
+    gpa = aff['gpa']
+    Org1= aff['org1']
+    Org2= aff['org2']
+    Org3= aff['org3']
+    comp = aff['comp_name'] 
     #Create cursor to pull data from the experience table.
-    curs1 = dbi.dict_cursor(conn)
-    curs1.execute("select jid, comp_id, hire_date, end_date from experience where username = %s", [username])
-    jobs = curs.fetchall()
-
-    #Somehow get the job titles.
-    #something something something
+    
 
     if request.method = 'GET':
-        return render_template('affiliate-page.html',  name=user_name, 
-                                username=userid, org1=org1, org2=org2,org3=org3,
-                                jobs=jobs, major=major, gpa=gpa)
+        return render_template('affiliate-page.html',name = name,
+            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp)
     else: 
         return redirect(url_for('affiliate_update', username=username))
 

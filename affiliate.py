@@ -4,23 +4,17 @@ import cs304dbi as dbi
 
 import random
 
-@app.route('/affiliate/<username>', methods=['GET', 'POST'])
-def affiliate(username):
-    #Set up connection.
+
+def get_affiliate(conn,username):
+   #Set up connection.
     conn = dbi.connect()
     #Create cursor to pull data from the user table.
     curs = dbi.dict_cursor(conn)
-    curs.execute("select * from user where username = %s", [username])
-    usernow = curs.fetchone()
-    #Assign variables.
-    user_name = usernow['name']
-    userid = usernow['username']
-    major = usernow['major']
-    gpa = usernow['GPA']
-    Org1= usernow['org1']
-    Org2= usernow['org1']
-    Org3= usernow['org1']
-    return render_template('affiliate-page.html',  name=user_name, 
-                                username=userid, org1=org1, org2=org2,org3=org3,
-                                description=None, reps=reps_iterate)
+    curs.execute("select welles_affiliates.username as 'username', welles_affiliates.year as 'year', welles_affiliates.major as 'major', welles_affiliates.gpa as 'gpa', welles_affiliates.org1 as 'org1', 
+                     welles_affiliates.org2 as 'org2',welles_affiliates.org3 as 'org3', worked_for.comp_id as 'comp_id', company.comp_name as 'comp_name'
+                     from welles_affiliates inner join worked_for using(username)
+                     inner join company using (comp_id)")
+    return curs.fetchone()
+
+
  
