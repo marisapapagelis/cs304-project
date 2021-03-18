@@ -49,7 +49,7 @@ def company(comp_id):
                             iid=iid, location=location, ind_name=ind_name,
                             description=None, reps=reps_iterate)
 
-@app.route('/company/<comp_id>/jobs/', methods=['GET', 'POST'])
+@app.route('/company/<comp_id>/jobs/')
     #Set up connection.
     conn = dbi.connect()
     #Create cursor to pull data from the company table.
@@ -63,7 +63,7 @@ def company(comp_id):
     curs5.execute("select jid, title, qual1, qual2, qual3, app_link from jobs where comp_id=%s", [comp_id])
     jobs_iterate = curs5.fetchall()
 
-    return render_template('job-page.html', name=comp_name, jobs=jobs_iterate)
+    return render_template('jobs.html', name=comp_name, jobs=jobs_iterate)
     
 @app.before_first_request
 def init_db():
