@@ -55,7 +55,7 @@ def jobs(comp_id):
     q3 = jobs['qual3']
     app = jobs['app_link']
     #Create table of Jobs.
-    return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app=app_link)
+    return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app_link=app)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
@@ -81,26 +81,23 @@ def affiliate(username):
 @app.route('/job/<jid>/')
 def job(jid):
     #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the jobs table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from jobs where jid = %s", [jid])
-    job = curs.fetchone()
-    #Assign variables.
-    title = job['title']
-    jid = job['jid']
-    comp_id = job['comp_id']
-    iid = job['iid']
+    job=jobs.get_jobs(conn,comp_id)
+    comp_name = job['comp_name']
+    comp_idd = job['comp_id']
+    jid=job['jid']
+    title = job['title'] 
     status = job['job_status']
-    q1 = job['qual1']
-    q2 = job['qual2']
-    q3 = job['qual3']
-    app = job['app_link']
+    getindustry=company.get_company(conn,comp_idd)
+    ind_name=getindustry['ind_name']
+    q1 = jobs['qual1']
+    q2 = jobs['qual2']
+    q3 = jobs['qual3']
+    app = jobs['app_link']
 
     #Somehow get the company and industry names.
     #something something something
 
-    return render_template('job-page.html', company=comp_id, industry=iid,
+    return render_template('job-page.html', company=comp_name, industry=ind_name,
                             jid=jid, status=status, qual1=q1, qual2=q2,
                             qual3=q3, link=app, title=title)
   
