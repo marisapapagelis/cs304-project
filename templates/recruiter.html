@@ -1,18 +1,14 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+      
+    <h1>{{name}}</h1>
+     
+    <h2> Company Name: <a href="{{ url_for ('company')}}" {{comp_name}}> </a></h2> 
 
-
-
-    <form method=POST action="{{ url_for ('recruiter', username = username)}}">
-      {% for name in comp_reps}
-      <h1>'{{name}}'</h1>
-      {% endfor %}
-      <h2> Company Name: <a href="{{ url_for ('company')}}" {{comp}}> </a></h2> 
-
-      <ul>
-        <li><a href="{{url_for('jobpost')}}">Add New Job Posting</a></li>
-        <li><a href="{{url_for('rec_event')}}">Add New Recruiting Event</a></li>
-      </ul>
+    <ul>
+      <li><a href="{{url_for('jobpost')}}">Add New Job Posting</a></li>
+      <li><a href="{{url_for('rec_event')}}">Add New Recruiting Event</a></li>
+    </ul>
 
 {% endblock %}

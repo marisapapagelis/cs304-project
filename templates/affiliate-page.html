@@ -8,16 +8,16 @@
 
 
 
-<p> GPA:  {{GPA}} 
+<p> GPA:  {{gpa}} 
 <br> Major: {{major}}
-<br> Orgs: {{ org1}}, {{org2}}, {{org3}}
+<br> Orgs: {{org1}}, {{org2}}, {{org3}}
 </p>
     <article>
         <p>Past Roles:</p>
         <ol>
              {% for job in jobs %}
             <li>
-                <a href= '../job/{{job.jobid}}'> {{job.title}}</a>
+                <a href={{url_for('job', jid=job.jid)}}> {{title}}</a>
             </li>
             {% endfor %}
         </ol>
