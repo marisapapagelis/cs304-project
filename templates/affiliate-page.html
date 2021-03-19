@@ -12,9 +12,9 @@
     <article>
         <p>Past Roles:</p>
         <ol>
-             {% for job in jobs %}
+             {% for job in experiences%}
             <li>
-                <a href={{url_for('job', jid=job.jid)}}> {{title}}</a>
+                <a href={{url_for('job', jid=job.jid)}}> {{title}}, {{comp_name}}</a>
             </li>
             {% endfor %}
         </ol>
