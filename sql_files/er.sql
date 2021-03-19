@@ -1,4 +1,4 @@
-use mbhatia_db;
+use lmiranda_db;
 
 
 drop table if exists experience;
@@ -6,8 +6,6 @@ drop table if exists jobs;
 drop table if exists company_rep; 
 drop table if exists company; -- done
 drop table if exists industry; -- done
-
-
 drop table if exists welles_affiliates; -- worked 
 drop table if exists user; -- worked
 
@@ -78,9 +76,9 @@ create table jobs (
     jid int auto_increment not null,
     username varchar(20) not null,
     title varchar (25),
-    qual1 varchar (30), --highest education
-    qual2 float, --gpa
-    qual3 varchar (50), --technical skills
+    qual1 varchar (30),
+    qual2 float,
+    qual3 varchar (50), 
     job_status enum ('applications open', 'applications closed'),
     app_link varchar (40),
     comp_id int not null,
@@ -99,12 +97,8 @@ create table experience (
     comp_id int not null,
     iid int not null,
     compensation int,
-    interview_rating int,
-    interview_ques varchar (300),
-    hire_date date,
-    end_date date,
     primary key (username,jid),
-    foreign key (username) references viewers(username),
+    foreign key (username) references welles_affiliates(username),
     foreign key (comp_id) references company(comp_id),
     foreign key (iid) references industry(iid),
     foreign key (jid) references jobs(jid)

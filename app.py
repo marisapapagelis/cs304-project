@@ -160,7 +160,7 @@ def rep(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' 
+    db_to_use = 'lmiranda_db' 
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
