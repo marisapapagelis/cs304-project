@@ -8,12 +8,12 @@ app = Flask(__name__)
 
 import cs304dbi as dbi
 
-import company 
-import jobs
-import affiliate
-import rep
+import company as comp
+import jobs as jo
+import affiliate as aff
+import rep as re
 import random
-import industry
+import industry as ind
 
 app.secret_key = 'welcome'
 # replace that with a random key
@@ -34,7 +34,7 @@ def search():
     kind= request.args['kind']
     conn=dbi.connect()
     if kind =='company':
-        companylist=company.get_allcompanies(conn,comp_name)
+        companylist=comp.get_allcompanies(conn,comp_name)
         if len(companylist) == 1: 
             return redirect(url_for('company', comp_id=companylist[0]['comp_id']))
         elif len(companylist) > 1: 
@@ -43,7 +43,7 @@ def search():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
     elif kind == 'industry':
-        industrylist=industry.get_industries(conn,ind_name)
+        industrylist=ind.get_industries(conn,ind_name)
         if len(industrylist) == 1: 
             return redirect(url_for('industry', iid=industrylist[0]['iid']))
         elif len(industrylist) > 1: 
@@ -52,7 +52,7 @@ def search():
             flash('Sorry, no industry with this name exists.')
             return redirect(url_for('index'))
     else: 
-        personlist=affiliate.get_affiliates(conn,name)
+        personlist=aff.get_affiliates(conn,name)
         if len(personlist) == 1: 
             return redirect(url_for('affiliate',username=personlist[0]['username']))
         elif len(personlist) > 1: 
@@ -63,20 +63,20 @@ def search():
 
 @app.route('/industry/<iid>/', methods=['GET', 'POST'])
 def industry(iid):
-    res = industry.get_industry(conn,iid)
+    res = ind.get_industry(conn,iid)
     ind_name = res['ind_name']
     iid = res['iid']
-    complist = industry.get_companies(conn,iid)
+    complist = ind.get_companies(conn,iid)
     return render_template('industry-page.html', iid = iid, ind_name=ind_name, comp_name=comp_name, complist = complist)
     
 @app.route('/company/<comp_id>/', methods=['GET', 'POST'])
 def company(comp_id):
-    res= company.get_company(conn,comp_id)
+    res= comp.get_company(conn,comp_id)
     comp_name = res['comp_name']
     iid = res['iid']
     location = res['locations']
     ind_name = res['ind_name']
-    reps=company.get_rep()
+    reps=comp.get_rep()
     if request.method == 'GET':
         return render_template('company-page.html', comp_id=comp_id, name=comp_name, iid=iid, location=location, ind_name=ind_name, reps=reps)
     else:
@@ -84,18 +84,18 @@ def company(comp_id):
 
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
-    jobs=jobs.get_jobs(conn,comp_id)
+    jobs=jo.get_jobs(conn,comp_id)
     return render_template('job-list.html', jobs=jobs)
 
 @app.route('/company/<comp_id>/jobs/<jid>/')
 def job(jid):
-    job=jobs.get_jobs(conn,comp_id)
+    job=jo.get_jobs(conn,comp_id)
     comp_name = job['comp_name']
     comp_id = job['comp_id']
     jid=job['jid']
     title = job['title'] 
     status = job['job_status']
-    getindustry=company.get_company(conn,comp_idd)
+    getindustry=comp.get_company(conn,comp_idd)
     ind_name=getindustry['ind_name']
     q1 = jobs['qual1']
     q2 = jobs['qual2']
@@ -107,7 +107,7 @@ def job(jid):
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
-    aff=affiliate.get_affiliate(conn,username)
+    aff=aff.get_affiliate(conn,username)
     #Assign variables.
     name = aff['name']
     username = aff['username']
@@ -117,16 +117,16 @@ def affiliate(username):
     Org2= aff['org2']
     Org3= aff['org3']
     comp = aff['comp_name'] 
-    experiences=affiliate.get_experience(conn,username)
+    experiences=aff.get_experience(conn,username)
     return render_template('affiliate-page.html',name = name,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
 
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
-    rep = rep.get_rep(conn, username)
+    rep = re.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
-    comp_name= company.get_company(conn,comp_id)
+    comp_name= comp.get_company(conn,comp_id)
 
     return render_template('rep.html', name=name, comp_id=comp_id, comp_name=comp_name)
 
