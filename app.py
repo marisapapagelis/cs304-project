@@ -105,7 +105,6 @@ def rep(username):
     name = rep['name']
     comp_id = rep['comp_id']
 
-
     #Somehow get the company name (comp_name).
     #something something something
 
