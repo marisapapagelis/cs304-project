@@ -8,12 +8,12 @@ app = Flask(__name__)
 
 import cs304dbi as dbi
 
-import company as comp
-import jobs as jo
-import affiliate as aff
-import rep as re
+import comp 
+import jo 
+import aff 
+import repre
 import random
-import industry as ind
+import ind
 
 app.secret_key = 'welcome'
 # replace that with a random key
@@ -32,9 +32,10 @@ def index():
 @app.route('/search/', methods = ['GET'])
 def search():
     kind= request.args['kind']
+    name=request.args['query']
     conn=dbi.connect()
     if kind =='company':
-        companylist=comp.get_allcompanies(conn,comp_name)
+        companylist=comp.get_allcompanies(conn,name)
         if len(companylist) == 1: 
             return redirect(url_for('company', comp_id=companylist[0]['comp_id']))
         elif len(companylist) > 1: 
@@ -43,7 +44,7 @@ def search():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
     elif kind == 'industry':
-        industrylist=ind.get_industries(conn,ind_name)
+        industrylist=ind.get_industries(conn,name)
         if len(industrylist) == 1: 
             return redirect(url_for('industry', iid=industrylist[0]['iid']))
         elif len(industrylist) > 1: 
@@ -107,23 +108,23 @@ def job(jid):
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
-    aff=aff.get_affiliate(conn,username)
+    affil=aff.get_affiliate(conn,username)
     #Assign variables.
-    name = aff['name']
-    username = aff['username']
-    major = aff['major']
-    gpa = aff['gpa']
-    Org1= aff['org1']
-    Org2= aff['org2']
-    Org3= aff['org3']
-    comp = aff['comp_name'] 
+    name = affil['name']
+    username = affil['username']
+    major = affil['major']
+    gpa = affil['gpa']
+    Org1= affil['org1']
+    Org2= affil['org2']
+    Org3= affil['org3']
+    comp = affil['comp_name'] 
     experiences=aff.get_experience(conn,username)
     return render_template('affiliate-page.html',name = name,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
 
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
-    rep = re.get_rep(conn, username)
+    rep = repre.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
     comp_name= comp.get_company(conn,comp_id)
