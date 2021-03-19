@@ -6,7 +6,7 @@
 <ol>
     {% for person in personlist: %}
     <li> 
-        <a href="{{url_for('affiliate',username=affiliate.username)}}">{{affiliate.name}}</a>
+        <a href="{{url_for('affiliate',username=person.username)}}">{{person.name}}</a>
     </li>
     {% endfor %}
 </ol>
