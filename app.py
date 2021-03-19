@@ -7,7 +7,6 @@ app = Flask(__name__)
 # change comment characters to switch to SQLite
 
 import cs304dbi as dbi
-# import cs304dbi_sqlite3 as dbi
 
 import random
 
@@ -20,12 +19,6 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-
-#Set this to a dummy comp_id for testing.
-#comp_id of 1 corresponds to JPMorgan Chase.
-comp_id=1
-username_recruit='lu1'
-username_welles='mars'
 
 @app.route('/company/<comp_id>', methods=['GET', 'POST'])
 def company(comp_id):
@@ -54,14 +47,13 @@ def jobs(comp_id):
     q2 = jobs['qual2']
     q3 = jobs['qual3']
     app = jobs['app_link']
-    #Create table of Jobs.
-    return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app=app_link)
+    return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app_link=app)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
     aff=affiliate.get_affiliate(conn,username)
     #Assign variables.
-    # name = aff['name']
+    name = aff['name']
     username = aff['username']
     major = aff['major']
     gpa = aff['gpa']
@@ -69,63 +61,66 @@ def affiliate(username):
     Org2= aff['org2']
     Org3= aff['org3']
     comp = aff['comp_name'] 
-    #Create cursor to pull data from the experience table.
-    
-
+    experiences=affiliate.get_experience(conn,username)
     if request.method = 'GET':
         return render_template('affiliate-page.html',name = name,
-            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp)
+            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
     else: 
         return redirect(url_for('affiliate_update', username=username))
 
 @app.route('/job/<jid>/')
 def job(jid):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the jobs table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from jobs where jid = %s", [jid])
-    job = curs.fetchone()
-    #Assign variables.
-    title = job['title']
-    jid = job['jid']
-    comp_id = job['comp_id']
-    iid = job['iid']
+    job=jobs.get_jobs(conn,comp_id)
+    comp_name = job['comp_name']
+    comp_idd = job['comp_id']
+    jid=job['jid']
+    title = job['title'] 
     status = job['job_status']
-    q1 = job['qual1']
-    q2 = job['qual2']
-    q3 = job['qual3']
-    app = job['app_link']
-
-    #Somehow get the company and industry names.
-    #something something something
-
-    return render_template('job-page.html', company=comp_id, industry=iid,
+    getindustry=company.get_company(conn,comp_idd)
+    ind_name=getindustry['ind_name']
+    q1 = jobs['qual1']
+    q2 = jobs['qual2']
+    q3 = jobs['qual3']
+    app = jobs['app_link']
+    return render_template('job-page.html', company=comp_name, industry=ind_name,
                             jid=jid, status=status, qual1=q1, qual2=q2,
                             qual3=q3, link=app, title=title)
   
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the jobs table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from company_rep where username = %s", [username])
-    recruiter = curs.fetchone()
-    #Assign variables.
-    name = recruiter['name']
-    comp_id = recruiter['comp_id']
+    rep = rep.get_rep(conn, username)
+    name = rep['name']
+    comp_id = rep['comp_id']
+    comp_name= company.get_company(conn,comp_id)
 
-    #Somehow get the company name (comp_name).
-    #something something something
+    return render_template('rep.html', name=name, comp_id=comp_id, comp_name=comp_name)
 
-    return render_template('recruiter.html', name=name, comp_name=comp_id)
+#For Alpha Implementation:
 
-#For Alpha Implementation: 
-#@app.route('/affiliate/<username>/update', methods=['GET', 'POST'])
+#@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
 #def affiliate_update(username):
+
+#@app.route('/rep/<username>/update/', methods=['GET', 'POST'])
+#def rep_update(username):
+
+#@app.route('/job/<jid>/update/', methods=['GET', 'POST'])
+#def job_update(jid):
     
+#@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
+#def comp_update(comp_id):
+
+#@app.route('/affiliate/<username>/insert/', methods=['GET', 'POST'])
+#def affiliate_insert(username):
+
+#@app.route('/rep/<username>/insert/', methods=['GET', 'POST'])
+#def rep_update(username):
+
+#@app.route('/job/<jid>/insert/', methods=['GET', 'POST'])
+#def job_insert(jid):
     
+#@app.route('/company/<comp_id>/insert/', methods=['GET', 'POST'])
+#def comp_insert(comp_id):
+
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
