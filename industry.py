@@ -15,7 +15,7 @@ def get_industry(conn,iid):
     return curs.fetchone()
 
 
-def get_companies(conn,iid)
+def get_companies(conn,iid):
     conn = dbi.connect()
     #Create cursor to pull data from the company table.
     curs = dbi.dict_cursor(conn)

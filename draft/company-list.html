@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Companies matching {{kind}}: </p>
+<ol>
+    {% for company in companylist: %}
+    <li> 
+        <a href="{{url_for('company',comp_id=company.comp_id)}}">{{company.comp_name}}</a>
+    </li>
+    {% endfor %}
+</ol>
+
+{% endblock %} 
