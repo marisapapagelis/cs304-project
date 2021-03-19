@@ -86,17 +86,7 @@ def company(comp_id):
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
     jobs=jobs.get_jobs(conn,comp_id)
-    comp_name = jobs['comp_name']
-    jid=jobs['jid']
-    title = jobs['title']
-    jid = jobs['jid']
-    comp_id = jobs['comp_id']
-    status = jobs['job_status']
-    q1 = jobs['qual1']
-    q2 = jobs['qual2']
-    q3 = jobs['qual3']
-    app = jobs['app_link']
-    return render_template('job-list.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app_link=app)
+    return render_template('job-list.html', jobs=jobs)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):

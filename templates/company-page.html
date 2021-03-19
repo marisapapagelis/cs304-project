@@ -4,7 +4,8 @@
 
 <h1>{{name}}</h1>
 
-<p>Industry Tag: {{ind_name}} (Industry ID: {{iid}})</p>
+<p>Industry Tag: <a href="{{url_for('industry',iid=iid)}}">{{ind_name}}</a></p>
+<p>(Industry ID: {{iid}})</p>
 <p>Current Locations: {{location}}</p>
 
 <p>Your company representatives are:</p>
