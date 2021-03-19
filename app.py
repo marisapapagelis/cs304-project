@@ -80,7 +80,6 @@ def affiliate(username):
 
 @app.route('/job/<jid>/')
 def job(jid):
-    #Set up connection.
     job=jobs.get_jobs(conn,comp_id)
     comp_name = job['comp_name']
     comp_idd = job['comp_id']
@@ -103,20 +102,15 @@ def job(jid):
   
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
-    #Set up connection.
-    conn = dbi.connect()
-    #Create cursor to pull data from the jobs table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute("select * from company_rep where username = %s", [username])
-    recruiter = curs.fetchone()
-    #Assign variables.
-    name = recruiter['name']
-    comp_id = recruiter['comp_id']
+    rep = rep.get_rep(conn, username)
+    name = rep['name']
+    comp_id = rep['comp_id']
+
 
     #Somehow get the company name (comp_name).
     #something something something
 
-    return render_template('recruiter.html', name=name, comp_name=comp_id)
+    return render_template('rep.html', name=name, comp_id=comp_id)
 
 #For Alpha Implementation: 
 #@app.route('/affiliate/<username>/update', methods=['GET', 'POST'])
