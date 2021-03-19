@@ -28,7 +28,7 @@ def index():
     return render_template('main.html',title='DoorToDoor')
 
 @app.route('/search/', methods = ['GET'])
-def query():
+def search():
     industry = request.args['industry']
     kind= request.args['kind']
     conn=dbi.connect()
@@ -42,7 +42,7 @@ def query():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
     elif kind == 'industry':
-        industrylist=industry.get_industry(conn,comp_id)
+        industrylist=industry.get_industries(conn,ind_name)
         if len(industrylist) == 1: 
             return redirect(url_for('industry', iid=industrylist[0]['iid']))
         elif len(industrylist) > 1: 
@@ -60,8 +60,16 @@ def query():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
 
+@app.route('/industry/<iid>/', methods=['GET', 'POST'])
+def industry(iid):
+    res = industry.get_industry(conn,iid)
+    ind_name = res['ind_name']
+    iid = res['iid']
+    complist = industry.get_companies(conn,iid)
+    return render_template('industry-page.html', iid = iid, ind_name=ind_name, comp_name=comp_name, complist = complist)
+    
 
-@app.route('/company/<comp_id>', methods=['GET', 'POST'])
+@app.route('/company/<comp_id>/', methods=['GET', 'POST'])
 def company(comp_id):
     res= company.get_company(conn,comp_id)
     comp_name = res['comp_name']
@@ -70,10 +78,10 @@ def company(comp_id):
     ind_name = res['ind_name']
     reps=company.get_rep()
     if request.method == 'GET':
-        return render_template('company.html', comp_id=comp_id, name=comp_name, ind_name=ind_name,
+        return render_template('company-page.html', comp_id=comp_id, name=comp_name, ind_name=ind_name,
                                 iid=iid, location=location, ind_name=ind_name, reps=reps)
     else:
-        return redirect(url_for('jobs', comp_id=comp_id))
+        return redirect(url_for('job-list', comp_id=comp_id))
 
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
@@ -103,11 +111,8 @@ def affiliate(username):
     Org3= aff['org3']
     comp = aff['comp_name'] 
     experiences=affiliate.get_experience(conn,username)
-    if request.method = 'GET':
-        return render_template('affiliate-page.html',name = name,
-            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
-    else: 
-        return redirect(url_for('affiliate_update', username=username))
+    return render_template('affiliate-page.html',name = name,
+        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
 
 @app.route('/job/<jid>/')
 def job(jid):
