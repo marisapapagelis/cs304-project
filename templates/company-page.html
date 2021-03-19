@@ -16,7 +16,7 @@
     </tr>
     {% for rep in reps %}
         <tr>
-            <td>{{rep.username}}</td>
+            <td><a href="{{url_for('rep',username=rep.username)}}">{{rep.username}}</a></td>
             <td>{{rep.name}}</td>
         </tr>
     {% endfor %}
