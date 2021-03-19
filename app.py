@@ -108,10 +108,10 @@ def rep(username):
     #Somehow get the company name (comp_name).
     #something something something
 
-    return render_template('rep.html', name=name, comp_id=comp_id)
+    return render_template('rep.html', name=name, comp_name=comp_id)
 
 #For Alpha Implementation:
- 
+
 #@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
 #def affiliate_update(username):
 
