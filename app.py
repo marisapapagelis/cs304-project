@@ -8,7 +8,10 @@ app = Flask(__name__)
 
 import cs304dbi as dbi
 
-import random
+import company 
+import jobs
+import affiliate
+import rep
 
 app.secret_key = 'your secret here'
 # replace that with a random key
@@ -19,6 +22,10 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
+
+@app.route('/')
+def index():
+    return render_template('main.html',title='DoorToDoor')
 
 @app.route('/company/<comp_id>', methods=['GET', 'POST'])
 def company(comp_id):
