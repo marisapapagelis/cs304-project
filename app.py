@@ -87,7 +87,7 @@ def jobs(comp_id):
     jobs=jobs.get_jobs(conn,comp_id)
     return render_template('job-list.html', jobs=jobs)
 
-@app.route('company/<comp_id>/job/<jid>/')
+@app.route('company/<comp_id>/jobs/<jid>/')
 def job(jid):
     job=jobs.get_jobs(conn,comp_id)
     comp_name = job['comp_name']
