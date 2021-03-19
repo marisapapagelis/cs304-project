@@ -18,6 +18,6 @@ def get_allcompanies(conn,comp_name):
 
 def get_rep(conn,comp_id)
     curs = dbi.dict_cursor(conn)
-    curs.execute("select username, name from company_rep where comp_id=%s", [comp_id])
+    curs.execute("select * from company_rep where comp_id=%s", [comp_id])
     return curs.fetchall()
 )
