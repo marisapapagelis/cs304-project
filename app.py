@@ -104,11 +104,9 @@ def rep(username):
     rep = rep.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
+    comp_name= company.get_company(conn,comp_id)
 
-    #Somehow get the company name (comp_name).
-    #something something something
-
-    return render_template('rep.html', name=name, comp_name=comp_id)
+    return render_template('rep.html', name=name, comp_id=comp_id,comp_name=comp_name)
 
 #For Alpha Implementation:
 
