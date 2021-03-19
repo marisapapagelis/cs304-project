@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{name}}</h1>
+
+<p>Industry Tag: <a href="{{url_for('industry',iid=iid)}}">{{ind_name}}</a></p>
+<p>(Industry ID: {{iid}})</p>
+<p>Current Locations: {{location}}</p>
+
+<p>Your company representatives are:</p>
+
+<table style="width:100%">
+    <tr>
+      <td>Username</td>
+      <td>Name</td>
+    </tr>
+    {% for rep in reps %}
+        <tr>
+            <td><a href="{{url_for('rep',username=rep.username)}}">{{rep.username}}</a></td>
+            <td>{{rep.name}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<br>
+<p>Click below to see a list of all jobs posted by {{name}}.</p>
+<form method="post" action="">
+    <p><input type="submit" value="See Jobs"></p>
+</form>
+
+{% endblock %} 

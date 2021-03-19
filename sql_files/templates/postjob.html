@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1>Add New Job Posting</h1>
+<p> <a href="{{ url_for ('recruiter', username = username)}}">Return to Profile</a>.</p>
+
+    
+    <tr> <td>
+    <label for="Company"> Company Name</label>
+    <input name="Company" id="company" type="text" /> <br>
+    </td> 
+    
+    <td>
+    <label for="Title"> Position Title</label>
+    <input name="jobtitle" id="jobtitle" type="text" /> <br>
+    </td> 
+
+       
+    <td >
+    <label for="Education">Highest Level of Education Achieved </label>
+    <input name="educ" id="educ" type="text" /> <br>
+    </td> 
+
+    <td >
+    <label for="gpa">Minimum GPA </label>
+    <input name="gpa" id="gpa" type="text" /> <br>
+    </td>  
+
+    <td>
+    <label for="skills"> Technical Skills Required </label>
+    <input name="skills" id="skills" type="text" /> <br>
+    </td> 
+
+   
+
+    <td><label for="app-status"> Are applications for this position currently open?</label> <br>
+    <input name="status" id="status" type="radio" value="Yes" /> Yes 
+    <input name="status" type="radio" value="No" /> No  <br>    
+    </td>  
+
+    <td><label for="AppLink">Application Link</label>
+    <input name="AppLink" id="AppLink" type="text" value="http://" /> <br>
+    </td> 
+
+    <td><input type="submit" value="submit"></td> <br>
+</tr>
+{% endblock %}

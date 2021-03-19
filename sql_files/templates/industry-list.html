@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Industries matching {{kind}}: </p>
+<ol>
+    {% for industry in industrylist: %}
+    <li> 
+        <a href="{{url_for('industry',iid=industry.iid)}}">{{industry.ind_name}}</a>
+    </li>
+    {% endfor %}
+</ol>
+
+{% endblock %} 
