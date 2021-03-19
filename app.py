@@ -20,12 +20,6 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-#Set this to a dummy comp_id for testing.
-#comp_id of 1 corresponds to JPMorgan Chase.
-comp_id=1
-username_recruit='lu1'
-username_welles='mars'
-
 @app.route('/company/<comp_id>', methods=['GET', 'POST'])
 def company(comp_id):
     res= company.get_company(conn,comp_id)
@@ -70,7 +64,6 @@ def affiliate(username):
     comp = aff['comp_name'] 
     #Create cursor to pull data from the experience table.
     
-
     if request.method = 'GET':
         return render_template('affiliate-page.html',name = name,
             username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp)
@@ -106,7 +99,7 @@ def rep(username):
     comp_id = rep['comp_id']
     comp_name= company.get_company(conn,comp_id)
 
-    return render_template('rep.html', name=name, comp_id=comp_id,comp_name=comp_name)
+    return render_template('rep.html', name=name, comp_id=comp_id, comp_name=comp_name)
 
 #For Alpha Implementation:
 
