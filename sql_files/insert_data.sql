@@ -51,7 +51,7 @@ VALUES ('lu1','Luiza', 1);
 
 INSERT INTO jobs (username, title, qual1, qual2, qual3, 
 job_status, app_link, comp_id, iid )
-VALUES ('lu1','portfolio analyst', 'BA in Economics', 'Minimum GPA: 3.5', 'Familiarity with Excel','applications closed',
+VALUES ('lu1','portfolio analyst', 'BA in Economics',  3.5, 'Familiarity with Excel','closed',
 NULL, 1, 1);
 
 
