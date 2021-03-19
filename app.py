@@ -110,11 +110,32 @@ def rep(username):
 
     return render_template('rep.html', name=name, comp_id=comp_id)
 
-#For Alpha Implementation: 
-#@app.route('/affiliate/<username>/update', methods=['GET', 'POST'])
+#For Alpha Implementation:
+ 
+#@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
 #def affiliate_update(username):
+
+#@app.route('/rep/<username>/update/', methods=['GET', 'POST'])
+#def rep_update(username):
+
+#@app.route('/job/<jid>/update/', methods=['GET', 'POST'])
+#def job_update(jid):
     
+#@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
+#def comp_update(comp_id):
+
+#@app.route('/affiliate/<username>/insert/', methods=['GET', 'POST'])
+#def affiliate_insert(username):
+
+#@app.route('/rep/<username>/insert/', methods=['GET', 'POST'])
+#def rep_update(username):
+
+#@app.route('/job/<jid>/insert/', methods=['GET', 'POST'])
+#def job_insert(jid):
     
+#@app.route('/company/<comp_id>/insert/', methods=['GET', 'POST'])
+#def comp_insert(comp_id):
+
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
