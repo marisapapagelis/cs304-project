@@ -99,12 +99,8 @@ create table experience (
     comp_id int not null,
     iid int not null,
     compensation int,
-    interview_rating int,
-    interview_ques varchar (300),
-    hire_date date,
-    end_date date,
     primary key (username,jid),
-    foreign key (username) references viewers(username),
+    foreign key (username) references welles_affiliates(username),
     foreign key (comp_id) references company(comp_id),
     foreign key (iid) references industry(iid),
     foreign key (jid) references jobs(jid)
@@ -112,3 +108,4 @@ create table experience (
         on delete restrict
 )
 ENGINE = InnoDB;
+
