@@ -1,9 +1,4 @@
-#very rough version of py file, because we need to change our tables :) 
-
 import cs304dbi as dbi 
-
-import random
-
 
 def get_affiliate(conn,username):
    #Set up connection.
