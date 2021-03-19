@@ -47,14 +47,13 @@ def jobs(comp_id):
     q2 = jobs['qual2']
     q3 = jobs['qual3']
     app = jobs['app_link']
-    #Create table of Jobs.
     return render_template('jobs.html', comp_id=comp_id, jid= jid, status=status,comp_name=comp_name, q1=q1, q2=q2, q3=q3,app_link=app)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
     aff=affiliate.get_affiliate(conn,username)
     #Assign variables.
-    # name = aff['name']
+    name = aff['name']
     username = aff['username']
     major = aff['major']
     gpa = aff['gpa']
@@ -62,11 +61,10 @@ def affiliate(username):
     Org2= aff['org2']
     Org3= aff['org3']
     comp = aff['comp_name'] 
-    #Create cursor to pull data from the experience table.
-    
+    experiences=affiliate.get_experience(conn,username)
     if request.method = 'GET':
         return render_template('affiliate-page.html',name = name,
-            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp)
+            username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
     else: 
         return redirect(url_for('affiliate_update', username=username))
 
@@ -84,10 +82,6 @@ def job(jid):
     q2 = jobs['qual2']
     q3 = jobs['qual3']
     app = jobs['app_link']
-
-    #Somehow get the company and industry names.
-    #something something something
-
     return render_template('job-page.html', company=comp_name, industry=ind_name,
                             jid=jid, status=status, qual1=q1, qual2=q2,
                             qual3=q3, link=app, title=title)
