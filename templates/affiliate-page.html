@@ -11,12 +11,16 @@
 </p>
     <article>
         <p>Past Roles:</p>
-        <ol>
-             {% for job in experiences%}
-            <li>
-                <a href={{url_for('job', jid=job.jid)}}> {{job.title}}, {{job.comp_name}}</a>
-            </li>
-            {% endfor %}
-        </ol>
+        {% if experiences %}
+            <ol>
+                {% for job in experiences%}
+                <li>
+                    <a href={{url_for('job', jid=job.jid)}}> {{job.title}}, {{job.comp_name}}</a>
+                </li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>No Jobs Listed.</p>
+        {% endif %} 
     </article>
 {% endblock %}

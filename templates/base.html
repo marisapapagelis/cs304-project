@@ -27,7 +27,17 @@
     </label> 
     <input type="submit" value="search"></p>
 </form>
-    
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="messages">
+  {% for msg in messages %}
+  <p>{{msg}}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
 {% block content %} {% endblock %}  
 
 </div>
