@@ -5,6 +5,7 @@
 import cs304dbi as dbi
 
 def get_jobs(conn,comp_id):
+    '''Returns the company name, id, and associate job information for that company given it's company id.'''
     conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''select company.comp_name, company.comp_id as comp_id, jobs.jid, jobs.title,jobs.qual1, 
@@ -12,6 +13,7 @@ def get_jobs(conn,comp_id):
     return curs.fetchall()
 
 def get_job(jid):
+    '''Returns the job title and id of a job given it's job id.'''
     conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''select title,jid from jobs where jid=%s''',[jid])
