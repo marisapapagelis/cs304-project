@@ -3,13 +3,13 @@
 {% block content %}
 
 <h1>{{ind_name}}</h1>
-<p> ID: {{iid}}}</p>
+<p> ID: {{iid}}</p>
 
 <p>Companies within {{ind_name}}: </p>
 <ol>
-    {% for company in complist: %}
+    {% for c in complist: %}
     <li> 
-        <a href="{{url_for('company',comp_id=company.comp_id)}}">{{company.comp_name}}</a>
+        <a href="{{url_for('company',comp_id=c.comp_id)}}">{{c.comp_name}}</a>
     </li>
     {% endfor %}
 </ol>

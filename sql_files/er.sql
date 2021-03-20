@@ -24,6 +24,7 @@ ENGINE = InnoDB;
 
 create table welles_affiliates (
     username varchar(20) not null,
+    primary key (username),
     year int, 
     major varchar (20),
     gpa float, 
