@@ -1,3 +1,7 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# aff.py file - helper functions for affiliate routes
+
 import cs304dbi as dbi 
 
 

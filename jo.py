@@ -1,3 +1,7 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# jo.py file - helper functions for job routes
+
 import cs304dbi as dbi
 
 def get_jobs(conn,comp_id):

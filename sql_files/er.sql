@@ -1,17 +1,19 @@
+-- Luiza, Nina, Marisa, Mehar 
+-- CS 304 Final Project 
+-- DDL's for database 
+
 use lmiranda_db;
 
-
+-- drop existing tables
 drop table if exists experience;
 drop table if exists jobs; 
 drop table if exists company_rep; 
-drop table if exists company; -- done
-drop table if exists industry; -- done
-drop table if exists welles_affiliates; -- worked 
-drop table if exists user; -- worked
+drop table if exists company; 
+drop table if exists industry; 
+drop table if exists welles_affiliates; 
+drop table if exists user; 
 
-
-
-
+-- create user table
 create table user(
     username varchar(20) not null, 
     name varchar(30), 
@@ -22,6 +24,7 @@ create table user(
 
 ENGINE = InnoDB;
 
+-- create wellesley affiliates table
 create table welles_affiliates (
     username varchar(20) not null,
     primary key (username),
@@ -37,9 +40,7 @@ create table welles_affiliates (
 )
 ENGINE = InnoDB;
     
-
-
-
+-- create industry table
 create table industry (
     iid int auto_increment not null ,
     ind_name varchar (30),
@@ -48,6 +49,7 @@ create table industry (
 
 ENGINE = InnoDB;
 
+-- create company table
 create table company (
     comp_id int auto_increment not null,
     comp_name varchar (15),
@@ -60,7 +62,7 @@ create table company (
 )
 ENGINE = InnoDB;
 
-
+-- create company rep table
 create table company_rep (
     username varchar(20) not null,
     name varchar (15),
@@ -73,6 +75,7 @@ create table company_rep (
 )
 ENGINE = InnoDB;
 
+-- create jobs table
 create table jobs (
     jid int auto_increment not null,
     username varchar(20) not null,
@@ -92,6 +95,7 @@ create table jobs (
 )
 ENGINE = InnoDB;
 
+-- create experience table
 create table experience (
     username varchar(20) not null,
     jid int not null,

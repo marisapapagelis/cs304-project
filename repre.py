@@ -1,3 +1,7 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# repre.py file - helper functions for representative routes
+
 import cs304dbi as dbi
 
 def get_rep(conn,username):

@@ -1,3 +1,7 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# comp.py file - helper functions for company routes
+
 import cs304dbi as dbi
 
 def get_company(conn,comp_id):

@@ -1,13 +1,14 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# App.py file 
+
 from flask import (Flask, render_template, make_response, url_for, request,
                    redirect, flash, session, send_from_directory, jsonify)
 from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 
-# one or the other of these. Defaults to MySQL (PyMySQL)
-# change comment characters to switch to SQLite
-
 import cs304dbi as dbi
-
 import comp 
 import jo 
 import aff 
@@ -15,26 +16,29 @@ import repre
 import random
 import ind
 
-app.secret_key = 'welcome'
-# replace that with a random key
+app.secret_key = 'welcome' # secret key
+
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                           '0123456789'))
                            for i in range(20) ])
 
-# This gets us better error messages for certain common request errors
+
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+# route to home page
 @app.route('/')
 def index():
     return render_template('main.html',title='DoorToDoor')
 
+# routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])
 def search():
     kind= request.args['kind']
     name=request.args['query']
     conn=dbi.connect()
     if kind =='company':
+        # routes to company page, list, or lists no companies 
         companylist=comp.get_allcompanies(conn,name)
         if len(companylist) == 1: 
             return redirect(url_for('company', comp_id=companylist[0]['comp_id']))
@@ -44,6 +48,7 @@ def search():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
     elif kind == 'industry':
+        # routes to industry page, list, or lists no industries
         industrylist=ind.get_industries(conn,name)
         if len(industrylist) == 1: 
             return redirect(url_for('industry', iid=industrylist[0]['iid']))
@@ -53,6 +58,7 @@ def search():
             flash('Sorry, no industry with this name exists.')
             return redirect(url_for('index'))
     else: 
+        # routes to person page, list, or lists no people
         personlist=aff.get_affiliates(conn,name)
         if len(personlist) == 1: 
             return redirect(url_for('affiliate',username=personlist[0]['username']))
@@ -62,6 +68,7 @@ def search():
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
 
+# routes to a specific industry page given an industry id
 @app.route('/industry/<iid>/', methods=['GET', 'POST'])
 def industry(iid):
     conn=dbi.connect()
@@ -70,11 +77,13 @@ def industry(iid):
     iid = res['iid']
     complist = ind.get_companies(conn,iid)
     if len(complist)!=0 : 
+        # returns no industries
         comp_name = complist[0]['comp_name'] 
     else: 
         comp_name='N/A'
     return render_template('industry-page.html', iid = iid, ind_name=ind_name, complist = complist)
     
+# routes to a specific company page given a company id
 @app.route('/company/<comp_id>/', methods=['GET', 'POST'])
 def company(comp_id):
     conn=dbi.connect()
@@ -90,6 +99,7 @@ def company(comp_id):
     else:
         return redirect(url_for('jobs', comp_id=comp_id))
 
+# routes from a company page to a job page for that company 
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
     conn=dbi.connect()
@@ -98,6 +108,7 @@ def jobs(comp_id):
     comp_name=dictcompany['comp_name']
     return render_template('job-list.html', jobs=jobs,comp_name=comp_name)
 
+# routes from a companies job page to a specific job given the jobs unique ID
 @app.route('/company/<comp_id>/job/<jid>/')
 def job(comp_id,jid):
     conn=dbi.connect()
@@ -113,11 +124,11 @@ def job(comp_id,jid):
     app = job[0]['app_link']
     getindustry=comp.get_company(conn,comp_id)
     ind_name=getindustry['ind_name']
-
     return render_template('job-page.html', company=comp_name, industry=ind_name,
                             jid=jid, status=status, qual1=q1, qual2=q2,comp_id=comp_id,
                             qual3=q3, link=app, title=title)
 
+# routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
     conn=dbi.connect()
@@ -142,6 +153,7 @@ def affiliate(username):
     return render_template('affiliate-page.html',name = name,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp_name=comp_name,experiences=experiences,title=title)
 
+# routes to company reps page given a unique username
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
     conn=dbi.connect()
@@ -149,7 +161,6 @@ def rep(username):
     name = rep['name']
     comp_id = rep['comp_id']
     comp_name= comp.get_company(conn,comp_id)
-
     return render_template('rep.html', name=name, comp_id=comp_id, comp_name=comp_name)
 
 #For Alpha Implementation:
@@ -182,7 +193,7 @@ def rep(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'lmiranda_db' 
+    db_to_use = 'lmiranda_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

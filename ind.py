@@ -1,3 +1,7 @@
+# Luiza, Nina, Marisa, Mehar 
+# CS 304 Final Project
+# ind.py file - helper functions for industry routes
+
 import cs304dbi as dbi 
 
 def get_industries(conn,ind_name):
