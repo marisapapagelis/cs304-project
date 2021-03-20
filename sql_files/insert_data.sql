@@ -18,6 +18,8 @@ VALUES ('mehr', 2022, 'Data Science', 2.2, 'ISOC', 'WNews', 'WIB');
 
 INSERT INTO industry (ind_name)
 VALUES ('Financials');
+INSERT INTO industry (ind_name)
+VALUES ('FinTech');
 
 INSERT INTO industry (ind_name)
 VALUES ('Technology');
@@ -34,11 +36,7 @@ VALUES ('lu1','Luiza', 1);
 
 INSERT INTO jobs (username, title, qual1, qual2, qual3, 
 job_status, app_link, comp_id, iid )
-<<<<<<< HEAD
-VALUES ('lu1','portfolio analyst', 'BA in Economics', 3.5, 'Familiarity with Excel','applications closed',
-=======
 VALUES ('lu1','portfolio analyst', 'BA in Economics', 'Minimum GPA: 3.5', 'Familiarity with Excel','applications closed',
->>>>>>> d5188fb027b78585f4ce5d1e5f5b184df115ff73
 NULL, 1, 1);
 
 INSERT INTO experience (username, jid, comp_id , iid, compensation)

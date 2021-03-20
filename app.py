@@ -64,66 +64,87 @@ def search():
 
 @app.route('/industry/<iid>/', methods=['GET', 'POST'])
 def industry(iid):
+    conn=dbi.connect()
     res = ind.get_industry(conn,iid)
     ind_name = res['ind_name']
     iid = res['iid']
     complist = ind.get_companies(conn,iid)
-    return render_template('industry-page.html', iid = iid, ind_name=ind_name, comp_name=comp_name, complist = complist)
+    if len(complist)!=0 : 
+        comp_name = complist[0]['comp_name'] 
+    else: 
+        comp_name='N/A'
+    return render_template('industry-page.html', iid = iid, ind_name=ind_name, complist = complist)
     
 @app.route('/company/<comp_id>/', methods=['GET', 'POST'])
 def company(comp_id):
+    conn=dbi.connect()
     res= comp.get_company(conn,comp_id)
     comp_name = res['comp_name']
     iid = res['iid']
+    comp_id=res['comp_id']
     location = res['locations']
     ind_name = res['ind_name']
-    reps=comp.get_rep()
+    reps=comp.get_rep(conn,comp_id)
     if request.method == 'GET':
         return render_template('company-page.html', comp_id=comp_id, name=comp_name, iid=iid, location=location, ind_name=ind_name, reps=reps)
     else:
-        return redirect(url_for('job-list', comp_id=comp_id))
+        return redirect(url_for('jobs', comp_id=comp_id))
 
 @app.route('/company/<comp_id>/jobs/')
 def jobs(comp_id):
+    conn=dbi.connect()
     jobs=jo.get_jobs(conn,comp_id)
-    return render_template('job-list.html', jobs=jobs)
+    dictcompany=comp.get_company(conn,comp_id)
+    comp_name=dictcompany['comp_name']
+    return render_template('job-list.html', jobs=jobs,comp_name=comp_name)
 
-@app.route('/company/<comp_id>/jobs/<jid>/')
-def job(jid):
+@app.route('/company/<comp_id>/job/<jid>/')
+def job(comp_id,jid):
+    conn=dbi.connect()
     job=jo.get_jobs(conn,comp_id)
-    comp_name = job['comp_name']
-    comp_id = job['comp_id']
-    jid=job['jid']
-    title = job['title'] 
-    status = job['job_status']
-    getindustry=comp.get_company(conn,comp_idd)
+    comp_name = job[0]['comp_name']
+    jid=job[0]['jid']
+    comp_id=job[0]['comp_id']
+    title = job[0]['title'] 
+    status = job[0]['job_status']
+    q1 = job[0]['qual1']
+    q2 = job[0]['qual2']
+    q3 = job[0]['qual3']
+    app = job[0]['app_link']
+    getindustry=comp.get_company(conn,comp_id)
     ind_name=getindustry['ind_name']
-    q1 = jobs['qual1']
-    q2 = jobs['qual2']
-    q3 = jobs['qual3']
-    app = jobs['app_link']
+
     return render_template('job-page.html', company=comp_name, industry=ind_name,
-                            jid=jid, status=status, qual1=q1, qual2=q2,
+                            jid=jid, status=status, qual1=q1, qual2=q2,comp_id=comp_id,
                             qual3=q3, link=app, title=title)
 
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
 def affiliate(username):
+    conn=dbi.connect()
     affil=aff.get_affiliate(conn,username)
     #Assign variables.
     name = affil['name']
     username = affil['username']
     major = affil['major']
     gpa = affil['gpa']
-    Org1= affil['org1']
-    Org2= affil['org2']
-    Org3= affil['org3']
-    comp = affil['comp_name'] 
+    org1= affil['org1']
+    org2= affil['org2']
+    org3= affil['org3']
     experiences=aff.get_experience(conn,username)
+    if len(experiences)!=0 : 
+        comp_name = experiences[0]['comp_name'] 
+        jid=experiences[0]['jid']
+        jobdict=jo.get_job(jid)
+        title=jobdict['title']
+    else: 
+        comp_name='N/A'
+        title='N/A'
     return render_template('affiliate-page.html',name = name,
-        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp=comp,experiences=experiences)
+        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp_name=comp_name,experiences=experiences,title=title)
 
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
+    conn=dbi.connect()
     rep = repre.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
