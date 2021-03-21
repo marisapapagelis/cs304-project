@@ -23,6 +23,7 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           '0123456789'))
                            for i in range(20) ])
 
+
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 # route to home page
@@ -64,7 +65,7 @@ def search():
         elif len(personlist) > 1: 
             return render_template('affiliate-list.html',personlist=personlist,kind=kind)
         else:
-            flash('Sorry, no company with this name exists.')
+            flash('Sorry, no person with this name exists.')
             return redirect(url_for('index'))
 
 # routes to a specific industry page given an industry id
@@ -192,7 +193,7 @@ def rep(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'lmiranda_db' # using Luiza's database
+    db_to_use = 'mbhatia_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
