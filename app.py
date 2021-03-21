@@ -23,7 +23,6 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           '0123456789'))
                            for i in range(20) ])
 
-
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 # route to home page
