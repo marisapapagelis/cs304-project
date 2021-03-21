@@ -15,7 +15,7 @@
             <ol>
                 {% for job in experiences%}
                 <li>
-                    <a href={{url_for('job', jid=job.jid)}}> {{job.title}}, {{job.comp_name}}</a>
+                    <a href={{url_for('job', comp_id=job.comp_id, jid=job.jid)}}> {{job.title}}, {{job.comp_name}}</a>
                 </li>
                 {% endfor %}
             </ol>
