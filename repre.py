@@ -5,7 +5,6 @@
 import cs304dbi as dbi
 
 def get_rep(conn,username):
-    '''Returns the name and company id of a company rep given their username.'''
     conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute("select name, comp_id from company_rep where username = %s", [username])

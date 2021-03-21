@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- DDL's for database 
 
-use lmiranda_db;
+use mbhatia_db;
 
 -- drop existing tables
 drop table if exists experience;

@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
-use lmiranda_db; 
+use mbhatia_db; 
 
 -- insert users into user table
 INSERT INTO user(username,name,passwd,email) 
