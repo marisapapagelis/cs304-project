@@ -14,12 +14,18 @@ VALUES ('mehr','Mehar', 'dog657', 'mbhatia');
 INSERT INTO user(username,name,passwd,email) 
 VALUES ('lu1','Luiza', 'monkey657', 'lmiranda');
 
+insert into user(username, name, passwd, email) 
+values ('ng', 'Nina', 'puppy', 'ngoodman');
+
 -- insert wellesley affiliates into wellesley affiliate table
 INSERT INTO welles_affiliates (username, year, major, gpa, org1, org2, org3)
 VALUES ('mars', 2022, 'Economics', 3.98, 'CSClub', 'WNews', 'WIB');
 
 INSERT INTO welles_affiliates (username, year, major, gpa, org1, org2, org3)
 VALUES ('mehr', 2022, 'Data Science', 2.2, 'ISOC', 'WNews', 'WIB');
+
+insert into welles_affiliates(username, year, major, gpa)
+values('ng', 2022, 'Music', 3.7);
 
 -- insert industries into industry table
 INSERT INTO industry (ind_name)
@@ -31,12 +37,18 @@ VALUES ('FinTech');
 INSERT INTO industry (ind_name)
 VALUES ('Technology');
 
+insert into industry (ind_name)
+values ('Food/Beverage');
+
 -- insert companies into company table
 INSERT INTO company (comp_name,iid,locations)
 VALUES ('JPMorgan Chase', 1, 'NY, SFO');
 
 INSERT INTO company (comp_name,iid,locations)
 VALUES ('Morgan Stanley', 2, 'NY, SFO');
+
+insert into company(comp_name, iid, locations)
+values ('Apple', 3, 'NY, SFO, CHI');
 
 -- insert company representative into company rep table
 INSERT INTO company_rep(username,name,comp_id)
@@ -47,7 +59,9 @@ INSERT INTO jobs (username, title, qual1, qual2, qual3, job_status, app_link, co
 VALUES ('lu1','portfolio analyst', 'BA in Economics', 'Minimum GPA: 3.5', 
 'Familiarity with Excel','applications closed', NULL, 1, 1);
 
+insert into jobs(username, title, qual1, qual2, qual3, job_status, app_link, comp_id, iid) 
+values ('lu1', 'software engineer', 'BA in computer engineering', 'Minimum GPA: 3.7', 'Java', 'open', NULL, 1, 1);
+
 -- insert experience for mars into experience table
 INSERT INTO experience (username, jid, comp_id , iid, compensation)
 VALUES ('mars',1,1,1,100000)
-
