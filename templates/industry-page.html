@@ -6,12 +6,16 @@
 <p> ID: {{iid}}</p>
 
 <p>Companies within {{ind_name}}: </p>
-<ol>
-    {% for c in complist: %}
-    <li> 
-        <a href="{{url_for('company',comp_id=c.comp_id)}}">{{c.comp_name}}</a>
-    </li>
-    {% endfor %}
-</ol>
+{% if complist %}
+    <ol>
+        {% for c in complist: %}
+        <li> 
+            <a href="{{url_for('company',comp_id=c.comp_id)}}">{{c.comp_name}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p>No Companies Listed.</p>
+{% endif %}
 
 {% endblock %} 

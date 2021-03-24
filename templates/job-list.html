@@ -5,12 +5,15 @@
 <h1>{{comp_name}}</h1>
 
 <p>All job listings for {{comp_name}}</p>
-<ol>
-    {% for job in jobs: %}
-    <li> 
-        <a href="{{url_for('job',jid=job.iid,comp_id=job.comp_id)}}">{{job.title}}</a>
-    </li>
-    {% endfor %}
-</ol>
-
+{% if jobs %}
+    <ol>
+        {% for job in jobs: %}
+        <li>
+            <a href="{{url_for('job', comp_id=job['comp_id'], jid=job['jid'])}}">{{job.title}}</a>
+        </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p>No Jobs Listed.</p>
+{% endif %}
 {% endblock %} 
