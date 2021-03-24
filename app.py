@@ -76,11 +76,6 @@ def industry(iid):
     ind_name = res['ind_name']
     iid = res['iid']
     complist = ind.get_companies(conn,iid)
-    if len(complist)!=0 : 
-        # returns no industries
-        comp_name = complist[0]['comp_name'] 
-    else: 
-        comp_name='N/A'
     return render_template('industry-page.html', iid = iid, ind_name=ind_name, complist = complist)
     
 # routes to a specific company page given a company id
@@ -112,18 +107,20 @@ def jobs(comp_id):
 @app.route('/company/<comp_id>/job/<jid>/')
 def job(comp_id,jid):
     conn=dbi.connect()
-    job=jo.get_jobs(conn,comp_id)
-    comp_name = job[0]['comp_name']
-    jid=job[0]['jid']
-    comp_id=job[0]['comp_id']
-    title = job[0]['title'] 
-    status = job[0]['job_status']
-    q1 = job[0]['qual1']
-    q2 = job[0]['qual2']
-    q3 = job[0]['qual3']
-    app = job[0]['app_link']
-    getindustry=comp.get_company(conn,comp_id)
-    ind_name=getindustry['ind_name']
+    com=comp.get_company(conn,comp_id)
+    comp_id=com['comp_id']
+    comp_name=com['comp_name']
+    ind_name=com['ind_name']
+
+    job=jo.get_job(conn,jid)
+    jid=job['jid']
+    title = job['title'] 
+    status = job['job_status']
+    q1 = job['qual1']
+    q2 = job['qual2']
+    q3 = job['qual3']
+    app = job['app_link']
+
     return render_template('job-page.html', company=comp_name, industry=ind_name,
                             jid=jid, status=status, qual1=q1, qual2=q2,comp_id=comp_id,
                             qual3=q3, link=app, title=title)
@@ -142,16 +139,14 @@ def affiliate(username):
     org2= affil['org2']
     org3= affil['org3']
     experiences=aff.get_experience(conn,username)
-    if len(experiences)!=0 : 
-        comp_name = experiences[0]['comp_name'] 
-        jid=experiences[0]['jid']
-        jobdict=jo.get_job(jid)
-        title=jobdict['title']
-    else: 
-        comp_name='N/A'
-        title='N/A'
+
+    if experiences:
+        for e in experiences:
+            job = jo.get_job(conn, e['jid']) #get each job based on the jid
+            e['title']=job['title'] #add job title onto each experience 
+
     return render_template('affiliate-page.html',name = name,
-        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,comp_name=comp_name,experiences=experiences,title=title)
+        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences)
 
 # routes to company reps page given a unique username
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
