@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<p>People (Wellesley Affiliates) matching {{kind}}: </p>
+<p>People (Wellesley Affiliates) in result: </p>
 <ol>
     {% for person in personlist: %}
     <li> 
-        <a href="{{url_for('affiliate',username=person.username)}}">{{person.name}}</a>
+        <a href="{{url_for('affiliate',username=person['username'])}}">{{person['name']}}</a>
     </li>
     {% endfor %}
 </ol>
