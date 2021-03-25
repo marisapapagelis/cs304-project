@@ -100,7 +100,12 @@ def jobs(comp_id):
     conn=dbi.connect()
     jobs=jo.get_jobs(conn,comp_id)
     comp_name=comp.get_company(conn,comp_id)['comp_name']
-    return render_template('job-list.html', jobs=jobs,comp_name=comp_name)
+    #get username using session - pull it out from the session after they login
+    #get username using session - pull it out from the session after they login
+    if repre.is_rep(conn,username): #get username using session - pull it out from the session after they login
+        return render_template('rep_job-list.html', jobs=jobs,comp_name=comp_name) 
+    else:
+        return render_template('job-list.html', jobs=jobs,comp_name=comp_name) 
 
 # routes from a companies job page to a specific job given the jobs unique ID
 @app.route('/company/<comp_id>/job/<jid>/')
@@ -194,6 +199,8 @@ def job_update(jid):
     comp = comp.get_company(conn,comp_id)
     iid = job['iid']
     ind = get_industry(conn,iid)
+    username = 
+    if repre.is_rep(conn,username):
     if job != None: 
         return render_template('update_job.html', title = job['title'], comp = comp, comp_id = comp_id
                                     educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job[job_status], link = job['app_link'],
@@ -208,10 +215,14 @@ def job_update(jid):
             ind_id = request.form['industry-id']
             educ = request.form['education']
             educ = request.form['gpa']
-            skills = request.form['skills']
-            #how to get data from radio button? for job status?
+            skills = request.form['technical_skills']
+            status = request.form['app_status']
+            link = request.form['AppLink']
+            #how to get data from radio button? for job status? should we just make it a text field?
 
             if request.form.get('submit') == 'update': #if user wants to update 
+
+            else: #if deleting job
     
 #@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
 #def comp_update(comp_id):
