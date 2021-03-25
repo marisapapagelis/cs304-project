@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<h1>Update Job Posting</h1>
+
+  <p> You can update or delete job listing here.</p>
+
+    <form method=POST action="{{url_for('update_job')}}">
+      <table>
+        <tr>
+          <td><label for="company">Company Name</label></td>
+          <td><input name='company-name' id = 'company' value='{{comp}}'></td> 
+        </tr>
+        <tr>
+          <td><label for="jobtitle">Position Title</label></td>
+          <td><input name="jobtitle" id = "jobtitle" value='{{title}}'></td>
+        </tr>
+        <tr>
+          <td><label for="educ">Highest Level of Education Achieved </label></td>
+          <td><input name= "education" id = 'educ' value='{{educ}}'></td>
+        </tr>
+        <tr>
+          <td><label for="gpa"> Minimum GPA</label></td>
+          <td><input name='gpa' id = 'gpa' value='{{gpa}}'></td>
+        </tr>
+        <tr>
+          <td><label for="skills">Technical Skills Required </label></td>
+          <td><input name='technical_skills' id = 'skills' value='{{skills}}'></td>
+        </tr>
+        <tr>
+          <td><label for="status"> Are applications for this position currently open?</label> </td>
+          <td><input name="app_status" id="status" type="radio" value="Yes"> Yes </td>
+          <td><input name="app_status" id = "status" type="radio" value="No"> No </td>
+        </tr>
+
+        <tr>
+          <td><label for="AppLink">Application Link</label> </td> 
+          <td><input name="AppLink" id="AppLink" type="text" value='{{link}}'> </td> 
+          </tr>  
+
+      </table>
+      <input type="submit" name="submit" value="update">
+      <input type="submit" name="submit" value="delete">
+    </form>
+
+{% endblock %}
