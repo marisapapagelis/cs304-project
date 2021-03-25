@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block main_content %}
+{% block content %}
       
-    <h1>{{name}}</h1>
+<h1>Welcome, {{name}}</h1>
      
-    <h2> Company Name: <a href="{{url_for('company', comp_id)}}">{{comp_name}}</a></h2> 
+<p>You Are Representing: <a href="{{url_for('company', comp_id=comp_id)}}">{{comp_name}}</a></p>
 
-    <ul>
-      <li><a href="{{url_for('jobpost')}}">Add New Job Posting</a></li>
-      <li><a href="{{url_for('rec_event')}}">Add New Recruiting Event</a></li>
-    </ul>
+<ul>
+  <li><a href="{{url_for('index')}}">Add New Job Post</a></li>
+  <li><a href="{{url_for('index')}}">Add New Recruiting Event</a></li>
+</ul>
 
 {% endblock %}
