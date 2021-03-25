@@ -12,7 +12,7 @@ def get_company(conn,comp_id):
     from company inner join industry using(iid) where comp_id = %s''', [comp_id])
     return curs.fetchone()
 
-def get_allcompanies(conn,comp_name):
+def get_companies(conn,comp_name):
     conn = dbi.connect()
     #Create cursor to pull data from the company table.
     curs = dbi.dict_cursor(conn)
@@ -20,7 +20,9 @@ def get_allcompanies(conn,comp_name):
     from company inner join industry using(iid) where lower(comp_name) like  %s''', ['%'+ comp_name.lower() + '%'])
     return curs.fetchall()
 
-def get_rep(conn,comp_id):
+def get_all_companies(conn):
+    conn = dbi.connect()
+    #Create cursor to pull data from the company table.
     curs = dbi.dict_cursor(conn)
-    curs.execute("select * from company_rep where comp_id=%s", [comp_id])
+    curs.execute('''select comp_id, comp_name from company order by comp_name asc''')
     return curs.fetchall()
