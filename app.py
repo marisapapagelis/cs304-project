@@ -39,11 +39,11 @@ def search():
     conn=dbi.connect()
     if kind =='company':
         # routes to company page, list, or lists no companies 
-        companylist=comp.get_allcompanies(conn,name)
+        companylist=comp.get_companies(conn,name)
         if len(companylist) == 1: 
             return redirect(url_for('company', comp_id=companylist[0]['comp_id']))
         elif len(companylist) > 1: 
-            return render_template('company-list.html',companylist=companylist,kind=kind)
+            return render_template('company-list.html',companylist=companylist)
         else :
             flash('Sorry, no company with this name exists.')
             return redirect(url_for('index'))
@@ -53,7 +53,7 @@ def search():
         if len(industrylist) == 1: 
             return redirect(url_for('industry', iid=industrylist[0]['iid']))
         elif len(industrylist) > 1: 
-            return render_template('industry-list.html',industrylist=industrylist,kind=kind)
+            return render_template('industry-list.html',industrylist=industrylist)
         else :
             flash('Sorry, no industry with this name exists.')
             return redirect(url_for('index'))
@@ -63,7 +63,7 @@ def search():
         if len(personlist) == 1: 
             return redirect(url_for('affiliate',username=personlist[0]['username']))
         elif len(personlist) > 1: 
-            return render_template('affiliate-list.html',personlist=personlist,kind=kind)
+            return render_template('affiliate-list.html',personlist=personlist)
         else:
             flash('Sorry, no person with this name exists.')
             return redirect(url_for('index'))
@@ -88,7 +88,7 @@ def company(comp_id):
     comp_id=res['comp_id']
     location = res['locations']
     ind_name = res['ind_name']
-    reps=comp.get_rep(conn,comp_id)
+    reps=repre.get_reps(conn,comp_id)
     if request.method == 'GET':
         return render_template('company-page.html', comp_id=comp_id, name=comp_name, iid=iid, location=location, ind_name=ind_name, reps=reps)
     else:
@@ -99,8 +99,7 @@ def company(comp_id):
 def jobs(comp_id):
     conn=dbi.connect()
     jobs=jo.get_jobs(conn,comp_id)
-    dictcompany=comp.get_company(conn,comp_id)
-    comp_name=dictcompany['comp_name']
+    comp_name=comp.get_company(conn,comp_id)['comp_name']
     return render_template('job-list.html', jobs=jobs,comp_name=comp_name)
 
 # routes from a companies job page to a specific job given the jobs unique ID
@@ -119,11 +118,11 @@ def job(comp_id,jid):
     q1 = job['qual1']
     q2 = job['qual2']
     q3 = job['qual3']
-    app = job['app_link']
+    app_link = job['app_link']
 
-    return render_template('job-page.html', company=comp_name, industry=ind_name,
-                            jid=jid, status=status, qual1=q1, qual2=q2,comp_id=comp_id,
-                            qual3=q3, link=app, title=title)
+    return render_template('job-page.html', comp_name=comp_name, ind_name=ind_name,
+                            jid=jid, status=status, q1=q1, q2=q2,comp_id=comp_id,
+                            q3=q3, app_link=app_link, title=title)
 
 # routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
@@ -155,8 +154,29 @@ def rep(username):
     rep = repre.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
-    comp_name= comp.get_company(conn,comp_id)
-    return render_template('rep.html', name=name, comp_id=comp_id, comp_name=comp_name)
+    comp_name = comp.get_company(conn,comp_id)['comp_name']
+    return render_template('rep-page.html', name=name, comp_id=comp_id, comp_name=comp_name)
+
+# routes to page that lists all companies included to date
+@app.route('/all/companies/')
+def all_companies():
+    conn=dbi.connect()
+    companylist = comp.get_all_companies(conn)
+    return render_template('company-list.html', companylist=companylist)
+
+# routes to page that lists all industries included to date
+@app.route('/all/industries/')
+def all_industries():
+    conn=dbi.connect()
+    industrylist = ind.get_all_industries(conn)
+    return render_template('industry-list.html', industrylist=industrylist)
+
+# routes to page that lists all affiliates included to date
+@app.route('/all/affiliates/')
+def all_affiliates():
+    conn=dbi.connect()
+    personlist = aff.get_all_affiliates(conn)
+    return render_template('affiliate-list.html', personlist=personlist)
 
 #For Alpha Implementation:
 
