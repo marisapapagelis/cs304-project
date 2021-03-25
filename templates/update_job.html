@@ -10,13 +10,31 @@
     <form method=POST action="{{url_for('update_job')}}">
       <table>
         <tr>
-          <td><label for="company">Company Name</label></td>
-          <td><input name='company-name' id = 'company' value='{{comp}}'></td> 
-        </tr>
-        <tr>
           <td><label for="jobtitle">Position Title</label></td>
           <td><input name="jobtitle" id = "jobtitle" value='{{title}}'></td>
         </tr>
+        
+        <tr>
+          <td><label for="company">Company Name</label></td>
+          <td><input name='company-name' id = 'company' value='{{comp}}'></td> 
+        </tr>
+
+        <tr>
+          <td><label for="cid">Company ID</label></td>
+          <td><input name='company-id' id = 'cid' value='{{comp_id}}'></td> 
+        </tr>
+
+        <tr>
+        <td><label for="ind">Industry Name</label></td>
+        <td><input name='industry-name' id = 'ind' value='{{ind}}'></td> 
+        </tr>
+    
+        <tr>
+        <td><label for="iid">Industry ID</label></td>
+        <td><input name='industry-id' id = 'iid' value='{{ind_id}}'></td> 
+        </tr>
+
+
         <tr>
           <td><label for="educ">Highest Level of Education Achieved </label></td>
           <td><input name= "education" id = 'educ' value='{{educ}}'></td>
@@ -29,11 +47,14 @@
           <td><label for="skills">Technical Skills Required </label></td>
           <td><input name='technical_skills' id = 'skills' value='{{skills}}'></td>
         </tr>
+
         <tr>
           <td><label for="status"> Are applications for this position currently open?</label> </td>
-          <td><input name="app_status" id="status" type="radio" value="Yes"> Yes </td>
-          <td><input name="app_status" id = "status" type="radio" value="No"> No </td>
-        </tr>
+          <td><label for="open"> Applications Open </label> </td>
+          <td><input name="app_status" id="open" type="radio" value="Applications Open"> </td>
+          <td><label for="closed"> Applications Closed </label> </td>
+          <td><input name="app_status" id = "closed" type="radio" value="Applications Closed"> </td>
+          </tr> 
 
         <tr>
           <td><label for="AppLink">Application Link</label> </td> 

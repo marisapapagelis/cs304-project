@@ -184,10 +184,34 @@ def all_affiliates():
 #def affiliate_update(username):
 
 #@app.route('/rep/<username>/update/', methods=['GET', 'POST'])
-#def rep_update(username):
+#def insert_rep(username):
 
-#@app.route('/job/<jid>/update/', methods=['GET', 'POST'])
-#def job_update(jid):
+@app.route('/job/<jid>/update/', methods=['GET', 'POST'])
+def job_update(jid):
+    conn = dbi.connect()
+    job = insertpy.search_job(conn, jid) #how do we get jid from the database? it's autoincremented and user wouldn't know?
+    comp_id = job['comp_id']
+    comp = comp.get_company(conn,comp_id)
+    iid = job['iid']
+    ind = get_industry(conn,iid)
+    if job != None: 
+        return render_template('update_job.html', title = job['title'], comp = comp, comp_id = comp_id
+                                    educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job[job_status], link = job['app_link'],
+                                    ind = ind, iid = iid)
+                
+        else: #using POST
+            #requesting information inputted by user in form
+            title = request.form['jobtitle']
+            company = request.form['company-name']
+            comp_id = request.form['company-id'] 
+            ind_name = request.form['industry-name']
+            ind_id = request.form['industry-id']
+            educ = request.form['education']
+            educ = request.form['gpa']
+            skills = request.form['skills']
+            #how to get data from radio button? for job status?
+
+            if request.form.get('submit') == 'update': #if user wants to update 
     
 #@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
 #def comp_update(comp_id):
