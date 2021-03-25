@@ -11,9 +11,9 @@
 <div class = "box">
 
 <h1>DoorToDoor</h1>
-    <h2>I'll open your door if you open mine</h2>
+<h2>I'll open your door if you open mine</h2>
 
-    <p> Search by person, company, or industry!</p>
+<p> Search by person, company, or industry!</p>
     
 <form class="search" method="GET" action="/search/">
     <p><label> Search by Name: <input type="text" required name="query"></label>
@@ -27,6 +27,12 @@
     </label> 
     <input type="submit" value="search"></p>
 </form>
+
+<br> 
+<a href="{{url_for('all_companies')}}">See All Companies To Date</a></p>
+<a href="{{url_for('all_industries')}}">See All Industries To Date</a></p>
+<a href="{{url_for('all_affiliates')}}">See All Affiliates Joined To Date</a></p>
+<br> 
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
