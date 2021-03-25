@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<p>Industries matching {{kind}}: </p>
+<p>Industries in result: </p>
 <ol>
     {% for industry in industrylist: %}
     <li> 
-        <a href="{{url_for('industry',iid=industry.iid)}}">{{industry.ind_name}}</a>
+        <a href="{{url_for('industry',iid=industry['iid'])}}">{{industry['ind_name']}}</a>
     </li>
     {% endfor %}
 </ol>
