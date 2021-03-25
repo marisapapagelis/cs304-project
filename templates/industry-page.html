@@ -10,7 +10,7 @@
     <ol>
         {% for c in complist: %}
         <li> 
-            <a href="{{url_for('company',comp_id=c.comp_id)}}">{{c.comp_name}}</a>
+            <a href="{{url_for('company',comp_id=c['comp_id'])}}">{{c['comp_name']}}</a>
         </li>
         {% endfor %}
     </ol>
