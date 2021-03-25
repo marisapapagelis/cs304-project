@@ -23,18 +23,16 @@ def get_affiliates(conn,name):
                      welles_affiliates.org2,welles_affiliates.org3, user.name  from  welles_affiliates inner join user using (username) where user.name like %s''', ['%' + name + '%'])
     return curs.fetchall()
 
+def get_all_affiliates(conn):
+    conn = dbi.connect()
+    #Create cursor to pull data from the company table.
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''select welles_affiliates.username, user.name from welles_affiliates inner join user using (username) order by name asc''')
+    return curs.fetchall()
+
 def get_experience(conn,username): 
     conn = dbi.connect()
     #Create cursor to pull data from the user table.
     curs = dbi.dict_cursor(conn)
     curs.execute(''' select experience.username,experience.jid, experience.comp_id, company.comp_name from experience inner join company using (comp_id) where username=%s''', [username])
     return curs.fetchall()
-
-
-
-
-
-
-
-
- 
