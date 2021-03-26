@@ -103,7 +103,9 @@ def jobs(comp_id):
     #get username using session - pull it out from the session after they login
     #get username using session - pull it out from the session after they login
     if repre.is_rep(conn,username): #get username using session - pull it out from the session after they login
-        return render_template('rep_job-list.html', jobs=jobs,comp_name=comp_name) 
+        return render_template('rep_job-list.html', jobs=jobs,comp_name=comp_name)
+        if request.form.get('submit') == 'edit':
+            return redirect(url_for('job_update',jid = ))
     else:
         return render_template('job-list.html', jobs=jobs,comp_name=comp_name) 
 
@@ -139,10 +141,9 @@ def affiliate(username):
     username = affil['username']
     major = affil['major']
     gpa = affil['gpa']
-    org1 = affil['org1']
-    org2 = affil['org2']
-    org3 = affil['org3']
-    year = affil['year']
+    org1= affil['org1']
+    org2= affil['org2']
+    org3= affil['org3']
     experiences=aff.get_experience(conn,username)
 
     if experiences:
@@ -150,7 +151,7 @@ def affiliate(username):
             job = jo.get_job(conn, e['jid']) #get each job based on the jid
             e['title']=job['title'] #add job title onto each experience 
 
-    return render_template('affiliate-page.html',name = name, year=year,
+    return render_template('affiliate-page.html',name = name,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences)
 
 # routes to company reps page given a unique username
@@ -189,50 +190,65 @@ def all_affiliates():
 #@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
 #def affiliate_update(username):
 
-#@app.route('/rep/<username>/update/', methods=['GET', 'POST'])
-#def insert_rep(username):
 
 @app.route('/job/<jid>/update/', methods=['GET', 'POST'])
 def job_update(jid):
     conn = dbi.connect()
-    job = insertpy.search_job(conn, jid) #how do we get jid from the database? it's autoincremented and user wouldn't know?
-    comp_id = job['comp_id']
-    comp = comp.get_company(conn,comp_id)
-    iid = job['iid']
-    ind = get_industry(conn,iid)
-    username = 
+    job = jo.get_job(conn,jid)
+    # username = 
     if repre.is_rep(conn,username):
-    if job != None: 
-        return render_template('update_job.html', title = job['title'], comp = comp, comp_id = comp_id
-                                    educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job[job_status], link = job['app_link'],
-                                    ind = ind, iid = iid)
+            if request.method == 'GET':
+                return render_template('update_job.html', title = job['title'],
+                                    educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job['job_status'], link = job['app_link'])
                 
-        else: #using POST
-            #requesting information inputted by user in form
-            title = request.form['jobtitle']
-            company = request.form['company-name']
-            comp_id = request.form['company-id'] 
-            ind_name = request.form['industry-name']
-            ind_id = request.form['industry-id']
-            educ = request.form['education']
-            educ = request.form['gpa']
-            skills = request.form['technical_skills']
-            status = request.form['app_status']
-            link = request.form['AppLink']
-            #how to get data from radio button? for job status? should we just make it a text field?
+            else: #using POST
+                #requesting information inputted by user in form
+                title = request.form['jobtitle']
+                educ = request.form['education']
+                gpa = request.form['gpa']
+                skills = request.form['technical_skills']
+                status = request.form['app_status']
+                link = request.form['AppLink']
+        
+                if request.form.get('submit') == 'update': #if user wants to update 
+                    if ddl.update_job(conn,jid,title,educ,gpa,skills,status,link) == 1: 
+                        flash("Job Posting for " + title + " was updated succesfully!")
+                        return render_template('update_job.html', title = job['title'],
+                                    educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job['job_status'], link = job['app_link'])
 
-            if request.form.get('submit') == 'update': #if user wants to update 
+                else: #if deleting job
+                    if ddl.delete_job(conn, jid) == 1: #deletes movie and checks if deleted
+                            flash('Job Posting for ' + title + ' was deleted successfully')
+                            return redirect(url_for('index'))
 
-            else: #if deleting job
-    
+
 #@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
 #def comp_update(comp_id):
 
-#@app.route('/affiliate/<username>/insert/', methods=['GET', 'POST'])
-#def affiliate_insert(username):
+@app.route('/rep/<username>/update/', methods=['GET', 'POST'])
+def rep_update(username):
+    conn = dbi.connect()
+    rep= repre.get_rep(conn,username)
+    getcomp = comp.get_company(rep['comp_id'])
+    comp = getcomp['comp_name']
+    if request.method == 'GET':
+        return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id']), comp_name = comp)
+        
+    else: #using POST
+        #requesting information inputted by user in form
+        name = request.form['rep-name']
+        cid = request.form['comp_id']
+        comp = request.form['comp_name']
+        if request.form.get('submit') == 'update': #if user wants to update 
+            if ddl.update_rep(conn,name,cid,comp) == 1: 
+                flash("Rep Profile for " + name + " was updated succesfully!")
+                return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id']), comp_name = comp)
 
-#@app.route('/rep/<username>/insert/', methods=['GET', 'POST'])
-#def rep_update(username):
+        else: #if deleting rep from database
+            if ddl.delete_rep(conn, username) == 1: #deletes movie and checks if deleted
+                    flash("Rep Profile for " + name + " was deleted successfully.")
+                    return redirect(url_for('index'))
+
 
 #@app.route('/job/<jid>/insert/', methods=['GET', 'POST'])
 #def job_insert(jid):

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<h1>Insert Recruiter</h1>
+
+<form method=post action="{{url_for('insert_recruiter')}}">
+
+    <fieldset>
+    <legend>Enter Recruiter Details</legend>
+    <table>
+    <tr><td><label for="name" accesskey="i" > (i) Recruiter Name: </label></td>
+        <td><input type="text" name="recruiter_name" id="name"></td></tr>
+    <tr><td><label for="comp" accesskey="t"> (t) Company Name: </label></td>
+        <td><input type="text" name="company" id="comp"></td></tr>
+    <tr><td><label for="cid" accesskey="r">(r) Company ID:</label></td>
+        <td><input type="text" name="comp_id" id="cid"></td></tr>
+    </table>
+    </fieldset>
+
+    <p> <input type='submit' value='Insert Recruiter'> </p>
+
+</form>
+
+{% endblock %}
