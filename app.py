@@ -139,9 +139,10 @@ def affiliate(username):
     username = affil['username']
     major = affil['major']
     gpa = affil['gpa']
-    org1= affil['org1']
-    org2= affil['org2']
-    org3= affil['org3']
+    org1 = affil['org1']
+    org2 = affil['org2']
+    org3 = affil['org3']
+    year = affil['year']
     experiences=aff.get_experience(conn,username)
 
     if experiences:
@@ -149,7 +150,7 @@ def affiliate(username):
             job = jo.get_job(conn, e['jid']) #get each job based on the jid
             e['title']=job['title'] #add job title onto each experience 
 
-    return render_template('affiliate-page.html',name = name,
+    return render_template('affiliate-page.html',name = name, year=year,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences)
 
 # routes to company reps page given a unique username
