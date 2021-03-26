@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<h1>Update Affiliate Information</h1>
+
+  <p> You can update or delete your affiliate profile here.</p>
+
+    <form method=POST action="{{url_for('affiliate_update')}}">
+        <table>
+            <tr>
+                <td><label for="affiliate-name">Affiliate Name</label></td>
+                <td><input name="affiliate-name" id="affiliate-name" type="text" value="{{name}}" ></td> 
+                </tr>
+        
+            <tr>
+            <td><label for="gpa">GPA</label></td>
+            <td><input name='gpa' id = 'gpa' value='{{gpa}}'></td> 
+            </tr>
+        
+            <tr>
+            <td><label for="org1">ORG 1</label></td>
+            <td><input name='org1' id = 'org1' value='{{org1}}'></td> 
+            </tr>
+
+            <tr>
+            <td><label for="org2">ORG 2</label></td>
+            <td><input name='org2' id = 'org2' value='{{org2}}'></td> 
+            </tr>
+        
+            <tr>
+            <td><label for="org3">ORG 3</label></td>
+            <td><input name='org3' id = 'org3' value='{{org3}}'></td> 
+            </tr>
+
+            <tr>
+            <td><label for="year">Year of Graduation</label></td>
+            <td><input name='year' id = 'year' value='{{year}}'></td> 
+            </tr>
+
+            <tr>
+            <td><label for="major">Major</label></td>
+            <td><input name='major' id = 'major' value='{{major}}'></td> 
+            </tr>
+            
+            <tr>
+            <td> <input type="submit" name="submit" value="update">
+                <input type="submit" name="submit" value="delete">
+            </tr>
+        </table>
+    </form>
+
+{% endblock %}
