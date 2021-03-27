@@ -17,3 +17,7 @@ def delete_job(conn,jid):
     j = curs.execute('''delete from jobs where jid=%s''', [jid]) 
     conn.commit()
     return j #returns number of rows affected by delete query above
+
+#def update_comp(conn,comp_id,comp_name,locations)
+#def delete_comp(conn,comp_id)
+#def insert_comp(conn,comp_name, iid, locations)
