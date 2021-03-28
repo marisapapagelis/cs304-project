@@ -13,6 +13,8 @@
 <br> Minimum GPA: {{q3}}
 <br> Application Link : {{app_link}}</p>
 
-<a href="{{url_for('job_update', jid=jid)}}"> Edit Job</a>
+{% if rep %}
+    <a href="{{url_for('job_update', jid=jid)}}"> Edit Job</a> 
+{% endif %}
 
 {% endblock %}

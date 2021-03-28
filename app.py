@@ -156,14 +156,7 @@ def jobs(comp_id):
     conn=dbi.connect()
     jobs=jo.get_jobs(conn,comp_id)
     comp_name=comp.get_company(conn,comp_id)['comp_name']
-    #get username using session - pull it out from the session after they login
-    #get username using session - pull it out from the session after they login
-    if repre.is_rep(conn,username): #get username using session - pull it out from the session after they login
-        return render_template('rep_job-list.html', jobs=jobs,comp_name=comp_name)
-        if request.form.get('submit') == 'edit':
-            return redirect(url_for('job_update',jid = ))
-    else:
-        return render_template('job-list.html', jobs=jobs,comp_name=comp_name) 
+    return render_template('job-list.html', jobs=jobs, comp_name=comp_name) 
 
 # routes from a companies job page to a specific job given the jobs unique ID
 @app.route('/company/<comp_id>/job/<jid>/')
@@ -183,9 +176,11 @@ def job(comp_id,jid):
     q3 = job['qual3']
     app_link = job['app_link']
 
+    rep = repre.is_rep(conn,username)
+
     return render_template('job-page.html', comp_name=comp_name, ind_name=ind_name,
                             jid=jid, status=status, q1=q1, q2=q2,comp_id=comp_id,
-                            q3=q3, app_link=app_link, title=title)
+                            q3=q3, app_link=app_link, title=title, rep = rep)
 
 # routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>', methods=['GET', 'POST'])
@@ -369,7 +364,7 @@ def job_insert(jid):
     conn = dbi.connect()
     if request.method == 'GET': 
         # renders template for insert page
-        return render_template('insert_job.html', title='Insert a Job')
+        return render_template('insert-job.html', title='Insert a Job')
     else: #if request method is POST
         # requests inputs from form 
         title = request.form['jobtitle']
@@ -385,7 +380,7 @@ def job_insert(jid):
             flash("Job Posting for " + title + " has been posted!") 
             return redirect(url_for('job_update',jid = jid)) 
         
-        return render_template('insert_job.html', title='Insert a Job')
+        return render_template('insert-job.html', title='Insert a Job')
 
 @app.before_first_request
 def init_db():
