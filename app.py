@@ -29,7 +29,55 @@ app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 # route to home page
 @app.route('/')
 def index():
-    return render_template('main.html',title='DoorToDoor')
+    if request.method=='GET':
+        return render_template('main.html',title='DoorToDoor')
+    else: 
+        return redirect(url_for('login'))
+
+@app.route('/login/')
+def login():
+    conn=dbi.connect()
+    if request.method=='GET':
+        return render_template('login.html')
+    else: 
+        username=request.form['username']
+        password=request.form['password']
+        user_password = aff.get_password(conn, username)
+        if password != user_password: # check if password is correct
+            is_rep = repre.is_rep(conn, username)
+            if is_rep == True: # check if rep
+                redirect(url_for('rep',username=username)
+            else:
+                redirect(url_for('affiliate',username=username)
+        else:
+            flash('Username or Password is Incorrect. Please try again.')
+            return redirect(url_for('login'))
+
+@app.route('/signup/')
+def signup():
+    conn=dbi.connect()
+    if request.method=='GET':
+        return render_template('login.html')
+    else: 
+        name=request.form['name']
+        email=request.form['email']
+        username=request.form['username']
+        password=request.form['password']
+        password2=request.form['password2']
+        kind= request.args['kind']
+        if password =! password2: # check is password was re-entered correctly
+            flash('Passwords do not match. Please try again.')
+            return redirect(url_for('login'))
+        else: 
+            ddl.insert_user(conn,username,name,password,email) # insert user
+            if kind = 'affiliate': # insert affiliate
+                ddl.insert_affiliate(conn,username)
+                flash('Taking you to your profile page. Please add additional information if necessary')
+                return redirect(url_for('affiliate_update', username = username)
+            else: 
+                ddl.insert_rep(conn,username) # insert rep
+                flash('Taking you to your profile page. Please add additional information if necessary')
+                return redirect(url_for('rep_update', username = username)
 
 # routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])

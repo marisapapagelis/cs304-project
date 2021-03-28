@@ -1,6 +1,12 @@
-{% extends "base.html" %}
-
-{% block content %}
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name=author content="Marisa, Luiza, Mehar, Nina">
+    <title>Welcome page</title>
+    <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
+</head>
+<body>
 
 <h1>Welcome to DoorToDoor</h1>
 
@@ -12,6 +18,9 @@
     but we want to bring it all together in one and solely focus on the Wellesley community. 
 </p>
 
-<h2> <a href="{{url_for('login')}}">Login or Sign Up</a> </h2>
+<form method="post" action="{{url_for('login')}}">
+    <p><input type="submit" value="Login or Sign Up"></p>
+</form>
 
-{% endblock %} 
+</body>
+</html>
