@@ -291,8 +291,8 @@ def job_update(jid):
                 if request.form.get('submit') == 'update': #if user wants to update 
                     if ddl.update_job(conn,jid,title,educ,gpa,skills,status,link) == 1: 
                         flash("Job Posting for " + title + " was updated succesfully!")
-                        return render_template('update-job.html', title = job['title'],
-                                    educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job['job_status'], link = job['app_link'])
+                        return render_template('update-job.html', title = title,
+                                    educ = educ, gpa = gpa, skills = skills, status = status, link = link)
 
                 else: #if deleting job
                     if ddl.delete_job(conn, jid) == 1: #deletes movie and checks if deleted
@@ -338,7 +338,7 @@ def comp_insert(comp_id):
         if ddl.insert_comp(conn, comp_name, iid, locations) == 1:
             flash("Company Profile (" + comp_name + ") was inserted successfully.")
             return redirect(url_for('index'))  
-                      
+
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
     conn = dbi.connect()
@@ -351,12 +351,12 @@ def rep_update(username):
     else: #using POST
         #requesting information inputted by user in form
         name = request.form['rep-name']
-        cid = request.form['comp_id']
-        comp = request.form['comp_name']
+        comp_id = request.form['comp_id']
+        comp_name = request.form['comp_name']
         if request.form.get('submit') == 'update': #if user wants to update 
             if ddl.update_rep(conn,name,cid,comp) == 1: 
                 flash("Rep Profile for " + name + " was updated succesfully!")
-                return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id']), comp_name = comp)
+                return render_template('update-rep.html', name = name, comp_id = comp_id), comp_name = comp)
 
         else: #if deleting rep from database
             if ddl.delete_rep(conn, username) == 1: #deletes movie and checks if deleted

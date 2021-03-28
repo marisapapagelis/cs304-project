@@ -40,8 +40,6 @@ def insert_rep(conn,username,name,comp_id):
     curs.execute('''INSERT INTO company_rep (username,name,comp_id)
     VALUES (%s, %s, %s);''',[username,name,comp_id])
 
-
-
 def delete_user(conn,username): # works for both affiliate and rep 
     conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
@@ -54,7 +52,7 @@ def update_comp(conn,comp_id,comp_name,iid,location):
                         [comp_name,iid,locations,comp_id])
     conn.commit() #committing updated changes to database
 
- def insert_jobs(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid) 
+ def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid) 
  conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid)
@@ -67,15 +65,14 @@ def insert_user(conn,username,name,password,email):
                     VALUES (%s, %s, %s, %s);''',[username,name,password,email]) 
     conn.commit()
 
-def update_jobs(conn,title,qual1,qual2,qual3,job_status,app_link): 
+def update_job(conn,title,qual1,qual2,qual3,job_status,app_link): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''update jobs set title = %s,qual1 = %s,qual2 = %s, qual3 = %s, job_status = %s, app_link = %s where jid=%s''',
                         [title,qual1,qual2,qual3,job_status,app_link])
     conn.commit() #committing updated changes to database
  
-
 #deletes the job from database given its jid
-def delete_jobs(conn,jid):
+def delete_job(conn,jid):
     curs = dbi.dict_cursor(conn)
     #deleting job from job table where jid is the jid of the job we want to delete
     curs.execute('''delete from jobs where jid=%s''', [jid]) 

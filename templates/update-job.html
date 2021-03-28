@@ -10,11 +10,9 @@
     <form method=POST action="{{url_for('update_job')}}">
       <table>
         <tr>
-          <td><label for="jobtitle">Position Title</label></td>
-          <td><input type = 'text' required name="jobtitle" id = "jobtitle" value='{{title}}'></td>
+          <td><label for="title">Position Title</label></td>
+          <td><input type = 'text' required name="title" id = "title" value='{{title}}'></td>
         </tr>
-        
-
         <tr>
           <td><label for="educ">Highest Level of Education Achieved </label></td>
           <td><input type = 'text' required name= "education" id = 'educ' value='{{educ}}'></td>
@@ -25,17 +23,17 @@
         </tr>
         <tr>
           <td><label for="skills">Technical Skills Required </label></td>
-          <td><input type = 'text' required name='technical_skills' id = 'skills' value='{{skills}}'></td>
+          <td><input type = 'text' required name='skills' id = 'skills' value='{{skills}}'></td>
         </tr>
 
         <tr>
           <td><label for="status"> Are applications for this position currently open? Please enter "Applications Open" or "Applications Closed" below.</label> </td>
-          <td><input type = 'text' required name="app_status" id="status" value='{{status}}'> </td> MAKE THIS A DROP DOWN
+          <td><input type = 'text' required name="status" id="status" value='{{status}}'> </td> MAKE THIS A DROP DOWN
           </tr> 
 
         <tr>
-          <td><label for="AppLink">Application Link</label> </td> 
-          <td><input type="text" name="AppLink" id="AppLink" value='{{link}}'> </td> 
+          <td><label for="link">Application Link</label> </td> 
+          <td><input type="text" name="link" id="link" value='{{link}}'> </td> 
           </tr>  
 
       </table>
