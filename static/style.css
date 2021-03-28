@@ -1,0 +1,28 @@
+h1, h2 {
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  body {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: rgb(235, 116, 205)
+  }
+
+  .box {
+    margin: auto;
+    width: 75%;
+    border: solid 3px;
+    background-color: rgb(255, 210, 245);
+    padding: 40px; }
+
+  .nav-box {
+    margin: auto;
+    width: 75%;
+    border: solid 3px;
+    background-color: rgb(177, 86, 142);
+    padding: 40px; }
