@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name=author content="Marisa, Luiza, Mehar, Nina">
+    <title>Welcome page</title>
+    <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
+</head>
+<body>
+    <h1> Welcome to DoorToDoor!</h1>
+    <p><b>If you are an existing user,</b> please login on the left.</p>
+    <p><b> If you are new to DoorToDoor,</b> please create an account on the right. Be sure to specify whether you are a Wellesley Affiliate or a Company Representative to be directed to your appropriate profile creation page. </p>
+
+    <div id = "leftbox">
+      <h2>Login</h2>
+      <form class="login" method="GET" action="{{url_for('login')}}">
+      <p><label>Username: <input type="text" required name="username"></label>
+      <br>
+      Password: <input type="text" required name="password"></label>
+      <br>
+        <input type="submit" value="submit"></p>
+    </form>
+    </div>
+
+    <div id = "rightbox">
+      <h2>Sign Up</h2>
+      <form class="signup" method="GET" action="{{url_for('signup')}}">
+      <label>I am a:
+            <select required name="kind">
+                <option value="">choose one</option>
+                <option value="affiliate">Wellesley Affiliate</option>
+                <option value="company_rep">Company Representative</option>
+            </select>
+    </label> 
+      <p><label>Name: <input type="text" required name="name"></label>
+      <br>
+      Email: <input type="text" required name="email"></label>
+      <br>
+      Username: <input type="text" required name="username"></label>
+      <br>
+      Password: <input type="text" required name="password"></label>
+      <br>
+      Enter Password Again: <input type="text" required name="password"></label>
+      <br>
+        <input type="submit" value="submit"></p>
+    </form>
+    </div>
+  </body>
+</html>
+
