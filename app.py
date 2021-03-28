@@ -202,6 +202,71 @@ def affiliate(username):
     return render_template('affiliate-page.html',name = name,
         username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences)
 
+@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
+def affiliate_update(username):  
+    conn = dbi.connect()
+    affili= aff.get_affiliate(conn,username)
+    if request.method == 'GET':
+        return render_template('update-affiliate.html', username = affili['username'],major =affili['major'],
+                                gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3']      
+    else: #using POST
+    #requesting information inputted by user in form
+        username = request.form['username']
+        major = request.form['major']
+        gpa=request.form['gpa']
+        year=equest.form['year']
+        org1=equest.form['org1']
+        org2=equest.form['org2']
+        org3=equest.form['org3']
+        if request.form.get('submit') == 'update': #if user wants to update 
+            ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3 ): 
+            flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
+            return redirect(url_for'affiliate',username=username)
+        else: #if deleting job
+            ddl.delete_comp(conn, comp_id) == 1: #deletes movie and checks if deleted
+            flash("This Profile was deleted. We are sad to see you go. Good luck!")
+            return redirect(url_for('index'))
+
+@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
+def comp_update(comp_id):
+    conn = dbi.connect()
+    c = comp.get_comp(conn, comp_id)
+    # username = 
+    if repre.is_rep(conn,username):
+        if request.method == 'GET':
+            return render_template('update-company.html', comp_name = c['comp_name'], locations = c['locations'])
+                
+        else: #using POST
+            #requesting information inputted by user in form
+            comp_name = request.form['comp_name']
+            locations = request.form['locations']
+        
+            if request.form.get('submit') == 'update': #if user wants to update 
+                if ddl.update_comp(conn,comp_id,comp_name,locations) == 1: 
+                    flash("Company Profile (" + comp_name + ") was updated succesfully!")
+                    return render_template('update-company.html', comp_name = comp_name, locations = locations)
+
+            else: #if deleting job
+                if ddl.delete_comp(conn, comp_id) == 1: #deletes movie and checks if deleted
+                    flash("Company Profile (" + title + ") was deleted successfully.")
+                    return redirect(url_for('index'))
+            flash('Job Posting for ' + title + ' was deleted successfully')
+            return redirect(url_for('index'))
+
+def comp_insert(comp_id):
+    conn = dbi.connect()
+    inds = ind.get_all_industries(conn)
+    if request.method == 'GET':
+        return render_template('insert-company.html', inds = inds)
+    else: #using POST
+        comp_name = request.form['comp_name']
+        iid = request.form['iid']
+        locations = request.form['locations']
+        if ddl.insert_comp(conn, comp_name, iid, locations) == 1:
+            flash("Company Profile (" + comp_name + ") was inserted successfully.")
+            return redirect(url_for('index'))
+
+
 # routes to company reps page given a unique username
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
