@@ -16,7 +16,7 @@ import repre
 import random
 import ind
 
-app.secret_key = 'welcome' # secret key
+app.secret_key = 'admin' # secret key
 
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
@@ -40,7 +40,9 @@ def login():
     if request.method=='GET':
         return render_template('login.html')
     else: 
-        username=request.form['username']
+        #username=request.form['username']
+        session['username'] = request.form['username']
+        username = session['username']
         password=request.form['password']
         user_password = aff.get_password(conn, username)
         if password != user_password: # check if password is correct
@@ -52,6 +54,12 @@ def login():
         else:
             flash('Username or Password is Incorrect. Please try again.')
             return redirect(url_for('login'))
+
+@app.route('/logout/')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return redirect(url_for('index'))
 
 @app.route('/signup/',  methods = ['GET', 'POST'])
 def signup():
