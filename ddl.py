@@ -81,7 +81,7 @@ def delete_jobs(conn,jid):
     curs.execute('''delete from jobs where jid=%s''', [jid]) 
     conn.commit()
 
-def update_affiliate(conn,major,gpa,org1,org2,org3 ): 
+def update_affiliate(conn,username,major,gpa,org1,org2,org3 ): 
     curs = dbi.dict_cursor(conn, )
     curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s where username=%s''', 
                         [year,major,gpa,org1,org2,org3])

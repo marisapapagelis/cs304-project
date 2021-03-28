@@ -245,6 +245,33 @@ def comp_update(comp_id):
                         flash("Company Profile (" + title + ") was deleted successfully.")
                         return redirect(url_for('index'))
 
+@app.route('/affiliate/<username>/update/', methods=['GET', 'POST'])
+def affiliate_update(username):  
+    conn = dbi.connect()
+    affili= aff.get_affiliate(conn,username)
+        if request.method == 'GET':
+            return render_template('update-affiliate.html', username = affili['username'],major =affili['major'],
+                                    gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3']
+                
+        else: #using POST
+                #requesting information inputted by user in form
+                username = request.form['username']
+                major = request.form['major']
+                gpa=request.form['gpa']
+                year=equest.form['year']
+                org1=equest.form['org1']
+                org2=equest.form['org2']
+                org3=equest.form['org3']
+                if request.form.get('submit') == 'update': #if user wants to update 
+                    ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3 ): 
+                    flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
+                    return redirect(url_for'affiliate',username=username)
+
+                else: #if deleting job
+                        ddl.delete_comp(conn, comp_id) == 1: #deletes movie and checks if deleted
+                        flash("This Profile was deleted. We are sad to see you go. Good luck!")
+                        return redirect(url_for('index'))
+
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
     conn = dbi.connect()
