@@ -13,7 +13,7 @@
 
     <div id = "leftbox">
       <h2>Login</h2>
-      <form class="login" method="GET" action="{{url_for('login')}}">
+      <form class="login" method="POST" action="{{url_for('login')}}">
       <p><label>Username: <input type="text" required name="username"></label>
       <br>
       Password: <input type="text" required name="password"></label>
@@ -25,7 +25,7 @@
     <div id = "rightbox">
       <h2>Sign Up</h2>
       <p>All fields are required</p>
-      <form class="signup" method="GET" action="{{url_for('signup')}}">
+      <form class="signup" method="POST" action="{{url_for('signup')}}">
       <label>I am a:
             <select required name="kind">
                 <option value="">choose one</option>
