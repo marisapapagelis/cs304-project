@@ -27,14 +27,14 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 # route to home page
-@app.route('/')
+@app.route('/',  methods = ['GET'])
 def index():
     if request.method=='GET':
         return render_template('main.html',title='DoorToDoor')
     else: 
         return redirect(url_for('login'))
 
-@app.route('/login/')
+@app.route('/login/', methods = ['GET', 'POST'])
 def login():
     conn=dbi.connect()
     if request.method=='GET':
@@ -53,7 +53,7 @@ def login():
             flash('Username or Password is Incorrect. Please try again.')
             return redirect(url_for('login'))
 
-@app.route('/signup/')
+@app.route('/signup/',  methods = ['GET', 'POST'])
 def signup():
     conn=dbi.connect()
     if request.method=='GET':
