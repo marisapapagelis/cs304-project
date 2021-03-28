@@ -48,9 +48,9 @@ def login():
         if password != user_password: # check if password is correct
             is_rep = repre.is_rep(conn, username)
             if is_rep == True: # check if rep
-                redirect(url_for('rep',username=username)
+                return redirect(url_for('rep',username=username))
             else:
-                redirect(url_for('affiliate',username=username)
+                return redirect(url_for('affiliate',username=username))
         else:
             flash('Username or Password is Incorrect. Please try again.')
             return redirect(url_for('login'))
