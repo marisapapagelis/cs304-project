@@ -9,7 +9,7 @@
     {% for job in jobs: %}
     <li> 
         <a href="{{url_for('job',jid=job.iid,comp_id=job.comp_id)}}">{{job.title}}</a>
-        <input type="submit" name="submit" value="edit">
+        <label for = "edit"></label><input type="submit" name="submit" value="{{job.jid}}">
     </li>
     {% endfor %}
 </ol>
