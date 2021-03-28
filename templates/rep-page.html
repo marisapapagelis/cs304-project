@@ -7,11 +7,11 @@
 <p>You Are Representing: <a href="{{url_for('company', comp_id=comp_id)}}">{{comp_name}}</a></p>
 
 <ul>
-  <li><a href="{{url_for('index')}}">Add New Job Post</a></li>
+  <li><a href="{{url_for('job_insert')}}">Add New Job Post</a></li>
   <li><a href="{{url_for('index')}}">Add New Recruiting Event</a></li>
 </ul>
 
-<a href="{{url_for('index')}}">Update Your Profile</a>
-<a href="{{url_for('index')}}">Update Your Company Profile</a>
+<a href="{{url_for('rep_update', username=username)}}">Update Your Profile</a>
+<a href="{{url_for('comp_update', comp_id=comp_id)}}">Update Your Company Profile</a>
 
 {% endblock %}

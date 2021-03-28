@@ -41,5 +41,5 @@ def get_password(conn,username):
     conn = dbi.connect()
     #Create cursor to pull data from the user table.
     curs = dbi.dict_cursor(conn)
-    curs.execute(''' select password from user where username=%s''', [username])
+    curs.execute(''' select passwd from user where username=%s''', [username])
     return curs.fetchall()

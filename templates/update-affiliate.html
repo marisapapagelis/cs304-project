@@ -1,17 +1,17 @@
 
 {% extends "base.html" %}
 
-{% block main_content %}
+{% block content %}
 
 <h1>Update Affiliate Information</h1>
 
   <p> You can update or delete your affiliate profile here.</p>
 
-    <form method=POST action="{{url_for('affiliate_update')}}">
+    <form method=POST action="{{url_for('affiliate_update', username=username)}}">
         <table>
             <tr>
-                <td><label for="affiliate-name">Affiliate Name</label></td>
-                <td><input name="affiliate-name" id="affiliate-name" type="text" value="{{name}}" ></td> 
+                <td><label for="name">Affiliate Name</label></td>
+                <td><input name="name" id="name" type="text" value="{{name}}" ></td> 
                 </tr>
         
             <tr>

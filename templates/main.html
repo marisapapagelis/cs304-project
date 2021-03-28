@@ -18,7 +18,17 @@
     but we want to bring it all together in one and solely focus on the Wellesley community. 
 </p>
 
-<form method="POST" action="{{url_for('index')}}">
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="messages">
+  {% for msg in messages %}
+  <p>{{msg}}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<form method="post" action="{{url_for('login')}}">
     <p><input type="submit" value="Login or Sign Up"></p>
 </form>
 

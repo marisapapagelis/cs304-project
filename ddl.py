@@ -1,59 +1,53 @@
-
+import cs304dbi as dbi
 
 def insert_comp(conn, comp_name,iid,locations): 
- '''Inserts company into db after using the insert feature
-    args: attributes of company to be displayed
-    '''
-    conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO company(comp_name,iid,locations)  
                     VALUES (%s, %s, %s);''',[comp_name,iid,locations])  #autoincrement no need for comp_id
     conn.commit()
 
-def delete_comp(conn,comp_id)
-    conn=dbi.connect()
+def delete_comp(conn,comp_id):
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from company where comp_id=%s''', [comp_id]) 
     conn.commit()
 
 def delete_affiliate(conn,username):
-    conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from welles_affiliates where username=%s''', [username])   
     conn.commit()
 
 def insert_affiliate(conn,username,year,major,gpa,org1,org2,org3):
-    conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO welles_affiliates (username,year,major,gpa,org1,org2,org3)
     VALUES (%s, %s, %s, %s,%s,%s,%s);''',[username,year,major,gpa,org1,org2,org3])
 
 def delete_rep(conn,username): 
-    conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from company_rep where username=%s''', [username]) 
     conn.commit()
 
 def insert_rep(conn,username,name,comp_id): 
-    conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO company_rep (username,name,comp_id)
-    VALUES (%s, %s, %s);''',[username,name,comp_id])
+    VALUES (%s, %s, %s)''',[username,name,comp_id])
+
+def update_rep(conn, username, name, comp_id):
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''update rep set name = %s,comp_id = %s where username=%s''',
+                        [name, comp_id, username])
 
 def delete_user(conn,username): # works for both affiliate and rep 
-    conn=dbi.connect()
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from user where username=%s''', [username]) 
     conn.commit()
 
 def update_comp(conn,comp_id,comp_name,iid,location): 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update company set comp_name = %s,iid = %s,location = %s, where comp_id=%s''', # should they be able to update industry?
+    curs.execute('''update company set comp_name = %s,iid = %s,location = %s where comp_id=%s''', # should they be able to update industry?
                         [comp_name,iid,locations,comp_id])
     conn.commit() #committing updated changes to database
 
- def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid) 
- conn = dbi.connect()
+def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid)
                     VALUES (%s, %s, %s, %s,%s,%s,%s,%s);''',[title,qual1,qual2,qual3,job_status,app_link,comp_id,iid]) 
@@ -78,10 +72,10 @@ def delete_job(conn,jid):
     curs.execute('''delete from jobs where jid=%s''', [jid]) 
     conn.commit()
 
-def update_affiliate(conn,username,major,gpa,org1,org2,org3 ): 
-    curs = dbi.dict_cursor(conn, )
-    curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s where username=%s''', 
-                        [year,major,gpa,org1,org2,org3])
+def update_affiliate(conn,username,major,gpa,org1,org2,org3,year): 
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s, year=%s where username=%s''', 
+                        [major,gpa,org1,org2,org3,year,username])
     conn.commit() #committing updated changes to database
 
 def insert_experience(conn,username,jid,comp_id,iid,compensation):
@@ -90,9 +84,14 @@ def insert_experience(conn,username,jid,comp_id,iid,compensation):
                     VALUES (%s, %s, %s, %s,%s);''',[username,jid,comp_id,iid,compensation]) 
     conn.commit()
 
-def delete_experience(conn,username,jid)
+def delete_experience(conn,username,jid):
     curs = dbi.dict_cursor(conn)    
     curs.execute('''delete from experience where username=%s and jid=%s''', [username,jid]) 
+    conn.commit()
+
+def delete_allexperiences(conn,username):
+    curs = dbi.dict_cursor(conn)    
+    curs.execute('''delete from experience where username=%s''', [username]) 
     conn.commit()
   
 

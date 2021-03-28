@@ -15,6 +15,7 @@ import aff
 import repre
 import random
 import ind
+import ddl
 
 app.secret_key = 'admin' # secret key
 
@@ -26,24 +27,30 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+username = 'lu1'
+password = 'mars1'
+
 # route to home page
-@app.route('/',  methods = ['GET'])
+@app.route('/',  methods = ['GET', 'POST'])
 def index():
     if request.method=='GET':
+        #print('get')
         return render_template('main.html',title='DoorToDoor')
     else: 
+        #print('here')
         return redirect(url_for('login'))
 
 @app.route('/login/', methods = ['GET', 'POST'])
 def login():
     conn=dbi.connect()
     if request.method=='GET':
+        print('return')
         return render_template('login.html')
     else: 
         #username=request.form['username']
-        session['username'] = request.form['username']
-        username = session['username']
-        password=request.form['password']
+        #session['username'] = request.form['username']
+        #username = session['username']
+        #password=request.form['password']
         user_password = aff.get_password(conn, username)
         if password != user_password: # check if password is correct
             is_rep = repre.is_rep(conn, username)
@@ -73,19 +80,19 @@ def signup():
         password=request.form['password']
         password2=request.form['password2']
         kind= request.args['kind']
-        if password =! password2: # check is password was re-entered correctly
+        if password != password2: # check is password was re-entered correctly
             flash('Passwords do not match. Please try again.')
             return redirect(url_for('login'))
         else: 
             ddl.insert_user(conn,username,name,password,email) # insert user
-            if kind = 'affiliate': # insert affiliate
+            if kind == 'affiliate': # insert affiliate
                 ddl.insert_affiliate(conn,username)
                 flash('Taking you to your profile page. Please add additional information if necessary')
-                return redirect(url_for('affiliate_update', username = username)
+                return redirect(url_for('affiliate_update', username = username))
             else: 
                 ddl.insert_rep(conn,username) # insert rep
                 flash('Taking you to your profile page. Please add additional information if necessary')
-                return redirect(url_for('rep_update', username = username)
+                return redirect(url_for('rep_update', username = username))
 
 # routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])
@@ -145,8 +152,9 @@ def company(comp_id):
     location = res['locations']
     ind_name = res['ind_name']
     reps=repre.get_reps(conn,comp_id)
+    is_rep = repre.is_rep(conn,username)
     if request.method == 'GET':
-        return render_template('company-page.html', comp_id=comp_id, name=comp_name, iid=iid, location=location, ind_name=ind_name, reps=reps)
+        return render_template('company-page.html', comp_id=comp_id, name=comp_name, iid=iid, location=location, ind_name=ind_name, reps=reps, is_rep=rep)
     else:
         return redirect(url_for('jobs', comp_id=comp_id))
 
@@ -213,7 +221,7 @@ def rep(username):
     name = rep['name']
     comp_id = rep['comp_id']
     comp_name = comp.get_company(conn,comp_id)['comp_name']
-    return render_template('rep-page.html', name=name, comp_id=comp_id, comp_name=comp_name)
+    return render_template('rep-page.html', username=username, name=name, comp_id=comp_id, comp_name=comp_name)
 
 # routes to page that lists all companies included to date
 @app.route('/all/companies/')
@@ -243,23 +251,26 @@ def affiliate_update(username):
     conn = dbi.connect()
     affili= aff.get_affiliate(conn,username)
     if request.method == 'GET':
-        return render_template('update-affiliate.html', username = affili['username'],major =affili['major'],
-                                gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3']      
+        return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major =affili['major'],
+                                gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3'])      
     else: #using POST
     #requesting information inputted by user in form
-        username = request.form['username']
+        print(request.form)
+        #username = request.form['username']
         major = request.form['major']
         gpa=request.form['gpa']
-        year=equest.form['year']
-        org1=equest.form['org1']
-        org2=equest.form['org2']
-        org3=equest.form['org3']
+        year=request.form['year']
+        org1=request.form['org1']
+        org2=request.form['org2']
+        org3=request.form['org3']
         if request.form.get('submit') == 'update': #if user wants to update 
-            ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3 ): 
+            ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
             flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
-            return redirect(url_for'affiliate',username=username)
-        else: #if deleting job
-            ddl.delete_comp(conn, comp_id) == 1: #deletes movie and checks if deleted
+            return redirect(url_for('affiliate',username=username))
+        else:
+            ddl.delete_allexperiences(conn,username) 
+            ddl.delete_affiliate(conn, username) 
+            ddl.delete_user(conn, username)
             flash("This Profile was deleted. We are sad to see you go. Good luck!")
             return redirect(url_for('index'))
 
@@ -320,8 +331,8 @@ def comp_update(comp_id):
             flash('Job Posting for ' + title + ' was deleted successfully')
             return redirect(url_for('index'))
 
-@app.route('/company/<comp_id>/insert/', methods=['GET', 'POST'])
-def comp_insert(comp_id):
+@app.route('/company/insert/', methods=['GET', 'POST'])
+def comp_insert():
     conn = dbi.connect()
     inds = ind.get_all_industries(conn)
     if request.method == 'GET':
@@ -338,10 +349,10 @@ def comp_insert(comp_id):
 def rep_update(username):
     conn = dbi.connect()
     rep= repre.get_rep(conn,username)
-    getcomp = comp.get_company(rep['comp_id'])
-    comp = getcomp['comp_name']
+    getcomp = comp.get_company(conn,rep['comp_id'])
+    company = getcomp['comp_name']
     if request.method == 'GET':
-        return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id']), comp_name = comp)
+        return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
         
     else: #using POST
         #requesting information inputted by user in form
@@ -351,7 +362,7 @@ def rep_update(username):
         if request.form.get('submit') == 'update': #if user wants to update 
             if ddl.update_rep(conn,name,cid,comp) == 1: 
                 flash("Rep Profile for " + name + " was updated succesfully!")
-                return render_template('update-rep.html', name = name, comp_id = comp_id), comp_name = comp)
+                return render_template('update-rep.html', name = name, comp_id = comp_id, comp_name = comp)
 
         else: #if deleting rep from database
             if ddl.delete_rep(conn, username) == 1: #deletes movie and checks if deleted
@@ -359,8 +370,8 @@ def rep_update(username):
                     return redirect(url_for('index'))
 
 '''routes to job insert form'''
-@app.route('/job/<jid>/insert/', methods=['GET', 'POST'])
-def job_insert(jid):
+@app.route('/job/insert/', methods=['GET', 'POST'])
+def job_insert():
     conn = dbi.connect()
     if request.method == 'GET': 
         # renders template for insert page
@@ -386,7 +397,7 @@ def job_insert(jid):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' # using Luiza's database
+    db_to_use = 'mpapagel_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

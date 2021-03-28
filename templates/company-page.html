@@ -23,6 +23,10 @@
     {% endfor %}
 </table>
 
+{% if rep %}
+    <a href="{{url_for('job_update', jid=jid)}}"> Edit Job</a> 
+{% endif %}
+
 <br>
 <p>Click below to see a list of all jobs posted by {{name}}.</p>
 <form method="post" action="">
