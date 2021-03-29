@@ -31,23 +31,23 @@ padding: 40px; }
 margin: auto;
 width: 75%;
 border: solid 3px;
-background-color: rgb(171, 220, 240);
+background-color: rgb(209, 238, 250);
 padding: 40px; }
 
 #leftbox { 
   margin: auto;
   float:left;
   border: solid 3px;  
-  background-color:rgb(255, 210, 245); 
+  background-color: rgb(209, 238, 250);
   width:47%; 
-  height:280px; 
+  padding: 10px;
 } 
     
 #rightbox{ 
   margin: auto;
   float:right;
   border: solid 3px; 
-    background-color:rgb(255, 210, 245); 
+  background-color:rgb(209, 238, 250); 
   width:47%; 
-  height:280px;
+  padding: 10px;
 } 
