@@ -7,7 +7,7 @@
 
   <p> You can update or delete your affiliate profile here.</p>
 
-    <form method=POST action="{{url_for('affiliate_update', username=username)}}">
+    <form method=POST action="{{url_for('affiliate_update', username=username)}}" enctype="multipart/form-data">
         <table>
             <tr>
                 <td><label for="name">Affiliate Name</label></td>
@@ -20,17 +20,17 @@
             </tr>
         
             <tr>
-            <td><label for="org1">ORG 1</label></td>
+            <td><label for="org1">College Org 1</label></td>
             <td><input name='org1' id = 'org1' value='{{org1}}'></td> 
             </tr>
 
             <tr>
-            <td><label for="org2">ORG 2</label></td>
+            <td><label for="org2">College Org 2</label></td>
             <td><input name='org2' id = 'org2' value='{{org2}}'></td> 
             </tr>
         
             <tr>
-            <td><label for="org3">ORG 3</label></td>
+            <td><label for="org3"> College Org 3</label></td>
             <td><input name='org3' id = 'org3' value='{{org3}}'></td> 
             </tr>
 
@@ -47,6 +47,7 @@
             <tr>
             <td><label for="myfile">Upload Your Resume</label></td>
             <td><input type="file" id="myfile" name="myfile"></td>
+            <td><input type="submit" name="submit" value="upload"></td>
             </tr>
             
 
@@ -57,4 +58,8 @@
         </table>
     </form>
 
+{% if username != '' and src != '' %}
+<p>Last upload: {{username}}</p>
+<p> <file src="{{src}}"></p>
+{% endif %}   
 {% endblock %}

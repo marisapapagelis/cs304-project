@@ -4,6 +4,16 @@
 
 use mbhatia_db; 
 
+--inserting dummy row for company 1 and industry 1
+INSERT INTO industry (ind_name)
+VALUES ('None');
+
+INSERT INTO company (comp_name, iid, locations)
+VALUES ('None',1, 'None');
+
+
+
+
 -- insert users into user table
 INSERT INTO user(username,name,passwd,email) 
 VALUES ('mars', 'Marisa', 'cat1234', 'mpapagel');

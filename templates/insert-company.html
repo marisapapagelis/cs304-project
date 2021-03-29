@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block main_content %}
+{% block content %}
 <h1>Add Your Company</h1>
 
-<form method=post action="{{url_for('insert_company')}}"></form>
+<form method=post action="{{url_for('comp_insert', username = username)}}">
 <fieldset>
     <legend>Enter Company Details</legend>
     <table>
@@ -14,19 +14,19 @@
 
         <tr>
         <td><label for="iid">Industry Name</label></td>
-            <select required name='iid'>
+            <td><select required name='iid'>
                 <option value="">Choose One</option>
                 {% for ind in inds: %}
                     <option value="{{ind['iid']}}">{{ind['ind_name']}}</option>
                 {% endfor %}
-            </select>
+            </select> </td>
         </tr>
 
         <tr>
         <td><label for="locations">Current Locations</label></td>
         <td><input type="text" required name="locations" id="locations"></td> 
     </table>
-    <input type="submit" value="submit">
+    <input type="submit" name = "submit" value="submit">
 </fieldset>
 </form>
 

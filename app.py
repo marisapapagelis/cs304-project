@@ -27,6 +27,10 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+# new for file upload
+app.config['resumes'] = 'resumes'
+app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
+
 # route to home page
 @app.route('/',  methods = ['GET', 'POST'])
 def index():
@@ -41,15 +45,18 @@ def login():
     if request.method == 'GET': # the get method is not working here! 
         return render_template('login.html')
     else:
+        print(list(request.form.keys()))
         if request.form['submit'] == 'login':
-            username=request.form['username']
-            #session['username'] = request.form['username']
-            #username = session['username']
+            session['username'] = request.form['username']
+            username = session['username']
             password=request.form['password']
-            user_password = aff.get_password(conn, username)
-            if password != user_password: # check if password is correct
+            print (password)
+            user_password = aff.get_password(conn, username) ['passwd']
+            print (user_password)
+
+            if password == user_password: # check if password is correct
                 is_rep = repre.is_rep(conn, username)
-                if is_rep == True: # check if rep
+                if is_rep: # check if rep
                     return redirect(url_for('rep',username=username))
                 else:
                     return redirect(url_for('affiliate',username=username))
@@ -62,26 +69,45 @@ def login():
             username=request.form['username']
             password=request.form['password']
             password2=request.form['password2']
-            kind= request.args['kind']
-            if password != password2: # check is password was re-entered correctly
-                flash('Passwords do not match. Please try again.')
+            kind= request.form['kind']
+            if not ddl.user_exists(conn, username): #FIX THIS
+                flash("Username already exists. Please choose another username.")
                 return redirect(url_for('login'))
-            else: 
-                ddl.insert_user(conn,username,name,password,email) # insert user
-                if kind == 'affiliate': # insert affiliate
-                    ddl.insert_affiliate(conn,username)
-                    flash('Taking you to your profile page. Please add additional information if necessary')
-                    return redirect(url_for('affiliate_update', username = username))
+            else:
+                if password != password2: # check is password was re-entered correctly
+                    flash('Passwords do not match. Please try again.')
+                    return redirect(url_for('login'))
                 else: 
-                    ddl.insert_rep(conn,username) # insert rep
-                    flash('Taking you to your profile page. Please add additional information if necessary')
-                    return redirect(url_for('rep_update', username = username))
+                    ddl.insert_user(conn,username,name,password,email) # insert user
+                    if kind == 'affiliate': # insert affiliate
+                        ddl.insert_affiliate(conn,username,None,None,None,None,None,None)
+                        flash('Taking you to your profile page. Please add additional information if necessary')
+                        return redirect(url_for('affiliate_update', username = username))
+                    else: 
+                        ddl.insert_rep(conn,username,name,1) # insert rep
+                        flash('Please enter your company details.')
+                        return redirect(url_for('comp_insert', username = username))
+
+
 
 @app.route('/logout/')
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
    return redirect(url_for('index'))
+
+@app.route('/resume/<username>')
+def resume(username):
+    conn = dbi.connect()
+    curs = dbi.dict_cursor(conn)
+    numrows = curs.execute(
+        '''select filename from user_resumes where username = %s''',
+        [username])
+    if numrows == 0:
+        flash('No resume for {}'.format(username))
+        return redirect(url_for('index'))
+    row = curs.fetchone()
+    return send_from_directory(app.config['resumes'],row['filename'])
 
 # routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])
@@ -255,6 +281,16 @@ def affiliate_update(username):
             ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
             flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
             return redirect(url_for('affiliate',username=username))
+        elif request.form['submit'] == 'upload':
+            f = request.files['myfile']
+            ddl.insert_resume(conn,username,f.filename)
+            user_filename = f.filename
+            ext = user_filename.split('.')[-1]
+            filename = secure_filename('{}.{}'.format(username,ext))
+            pathname = os.path.join(app.config['resumes'],filename)
+            f.save(pathname)    
+            flash('resume uploaded successfully')
+            return redirect(url_for('affiliate_update',username=username))
         else:
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
@@ -329,13 +365,15 @@ def comp_insert():
     if request.method == 'GET':
         return render_template('insert-company.html', inds = inds)
     else: #using POST
+        print (request.form)
         comp_name = request.form['comp_name']
         iid = request.form['iid']
         locations = request.form['locations']
-        ddl.insert_comp(conn, comp_name, iid, locations):
+        ddl.insert_comp(conn, comp_name, iid, locations)
         # need to fix this
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
-        return redirect(url_for('company', comp_id=comp_id))  
+        # return redirect(url_for('rep', username=username))  
+        return redirect(url_for('index'))
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
@@ -344,17 +382,20 @@ def rep_update(username):
     getcomp = comp.get_company(conn,rep['comp_id'])
     company = getcomp['comp_name']
     if request.method == 'GET':
-        return render_template('update-rep.html', username = username, name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
+        return render_template('update-rep.html', username = username, 
+        name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
         
     else: #using POST
         #requesting information inputted by user in form
-        name = request.form['rep-name']
+        name = request.form['name']
         comp_id = request.form['comp_id']
         comp_name = request.form['comp_name']
+        print(request.form)
         if request.form['submit'] == 'update': #if user wants to update 
-            ddl.update_rep(conn,name,cid,comp) 
+            ddl.update_rep(conn,username,name,comp_id) 
             flash("Rep Profile for " + name + " was updated succesfully!")
-            return render_template('update-rep.html', name = name, comp_id = comp_id, comp_name = comp)
+            return render_template('update-rep.html', name = name, 
+            comp_id = comp_id, comp_name = comp_name,username=username)
 
         else: #if deleting rep from database
             ddl.delete_rep(conn, username) #deletes movie and checks if deleted
@@ -392,7 +433,7 @@ def job_insert(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mpapagel_db' # using Luiza's database
+    db_to_use = 'mbhatia_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

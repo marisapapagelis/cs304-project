@@ -5,6 +5,7 @@
 use mbhatia_db;
 
 -- drop existing tables
+drop table if exists user_resumes;
 drop table if exists experience;
 drop table if exists jobs; 
 drop table if exists company_rep; 
@@ -28,7 +29,7 @@ ENGINE = InnoDB;
 create table welles_affiliates (
     username varchar(20) not null,
     primary key (username),
-    year int, 
+    year int(4), 
     major varchar (20),
     gpa float, 
     org1 varchar (15),
@@ -111,4 +112,16 @@ create table experience (
         on delete restrict
 )
 ENGINE = InnoDB;
+
+
+create table user_resumes (
+    username varchar(20) not null,
+    filename varchar(50),
+    primary key (username),
+    foreign key (username) references welles_affiliates(username)
+        on update restrict 
+        on delete restrict
+)
+ENGINE = InnoDB;
+
 

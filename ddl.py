@@ -20,6 +20,14 @@ def insert_affiliate(conn,username,year,major,gpa,org1,org2,org3):
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO welles_affiliates (username,year,major,gpa,org1,org2,org3)
     VALUES (%s, %s, %s, %s,%s,%s,%s);''',[username,year,major,gpa,org1,org2,org3])
+    conn.commit()
+
+def insert_resume(conn,username,filename):
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''INSERT INTO user_resumes (username,filename) VALUES (%s, %s) 
+    on duplicate key update filename = %s;''', [username,filename,filename])
+    conn.commit()
+
 
 def delete_rep(conn,username): 
     curs = dbi.dict_cursor(conn)
@@ -30,11 +38,13 @@ def insert_rep(conn,username,name,comp_id):
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO company_rep (username,name,comp_id)
     VALUES (%s, %s, %s)''',[username,name,comp_id])
+    conn.commit()
 
 def update_rep(conn, username, name, comp_id):
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update rep set name = %s,comp_id = %s where username=%s''',
+    curs.execute('''update company_rep set name = %s,comp_id = %s where username=%s''',
                         [name, comp_id, username])
+    conn.commit()
 
 def delete_user(conn,username): # works for both affiliate and rep 
     curs = dbi.dict_cursor(conn)
@@ -94,7 +104,10 @@ def delete_allexperiences(conn,username):
     curs.execute('''delete from experience where username=%s''', [username]) 
     conn.commit()
   
-
+def user_exists(conn, username):
+    curs = dbi.dict_cursor(conn)    
+    curs.execute('''select username from user where username=%s''', [username])  
+    curs.fetchone()
 
 
 
