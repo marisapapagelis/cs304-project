@@ -27,72 +27,61 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-username = 'lu1'
-password = 'mars1'
-
 # route to home page
 @app.route('/',  methods = ['GET', 'POST'])
 def index():
     if request.method=='GET':
-        #print('get')
         return render_template('main.html',title='DoorToDoor')
     else: 
-        #print('here')
         return redirect(url_for('login'))
 
 @app.route('/login/', methods = ['GET', 'POST'])
 def login():
-    conn=dbi.connect()
-    if request.method=='GET':
-        print('return')
+    conn = dbi.connect()
+    if request.method == 'GET': # the get method is not working here! 
         return render_template('login.html')
-    else: 
-        #username=request.form['username']
-        #session['username'] = request.form['username']
-        #username = session['username']
-        #password=request.form['password']
-        user_password = aff.get_password(conn, username)
-        if password != user_password: # check if password is correct
-            is_rep = repre.is_rep(conn, username)
-            if is_rep == True: # check if rep
-                return redirect(url_for('rep',username=username))
+    else:
+        if request.form['submit'] == 'login':
+            username=request.form['username']
+            #session['username'] = request.form['username']
+            #username = session['username']
+            password=request.form['password']
+            user_password = aff.get_password(conn, username)
+            if password != user_password: # check if password is correct
+                is_rep = repre.is_rep(conn, username)
+                if is_rep == True: # check if rep
+                    return redirect(url_for('rep',username=username))
+                else:
+                    return redirect(url_for('affiliate',username=username))
             else:
-                return redirect(url_for('affiliate',username=username))
-        else:
-            flash('Username or Password is Incorrect. Please try again.')
-            return redirect(url_for('login'))
+                flash('Username or Password is Incorrect. Please try again.')
+                return redirect(url_for('login'))
+        elif request.form['submit'] == 'signup':
+            name=request.form['name']
+            email=request.form['email']
+            username=request.form['username']
+            password=request.form['password']
+            password2=request.form['password2']
+            kind= request.args['kind']
+            if password != password2: # check is password was re-entered correctly
+                flash('Passwords do not match. Please try again.')
+                return redirect(url_for('login'))
+            else: 
+                ddl.insert_user(conn,username,name,password,email) # insert user
+                if kind == 'affiliate': # insert affiliate
+                    ddl.insert_affiliate(conn,username)
+                    flash('Taking you to your profile page. Please add additional information if necessary')
+                    return redirect(url_for('affiliate_update', username = username))
+                else: 
+                    ddl.insert_rep(conn,username) # insert rep
+                    flash('Taking you to your profile page. Please add additional information if necessary')
+                    return redirect(url_for('rep_update', username = username))
 
 @app.route('/logout/')
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
    return redirect(url_for('index'))
-
-@app.route('/signup/',  methods = ['GET', 'POST'])
-def signup():
-    conn=dbi.connect()
-    if request.method=='GET':
-        return render_template('login.html')
-    else: 
-        name=request.form['name']
-        email=request.form['email']
-        username=request.form['username']
-        password=request.form['password']
-        password2=request.form['password2']
-        kind= request.args['kind']
-        if password != password2: # check is password was re-entered correctly
-            flash('Passwords do not match. Please try again.')
-            return redirect(url_for('login'))
-        else: 
-            ddl.insert_user(conn,username,name,password,email) # insert user
-            if kind == 'affiliate': # insert affiliate
-                ddl.insert_affiliate(conn,username)
-                flash('Taking you to your profile page. Please add additional information if necessary')
-                return redirect(url_for('affiliate_update', username = username))
-            else: 
-                ddl.insert_rep(conn,username) # insert rep
-                flash('Taking you to your profile page. Please add additional information if necessary')
-                return redirect(url_for('rep_update', username = username))
 
 # routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])
@@ -109,7 +98,7 @@ def search():
             return render_template('company-list.html',companylist=companylist)
         else :
             flash('Sorry, no company with this name exists.')
-            return redirect(url_for('index'))
+            return redirect(url_for('all_companies'))
     elif kind == 'industry':
         # routes to industry page, list, or lists no industries
         industrylist=ind.get_industries(conn,name)
@@ -119,7 +108,7 @@ def search():
             return render_template('industry-list.html',industrylist=industrylist)
         else :
             flash('Sorry, no industry with this name exists.')
-            return redirect(url_for('index'))
+            return redirect(url_for('all_industries'))
     else: 
         # routes to person page, list, or lists no people
         personlist=aff.get_affiliates(conn,name)
@@ -129,7 +118,7 @@ def search():
             return render_template('affiliate-list.html',personlist=personlist)
         else:
             flash('Sorry, no person with this name exists.')
-            return redirect(url_for('index'))
+            return redirect(url_for('all_affiliates'))
 
 # routes to a specific industry page given an industry id
 @app.route('/industry/<iid>/', methods=['GET', 'POST'])
@@ -263,7 +252,7 @@ def affiliate_update(username):
         org1=request.form['org1']
         org2=request.form['org2']
         org3=request.form['org3']
-        if request.form.get('submit') == 'update': #if user wants to update 
+        if request.form['submit'] == 'update': #if user wants to update 
             ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
             flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
             return redirect(url_for('affiliate',username=username))
@@ -294,40 +283,43 @@ def job_update(jid):
                 status = request.form['app_status']
                 link = request.form['AppLink']
         
-                if request.form.get('submit') == 'update': #if user wants to update 
-                    if ddl.update_job(conn,jid,title,educ,gpa,skills,status,link) == 1: 
-                        flash("Job Posting for " + title + " was updated succesfully!")
-                        return render_template('update-job.html', title = title,
-                                    educ = educ, gpa = gpa, skills = skills, status = status, link = link)
+                if request.form['submit'] == 'update': #if user wants to update
+ 
+                    ddl.update_job(conn,jid,title,educ,gpa,skills,status,link) 
+                    flash("Job Posting for " + title + " was updated succesfully!")
+                    return render_template('update-job.html', title = title,
+                                educ = educ, gpa = gpa, skills = skills, status = status, link = link)
 
-                else: #if deleting job
-                    if ddl.delete_job(conn, jid) == 1: #deletes movie and checks if deleted
-                            flash('Job Posting for ' + title + ' was deleted successfully')
-                            return redirect(url_for('index'))
-
-@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
+                #else: #if deleting job
+                elif request.form['submit'] == 'delete':
+                    ddl.delete_job(conn, jid) #deletes movie and checks if deleted
+                    flash('Job Posting for ' + title + ' was deleted successfully')
+                    return redirect(url_for('index'))
+            
+@app.route('/company/update/<comp_id>', methods=['GET', 'POST'])
 def comp_update(comp_id):
     conn = dbi.connect()
-    c = comp.get_comp(conn, comp_id)
+    c = comp.get_company(conn,comp_id)
+    comp_id = c['comp_id']
     # username = 
-    if repre.is_rep(conn,username):
-        if request.method == 'GET':
-            return render_template('update-company.html', comp_name = c['comp_name'], locations = c['locations'])
-                
-        else: #using POST
+    #if repre.is_rep(conn,username):
+    if request.method == 'GET':
+        return render_template('update-company.html', comp_name = c['comp_name'], locations = c['locations'])         
+    else: #using POST
             #requesting information inputted by user in form
-            comp_name = request.form['comp_name']
-            locations = request.form['locations']
-        
-            if request.form.get('submit') == 'update': #if user wants to update 
-                if ddl.update_comp(conn,comp_id,comp_name,locations) == 1: 
-                    flash("Company Profile (" + comp_name + ") was updated succesfully!")
-                    return render_template('update-company.html', comp_name = comp_name, locations = locations)
+        comp_name = request.form['comp_name']
+        locations = request.form['locations']
 
-            else: #if deleting job
-                if ddl.delete_comp(conn, comp_id) == 1: #deletes movie and checks if deleted
-                    flash("Company Profile (" + title + ") was deleted successfully.")
-                    return redirect(url_for('index'))
+        if request.form['submit'] == 'update': #if user wants to update 
+            print(comp_id)
+            ddl.update_comp(conn,comp_id,comp_name,locations) 
+            flash("Company Profile (" + comp_name + ") was updated succesfully!")
+            #return redirect(url_for('company', comp_id=comp_id))
+            return redirect(url_for('index'))
+                
+        else: #if deleting job
+            ddl.delete_comp(conn, comp_id) #deletes movie and checks if deleted
+            flash("Company Profile (" + title + ") was deleted successfully.")
             flash('Job Posting for ' + title + ' was deleted successfully')
             return redirect(url_for('index'))
 
@@ -352,30 +344,30 @@ def rep_update(username):
     getcomp = comp.get_company(conn,rep['comp_id'])
     company = getcomp['comp_name']
     if request.method == 'GET':
-        return render_template('update-rep.html', name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
+        return render_template('update-rep.html', username = username, name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
         
     else: #using POST
         #requesting information inputted by user in form
         name = request.form['rep-name']
         comp_id = request.form['comp_id']
         comp_name = request.form['comp_name']
-        if request.form.get('submit') == 'update': #if user wants to update 
-            if ddl.update_rep(conn,name,cid,comp) == 1: 
-                flash("Rep Profile for " + name + " was updated succesfully!")
-                return render_template('update-rep.html', name = name, comp_id = comp_id, comp_name = comp)
+        if request.form['submit'] == 'update': #if user wants to update 
+            ddl.update_rep(conn,name,cid,comp) 
+            flash("Rep Profile for " + name + " was updated succesfully!")
+            return render_template('update-rep.html', name = name, comp_id = comp_id, comp_name = comp)
 
         else: #if deleting rep from database
-            if ddl.delete_rep(conn, username) == 1: #deletes movie and checks if deleted
-                    flash("Rep Profile for " + name + " was deleted successfully.")
-                    return redirect(url_for('index'))
+            ddl.delete_rep(conn, username) #deletes movie and checks if deleted
+            flash("Rep Profile for " + name + " was deleted successfully.")
+            return redirect(url_for('index'))
 
 '''routes to job insert form'''
-@app.route('/job/insert/', methods=['GET', 'POST'])
-def job_insert():
+@app.route('/<username>/job/insert/', methods=['GET', 'POST'])
+def job_insert(username):
     conn = dbi.connect()
     if request.method == 'GET': 
         # renders template for insert page
-        return render_template('insert-job.html', title='Insert a Job')
+        return render_template('insert-job.html', title='Insert a Job', username=username)
     else: #if request method is POST
         # requests inputs from form 
         title = request.form['jobtitle']

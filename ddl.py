@@ -41,10 +41,10 @@ def delete_user(conn,username): # works for both affiliate and rep
     curs.execute('''delete from user where username=%s''', [username]) 
     conn.commit()
 
-def update_comp(conn,comp_id,comp_name,iid,location): 
+def update_comp(conn,comp_id,comp_name,location): 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update company set comp_name = %s,iid = %s,location = %s where comp_id=%s''', # should they be able to update industry?
-                        [comp_name,iid,locations,comp_id])
+    curs.execute('''update company set comp_name = %s,location = %s where comp_id=%s''', # should they be able to update industry?
+                        [comp_name,locations,comp_id])
     conn.commit() #committing updated changes to database
 
 def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid): 

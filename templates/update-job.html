@@ -1,13 +1,13 @@
 
 {% extends "base.html" %}
 
-{% block main_content %}
+{% block content %}
 
 <h1>Update Job Posting</h1>
 
   <p> You can update or delete job listing here.</p>
 
-    <form method=POST action="{{url_for('update_job')}}">
+    <form method=POST action="{{url_for('job_update', jid=jid)}}">
       <table>
         <tr>
           <td><label for="title">Position Title</label></td>

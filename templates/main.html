@@ -7,16 +7,9 @@
     <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
 </head>
 <body>
+<div class = "box">
 
-<h1>Welcome to DoorToDoor</h1>
-
-<p>DoorToDoor is a platform to help students open doors throughout the challenging recruitment process. 
-    Our platform will help students in all stages of the process, from first-years who want a better understanding 
-    of different industries to seniors who need assistance with interview preparation and networking with alumni. 
-    DoorToDoor will connects students with alums in various industries, allows students to share resources, interview questions,
-    experiences with employers, deadlines, and provides anything else a student might need. There are many existing platforms, 
-    but we want to bring it all together in one and solely focus on the Wellesley community. 
-</p>
+<img src="{{ url_for('static', filename = 'logo.png') }}" alt="DoorToDoor Logo" width="350" height="300">
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -28,9 +21,22 @@
 {% endif %}
 {% endwith %}
 
-<form method="post" action="{{url_for('login')}}">
-    <p><input type="submit" value="Login or Sign Up"></p>
-</form>
+<h1>Welcome to DoorToDoor!</h1>
 
+<p>DoorToDoor is a platform to help students open doors throughout the challenging recruitment process. 
+    Our platform will help students in all stages of the process, from first-years who want a better understanding 
+    of different industries to seniors who need assistance with interview preparation and networking with alumni. 
+    DoorToDoor will connects students with alums in various industries, allows students to share resources, interview questions,
+    experiences with employers, deadlines, and provides anything else a student might need. There are many existing platforms, 
+    but we want to bring it all together in one and solely focus on the Wellesley community. 
+</p>
+
+<!-- <form method="POST" action="{{url_for('login')}}">
+    <p><input type="submit" value="Login or Sign Up"></p>
+</form> -->
+
+<a href="{{url_for('login')}}">Login or Sign Up</a></p>
+
+</div>
 </body>
 </html>

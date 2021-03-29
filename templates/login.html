@@ -7,6 +7,7 @@
     <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
 </head>
 <body>
+<div class = "box">
     <h1> Welcome to DoorToDoor!</h1>
     <p><b>If you are an existing user,</b> please login on the left.</p>
     <p><b> If you are new to DoorToDoor,</b> please create an account on the right. Be sure to specify whether you are a Wellesley Affiliate or a Company Representative to be directed to your appropriate profile creation page. </p>
@@ -18,14 +19,14 @@
       <br>
       Password: <input type="text" required name="password"></label>
       <br>
-        <input type="submit" value="submit"></p>
+        <input type="submit" value="login"></p>
     </form>
     </div>
 
     <div id = "rightbox">
       <h2>Sign Up</h2>
       <p>All fields are required</p>
-      <form class="signup" method="POST" action="{{url_for('signup')}}">
+      <form class="signup" method="POST" action="{{url_for('login')}}">
       <label>I am a:
             <select required name="kind">
                 <option value="">choose one</option>
@@ -43,9 +44,10 @@
       <br>
       Enter Password Again: <input type="text" required name="password2"></label>
       <br>
-        <input type="submit" value="submit"></p>
+        <input type="submit" value="signup"></p>
     </form>
     </div>
+</div>
   </body>
 </html>
 

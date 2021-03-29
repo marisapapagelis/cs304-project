@@ -1,13 +1,13 @@
 
 {% extends "base.html" %}
 
-{% block main_content %}
+{% block content %}
 
 <h1>Update Company Information</h1>
 
   <p> You can update or delete your company information here.</p>
 
-    <form method=POST action="{{url_for('update_company')}}">
+    <form method=POST action="{{url_for('comp_update', comp_id=comp_id)}}">
         <table>
             <tr>
             <td><label for="comp_name">Company Name</label></td>

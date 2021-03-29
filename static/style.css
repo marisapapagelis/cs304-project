@@ -6,30 +6,48 @@ h1 {
   }
 
 h2 {
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-  }
-  
-  body {
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: rgb(235, 116, 205)
-  }
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
 
-  .box {
-    margin: auto;
-    width: 75%;
-    border: solid 3px;
-    background-color: rgb(255, 210, 245);
-    padding: 40px; }
+body {
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-image: url('../static/doors.jpeg');
+}
 
-  .nav-box {
-    margin: auto;
-    width: 75%;
-    border: solid 3px;
-    background-color: rgb(177, 86, 142);
-    padding: 40px; }
+.box {
+margin: auto;
+width: 75%;
+border: solid 3px;
+background-color: rgb(249, 253, 209);
+padding: 40px; }
+
+.nav-box {
+margin: auto;
+width: 75%;
+border: solid 3px;
+background-color: rgb(171, 220, 240);
+padding: 40px; }
+
+#leftbox { 
+  margin: auto;
+  float:left;
+  border: solid 3px;  
+  background-color:rgb(255, 210, 245); 
+  width:47%; 
+  height:280px; 
+} 
+    
+#rightbox{ 
+  margin: auto;
+  float:right;
+  border: solid 3px; 
+    background-color:rgb(255, 210, 245); 
+  width:47%; 
+  height:280px;
+} 
