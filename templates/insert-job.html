@@ -5,7 +5,7 @@
 <h1>Add New Job Posting</h1>
 <p> <a href="{{ url_for ('rep', username = username)}}">Return to Profile</a>.</p>
 
-<form method=POST action="{{url_for('job_insert')}}"></form>
+<form method=POST action="{{url_for('job_insert',username = username)}}">
 <fieldset>
 <legend>Enter Job Details</legend>
 <table>
@@ -16,28 +16,28 @@
 
     <tr>
     <td><label for="company"> Company Name</label> </td>
-    <td><input name="company-name" id="company" type="text" > </td> 
+    <td><input name="company" id="company" type="text" value='{{comp_name}}' > </td> 
     </tr>
 
     <tr>
-        <td><label for="cid">Company ID</label></td>
-        <td><input name='company-id' id = 'cid' value='{{comp_id}}'></td> 
+        <td><label for="comp_id">Company ID</label></td>
+        <td><input name='comp_id' id = 'comp_id' value='{{comp_id}}'></td> 
     </tr>
 
     <tr>
     <td><label for="ind">Industry Name</label></td>
-    <td><input name='industry-name' id = 'ind' value='{{ind}}'></td> 
+    <td><input name='ind' id = 'ind' value='{{ind_name}}'></td> 
     </tr>
 
     <tr>
     <td><label for="iid">Industry ID</label></td>
-    <td><input name='industry-id' id = 'iid' value='{{ind_id}}'></td> 
+    <td><input name='iid' id = 'iid' value='{{iid}}'></td> 
     </tr>
 
 
     <tr>
     <td><label for="educ">Highest Level of Education Achieved </label></td>
-    <td><input name="education" id="educ" type="text"> </td> 
+    <td><input name="educ" id="educ" type="text"></td> 
 
     <tr>
     <td><label for="gpa">Minimum GPA </label> </td>  
@@ -46,18 +46,23 @@
 
     <tr>
     <td><label for="skills"> Technical Skills Required </label> </td> 
-    <td><input name="technical_skills" id="skills" type="text" > </td> 
+    <td><input name="skills" id="skills" type="text" > </td> 
     </tr>
 
    
     <tr>
-    <td><label for="status"> Are applications for this position currently open? Please enter "Applications Open" or "Applications Closed" below.</label> </td>
-    <td><input name="app_status" id="status" type="text" > </td> 
+    <td><label for="status"> Application Status </label></td>
+     <td><select required name="status">
+            <option value="">choose one</option>
+            <option value="Applications Open">Open</option>
+            <option value="Applications Closed">Closed</option>
+        </select>
+    </td>
     </tr> 
 
     <tr>
-    <td><label for="AppLink">Application Link</label> </td> 
-    <td><input name="AppLink" id="AppLink" type="text"> </td> 
+    <td><label for="link">Application Link</label> </td> 
+    <td><input name="link" id="link" type="text"> </td> 
     </tr>  
 
     <tr>

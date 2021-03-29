@@ -41,16 +41,16 @@ def delete_user(conn,username): # works for both affiliate and rep
     curs.execute('''delete from user where username=%s''', [username]) 
     conn.commit()
 
-def update_comp(conn,comp_id,comp_name,location): 
+def update_comp(conn,comp_id,comp_name,locations): 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update company set comp_name = %s,location = %s where comp_id=%s''', # should they be able to update industry?
+    curs.execute('''update company set comp_name = %s,locations = %s where comp_id=%s''', # should they be able to update industry?
                         [comp_name,locations,comp_id])
     conn.commit() #committing updated changes to database
 
-def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid): 
+def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username): 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid)
-                    VALUES (%s, %s, %s, %s,%s,%s,%s,%s);''',[title,qual1,qual2,qual3,job_status,app_link,comp_id,iid]) 
+    curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username)
+                    VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s);''',[title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username]) 
     conn.commit()
 
 def insert_user(conn,username,name,password,email): 
@@ -59,10 +59,10 @@ def insert_user(conn,username,name,password,email):
                     VALUES (%s, %s, %s, %s);''',[username,name,password,email]) 
     conn.commit()
 
-def update_job(conn,title,qual1,qual2,qual3,job_status,app_link): 
+def update_job(conn,title,qual1,qual2,qual3,job_status,app_link,jid): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''update jobs set title = %s,qual1 = %s,qual2 = %s, qual3 = %s, job_status = %s, app_link = %s where jid=%s''',
-                        [title,qual1,qual2,qual3,job_status,app_link])
+                        [title,qual1,qual2,qual3,job_status,app_link,jid])
     conn.commit() #committing updated changes to database
  
 #deletes the job from database given its jid
