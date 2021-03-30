@@ -384,7 +384,7 @@ def comp_insert():
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
     conn = dbi.connect()
-    #rep = repre.get_rep(conn, username)
+    rep = repre.get_rep(conn, username)
     comps = comp.get_all_companies(conn)
     if request.method == 'GET':
         return render_template('update-rep.html', name = rep['name'], username=username, comps=comps)
