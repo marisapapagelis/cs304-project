@@ -15,19 +15,24 @@
             </tr>
 
             <tr>
+
                 <td><label for="password">Password</label></td>
                 <td><input name="password" id="password" type="text" value="{{password}}" ></td> 
             </tr>
 
             <tr>
-                <td><label for="comp_id">Company Name</label></td>
-                    <td><select required name='comp_id'>
+                
+
+                <td><label>Company Name</label></td>
+                    <td><label><select required name='comp_id'>
                         <option value="">Choose one.</option>
                         <option value="null">My Company Is Not Listed.</option>
+
                         {% for comp in comps: %}
                             <option value="{{comp['comp_id']}}">{{comp['comp_name']}}</option>
                         {% endfor %}
-                    </select></td>
+                    </select></label>
+                </td>
             </tr>
 
         </table>
