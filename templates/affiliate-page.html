@@ -11,13 +11,11 @@
 <br> Orgs: {{org1}}, {{org2}}, {{org3}}
 
 {% if username != '' and src != '' %}
-<p><a href="{{url_for('resume', username=username)}}" download = resume> Last uploaded Resume
- <file src="{{url_for('resume', username=username)}}"></a> </p>
+<p><a href="{{url_for('resume', username=username)}}" download = resume> Last uploaded Resume</a> 
+    <p> <file src="{{url_for('resume', username=username)}}"></file> </p>
 {% else %}
     <p>No Resume Uploaded.</p>
 {% endif %}
-
-
 
 <p>Past Experiences:</p>
 {% if experiences %}
