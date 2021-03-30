@@ -12,8 +12,7 @@
 
 {% if username != '' and src != '' %}
 <p><a href="{{url_for('resume', username=username)}}" download = resume> Last uploaded Resume
- <file src="{{url_for('resume', username=username)}}">
-</a> </p>
+ <file src="{{url_for('resume', username=username)}}"></a> </p>
 {% else %}
     <p>No Resume Uploaded.</p>
 {% endif %}

@@ -14,12 +14,12 @@
 
         <tr>
         <td><label for="iid">Industry Name</label></td>
-            <td><select required name='iid'>
+        <td><label><select required name='iid' id = 'iid'>
                 <option value="">Choose One</option>
                 {% for ind in inds: %}
                     <option value="{{ind['iid']}}">{{ind['ind_name']}}</option>
                 {% endfor %}
-            </select> </td>
+            </select></label></td>
         </tr>
 
         <tr>
