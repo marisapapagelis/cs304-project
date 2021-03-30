@@ -92,7 +92,7 @@ def login():
                     else: 
                         ddl.insert_rep(conn,username,name,1) # insert rep
                         flash('Please enter your company details.')
-                        return redirect(url_for('comp_insert', username = username))
+                        return redirect(url_for('rep_update', username = username))
 
 
 
