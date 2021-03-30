@@ -17,10 +17,6 @@
                         {% endfor %}
                     </select></label>
                 </td>
-
-                <td><label for="compensation">Compensation</label></td> 
-                <td><input type="text" name="compensation" id="compensation"></td> 
-
                 <td><input type="submit" name="submit" value="Choose"></td>
             </tr>
         {% endif %}
@@ -35,10 +31,18 @@
                         {% endfor %}
                     </select></label>
                 </td>
+
+                <td><label for="compensation">Compensation (Numerical Values Only)</label></td> 
+                <td><input type="text" name="compensation" id="compensation"></td> 
+
                 <td><input type="submit" name="submit" value="submit"></td>
             </tr>
+        {% else %}
+            <p>There are no jobs listed.</p>
+            <a href="{{url_for('affiliate', username=username)}}">Return To Profile</a>
         {% endif %}
         
+            
     </table>
 </form>
   

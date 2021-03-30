@@ -70,6 +70,7 @@ li a {
 
 li a:hover {
   background-color: rgb(223, 140, 140);
+
 }
 
 @media all and (max-width: 800px) {

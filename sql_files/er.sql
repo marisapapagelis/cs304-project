@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- DDL's for database 
 
-use lmiranda_db;
+use ngoodman_db;
 
 -- drop existing tables
 drop table if exists user_resumes;
@@ -53,7 +53,7 @@ ENGINE = InnoDB;
 -- create company table
 create table company (
     comp_id int auto_increment not null,
-    comp_name varchar (15),
+    comp_name varchar (150),
     iid int not null,
     locations varchar (150),
     primary key (comp_id),

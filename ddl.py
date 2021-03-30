@@ -34,7 +34,6 @@ def user_update(conn,username,password):
                         [password, username])
     conn.commit()
 
-    
 def delete_rep(conn,username): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from company_rep where username=%s''', [username]) 
@@ -103,11 +102,6 @@ def insert_experience(conn,username,jid,comp_id,iid,compensation):
 def delete_experience(conn,username,jid):
     curs = dbi.dict_cursor(conn)    
     curs.execute('''delete from experience where username=%s and jid=%s''', [username,jid]) 
-    conn.commit()
-
-def delete_allexperiences(conn,username):
-    curs = dbi.dict_cursor(conn)    
-    curs.execute('''delete from experience where username=%s''', [username]) 
     conn.commit()
   
 def user_exists(conn, username):

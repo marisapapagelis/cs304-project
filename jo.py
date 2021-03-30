@@ -16,4 +16,14 @@ def get_job(conn,jid):
     curs = dbi.dict_cursor(conn)
     curs.execute('''select * from jobs where jid=%s''',[jid])
     return curs.fetchone()
-  
+
+def get_rep(conn, jid):
+    curs = dbi.dict_cursor(conn)
+    curs.execute("select username from jobs where jid = %s", [jid])
+    return curs.fetchone()
+    
+def get_compensation(conn, jid):
+    curs = dbi.dict_cursor(conn)
+    curs.execute("select compensation from jobs inner join experience using (jid) where jid = %s", [jid])
+    return curs.fetchall()
+

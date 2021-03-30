@@ -173,7 +173,7 @@ def jobs(comp_id):
 
 # routes from a companies job page to a specific job given the jobs unique ID
 @app.route('/company/<comp_id>/job/<jid>/')
-def job(comp_id,jid):
+def job(comp_id, jid):
     conn=dbi.connect()
     com=comp.get_company(conn,comp_id)
     comp_id=com['comp_id']
@@ -188,12 +188,19 @@ def job(comp_id,jid):
     q2 = job['qual2']
     q3 = job['qual3']
     app_link = job['app_link']
+    
+    compensation = jo.get_compensation(conn, jid)
 
-    #rep = repre.is_rep(conn,username)
+    #need this for job update link on html
+    username = jo.get_rep(conn, jid)['username']
+
+    # must implement a check to see if rep's username matches the session username
+    rep = True #for now, set to True
+    # if no match, then rep should be False
 
     return render_template('job-page.html', comp_name=comp_name, ind_name=ind_name,
                             jid=jid, status=status, q1=q1, q2=q2,comp_id=comp_id,
-                            q3=q3, app_link=app_link, title=title, rep = rep)
+                            q3=q3, app_link=app_link, title=title, rep = rep, username=username, compensation=compensation)
 
 # routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>/', methods=['GET', 'POST'])
@@ -324,21 +331,20 @@ def rep_update(username):
             ddl.update_rep(conn,username, name, comp_id)
             ddl.user_update(conn,username,password)
             flash("Rep Profile for " + name + " was updated succesfully!")
-            return render_template('update-rep.html', name = name, username=username, comps=comps)
+            return redirect(url_for('rep', username=username))
 
 @app.route('/rep/<username>/insert/company/', methods=['GET', 'POST'])
 def comp_insert(username):
     conn = dbi.connect()
     inds = ind.get_all_industries(conn)
     if request.method == 'GET':
-        return render_template('insert-company.html', inds = inds)
+        return render_template('insert-company.html', inds = inds, username=username)
     else: #using POST
         print (request.form)
         comp_name = request.form['comp_name']
         iid = request.form['iid']
         locations = request.form['locations']
         ddl.insert_comp(conn, comp_name, iid, locations)
-        # need to fix this
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
         flash("Please update your company in your personal profile.")
         return redirect(url_for('rep_update', username=username))
@@ -348,14 +354,13 @@ def comp_update(username, comp_id):
     conn = dbi.connect()
     c = comp.get_company(conn,comp_id)
     if request.method == 'GET':
-        return render_template('update-company.html', comp_id = comp_id, comp_name = c['comp_name'], locations = c['locations'])         
+        return render_template('update-company.html', username=username, comp_id = comp_id, comp_name = c['comp_name'], locations = c['locations'])         
     else: #using POST
         #requesting information inputted by user in form
         comp_name = request.form['comp_name']
         locations = request.form['locations']
 
         if request.form['submit'] == 'update': #if user wants to update 
-            print(comp_id)
             ddl.update_comp(conn,comp_id,comp_name,locations) 
             flash("Company Profile (" + comp_name + ") was updated succesfully!")
             return redirect(url_for('company', comp_id=comp_id))
@@ -396,7 +401,7 @@ def job_update(username, jid):
     job = jo.get_job(conn,jid)
     comp_id = job['comp_id']
     if request.method == 'GET':
-        return render_template('update-job.html', jid=jid, title = job['title'],
+        return render_template('update-job.html', username=username, jid=jid, title = job['title'],
                             educ= job['qual1'], gpa= job['qual2'], skills = job['qual3'], status = job['job_status'], link = job['app_link'])
         
     else: #using POST
@@ -427,29 +432,47 @@ def ex_insert(username):
     conn = dbi.connect()
     comps = comp.get_all_companies(conn)
     if request.method == 'GET': 
-        return render_template('insert-ex.html', comps=comps, jobs=None)
+        return render_template('insert-ex.html', username=username, comps=comps, jobs=None)
     else:
-        result = request.form
-        if result['submit'] == "Choose":
-            comp_id = result['comp_id']
-            values = jo.get_jobs(conn, comp_id)
-            return render_template('insert-ex-job.html', comps=None, jobs=jobs)
+        if request.form['submit'] == "Choose":
+            comp_id = request.form['comp_id']
+            jobs = jo.get_jobs(conn, comp_id)
+            return render_template('insert-ex.html', username=username, comps=None, jobs=jobs)
 
-        if request.form['submit'] == 'Insert':  
-            jid = result['jid']
-            compensation = result['compensation']
+        if request.form['submit'] == 'submit':  
+            jid = request.form['jid']
+            compensation = request.form['compensation']
             job = jo.get_job(conn, jid)
             comp_id = job['comp_id']
             iid = job['iid']
             ddl.insert_experience(conn,username,jid,comp_id,iid,compensation)
             flash("Experience was updated succesfully!") 
-            return redirect(url_for('affiliate',username=username))
+            return redirect(url_for('affiliate', username=username))
+
+'''The extent of the update feature for experiences is the delete option.'''
+@app.route('/affiliate/<username>/update/experience/', methods=['GET', 'POST'])
+def ex_update(username):
+    conn = dbi.connect()
+    experiences = aff.get_experience(conn, username)
+    if experiences: #get comp_name and job title to show up on form
+        for e in experiences:
+            job = jo.get_job(conn, e['jid']) #get job based on the jid
+            e['title']=job['title'] #add job title onto each experience 
+            c = comp.get_company(conn, e['comp_id']) #get company based on the jid
+            e['comp_name'] = c['comp_name'] #add company name onto each experience 
+    if request.method == 'GET': 
+        return render_template('update-ex.html', username=username, experiences=experiences)
+    else:
+        jid = request.form['jid']
+        ddl.delete_experience(conn,username,jid)
+        flash("Experience was deleted succesfully.") 
+        return redirect(url_for('affiliate', username=username))
 
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'lmiranda_db' # using Luiza's database
+    db_to_use = 'ngoodman_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

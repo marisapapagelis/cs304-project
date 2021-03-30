@@ -10,11 +10,19 @@
 <br> Status: {{status}}
 <br> Level Of Education: {{q1}}
 <br> Minimum GPA: {{q2}}
-<br> Skills: {{q2}}
+<br> Skills: {{q3}}
 <br> Application Link : {{app_link}}</p>
 
+<p>Past Compensation Levels for {{title}}:</p>
+<table style="width:100%">
+    {% for c in compensation %}
+        <tr><td>${{c['compensation']}}</td></tr> 
+    {% endfor %}
+</table>
+<br>
+
 {% if rep %}
-    <a href="{{url_for('job_update', jid=jid)}}"> Edit Job</a> 
+    <a href="{{url_for('job_update', username=username, jid=jid)}}"> Edit Job</a> 
 {% endif %}
 
 {% endblock %}

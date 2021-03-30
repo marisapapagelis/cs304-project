@@ -9,7 +9,7 @@
 <ul>
   <li><a href="{{url_for('job_insert', username=username)}}">Add New Job Post</a></li>
   <li><a href="{{url_for('rep_update', username=username)}}">Update Your Profile</a></li>
-  <li><a href="{{url_for('comp_update', comp_id=comp_id)}}">Update Your Company Profile</a></li>
+  <li><a href="{{url_for('comp_update', username=username, comp_id=comp_id)}}">Update Your Company Profile</a></li>
 </ul>
 
 {% endblock %}
