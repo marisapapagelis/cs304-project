@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
-use mbhatia_db; 
+use mpapagel_db; 
 
 --inserting dummy row for company 1 and industry 1
 INSERT INTO industry (ind_name)
@@ -80,7 +80,7 @@ values ('Dairy Queen', 4, 'NY, NJ, MA, FL');
 
 -- insert company representative into company rep table
 INSERT INTO company_rep(username,name,comp_id)
-VALUES ('lu1','Luiza', 1);
+VALUES ('lu1','Luiza', 2);
 
 insert into company_rep(username, name, comp_id)
 values ('styles', 'Harry Styles', 3);

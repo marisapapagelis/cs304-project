@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- DDL's for database 
 
-use mbhatia_db;
+use mpapagel_db;
 
 -- drop existing tables
 drop table if exists user_resumes;

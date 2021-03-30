@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <meta name=author content="Marisa, Luiza, Mehar, Nina">
-    <title>Welcome page</title>
+    <title>Login</title>
     <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
 </head>
 <body>
@@ -11,6 +11,16 @@
     <h1> Welcome to DoorToDoor!</h1>
     <p><b>If you are an existing user,</b> please login on the left.</p>
     <p><b> If you are new to DoorToDoor,</b> please create an account on the right. Be sure to specify whether you are a Wellesley Affiliate or a Company Representative to be directed to your appropriate profile creation page. </p>
+
+    {% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="messages">
+  {% for msg in messages %}
+  <p>{{msg}}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
     <div id = "leftbox">
       <h2>Login</h2>

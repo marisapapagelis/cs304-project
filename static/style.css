@@ -40,7 +40,7 @@ padding: 40px; }
   border: solid 3px;  
   background-color: rgb(209, 238, 250);
   width:47%; 
-  padding: 10px;
+  height: 300px;
 } 
     
 #rightbox{ 
@@ -49,5 +49,29 @@ padding: 40px; }
   border: solid 3px; 
   background-color:rgb(209, 238, 250); 
   width:47%; 
-  padding: 10px;
+  height: 300px;
 } 
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(249, 253, 209);
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: rgb(223, 140, 140);
+}

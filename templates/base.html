@@ -3,12 +3,26 @@
 <head>
     <meta charset='utf-8'>
     <meta name=author content="Marisa, Luiza, Mehar, Nina">
-    <title>Welcome page</title>
+    <title>DoorToDoor</title>
     <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
 </head>
 <body>
 <main>
 <div class = "nav-box">
+    <div id="navigation">
+        <nav>
+            <ul>
+            <!-- {% if rep %} -->
+                <li><a href="{{url_for('rep', username = username)}}">Home</a></li>
+            <!-- {% endif %}
+            {% if welles_affiliate %} -->
+                <li><a href="{{url_for('affiliate', username = username)}}">Home</a></li>
+            <!-- {% endif %} -->
+                <li style="float:right"><a href="{{url_for('logout')}}">Logout of {{username}}</a></li>
+              </ul>
+        </nav>
+        </div>
+
 <h1>DoorToDoor</h1>
 
 <h2>"I'll open your door if you open mine."</h2>
@@ -48,8 +62,6 @@
 <a href="{{url_for('all_companies')}}">See All Companies To Date</a></p>
 <a href="{{url_for('all_industries')}}">See All Industries To Date</a></p>
 <a href="{{url_for('all_affiliates')}}">See All Affiliates Joined To Date</a></p>
-<br>
-<a href="{{url_for('logout')}}">Logout of {{username}}</a></p>
 </div>
 </main>
 </body>

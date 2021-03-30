@@ -70,10 +70,12 @@ def login():
             password=request.form['password']
             password2=request.form['password2']
             kind= request.form['kind']
-            if not ddl.user_exists(conn, username): #FIX THIS
-                flash("Username already exists. Please choose another username.")
-                return redirect(url_for('login'))
-            else:
+            user_list = []
+            for user in aff.get_all_affiliates(conn):
+                user_list.append(user['username'])
+                if username in user_list:
+                    flash("Username already exists. Please choose another username.")
+                    return redirect(url_for('login'))
                 if password != password2: # check is password was re-entered correctly
                     flash('Passwords do not match. Please try again.')
                     return redirect(url_for('login'))
@@ -433,7 +435,7 @@ def job_insert(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' # using Luiza's database
+    db_to_use = 'mpapagel_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

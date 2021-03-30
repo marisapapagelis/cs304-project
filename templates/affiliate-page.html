@@ -22,7 +22,8 @@
 {% else %}
     <p>No Experiences Listed.</p>
 {% endif %}
-
-<a href="{{url_for('affiliate_update', username=username)}}">Update Your Profile</a>
+<ul>
+<li><a href="{{url_for('affiliate_update', username=username)}}">Update Your Profile</a></li>
+</ul>
 
 {% endblock %}

@@ -27,8 +27,12 @@
         </tr>
 
         <tr>
-          <td><label for="status"> Are applications for this position currently open? Please enter "Applications Open" or "Applications Closed" below.</label> </td>
-          <td><input type = 'text' required name="status" id="status" value='{{status}}'> </td> MAKE THIS A DROP DOWN
+          <td><label>Application Status</label></td>
+            <td><select required name="status">
+                <option value="">choose one</option>
+                <option value="Applications Open">Open</option>
+                <option value="Applications Closed">Closed</option>
+            </select></td> 
           </tr> 
 
         <tr>

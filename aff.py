@@ -13,6 +13,11 @@ def get_affiliate(conn,username):
                      welles_affiliates.org2,welles_affiliates.org3, user.name from  welles_affiliates inner join user using (username) where username=%s''', [username])
     return curs.fetchone()
 
+def get_all_affiliates(conn, username): 
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''select * from user''')
+    return curs.fetchall()
+
 def get_affiliates(conn,name):
    #Set up connection.
     #Create cursor to pull data from the user table
