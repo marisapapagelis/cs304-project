@@ -12,13 +12,14 @@
     <div id="navigation">
         <nav>
             <ul>
+                <li><a href="{{url_for('home')}}">Home</a></li>
             <!-- {% if rep %} -->
-                <li><a href="{{url_for('rep', username = username)}}">Home</a></li>
+                <li><a href="{{url_for('rep', username = username)}}">My Profile</a></li>
             <!-- {% endif %}
             {% if welles_affiliate %} -->
-                <li><a href="{{url_for('affiliate', username = username)}}">Home</a></li>
+                <li><a href="{{url_for('affiliate', username = username)}}">My Profile</a></li>
             <!-- {% endif %} -->
-                <li style="float:right"><a href="{{url_for('logout')}}">Logout of {{username}}</a></li>
+                <li><a href="{{url_for('logout')}}">Logout</a></li>
               </ul>
         </nav>
         </div>
