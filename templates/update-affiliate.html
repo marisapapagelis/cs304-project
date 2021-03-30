@@ -59,9 +59,8 @@
     </form>
 
 {% if username != '' and src != '' %}
-<a href="{{url_for('resume', username=username)}}" download = resume>Last uploaded Resume
- <file src="{{url_for('resume', username=username)}}">
-</a>
+<a href="{{url_for('resume', username=username)}}" download = resume>Last uploaded Resume </a> 
+<p><file src="{{src}}"> </file> </p>
 
 {% endif %}   
 {% endblock %}
