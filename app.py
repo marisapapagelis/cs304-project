@@ -380,25 +380,21 @@ def comp_insert():
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
     conn = dbi.connect()
-    rep= repre.get_rep(conn,username)
-    getcomp = comp.get_company(conn,rep['comp_id'])
-    company = getcomp['comp_name']
+    #rep = repre.get_rep(conn, username)
+    comps = comp.get_all_companies(conn)
     if request.method == 'GET':
-        return render_template('update-rep.html', username = username, 
-        name = rep['name'],comp_id = rep['comp_id'], comp_name = company)
-        
+        return render_template('update-rep.html', name = rep['name'], username=username, comps=comps)
     else: #using POST
         #requesting information inputted by user in form
         name = request.form['name']
-        if request.form['submit'] == 'update': #if user wants to update 
-            ddl.update_rep(conn,username,name) 
+        comp_id = request.form['comp_id']
+        if len(comp_id)==0:
+            flash("Redirecting you to the company insert page.")
+            return redirect(url_for('comp_insert', username=username))
+        else:
+            ddl.update_rep(conn,username, name, comp_id)
             flash("Rep Profile for " + name + " was updated succesfully!")
-            return render_template('update-rep.html', name = name, username=username)
-
-        else: #if deleting rep from database
-            ddl.delete_rep(conn, username) #deletes movie and checks if deleted
-            flash("Rep Profile for " + name + " was deleted successfully.")
-            return redirect(url_for('index'))
+            return render_template('update-rep.html', name = name, username=username, comps=comps)
 
 '''routes to job insert form'''
 @app.route('/<username>/job/insert/', methods=['GET', 'POST'])

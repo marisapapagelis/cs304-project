@@ -14,9 +14,18 @@
             <td><input type="text" required name="name" id="name" value="{{name}}"></td> 
             </tr>
 
+            <tr>
+                <td><label for="comp_id">Company Name</label></td>
+                    <td><select required name='comp_id'>
+                        <option value="">My Company Is Not Listed.</option>
+                        {% for comp in comps: %}
+                            <option value="{{comp['comp_id']}}">{{comp['comp_name']}}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+
         </table>
         <input type="submit" name="submit" value="update">
-        <input type="submit" name="submit" value="delete">
     </form>
 
 {% endblock %}
