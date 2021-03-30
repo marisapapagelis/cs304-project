@@ -199,7 +199,7 @@ def job(comp_id,jid):
                             q3=q3, app_link=app_link, title=title, rep = rep)
 
 # routes to an affiliates individual page given a unique username
-@app.route('/affiliate/<username>', methods=['GET', 'POST'])
+@app.route('/affiliate/<username>/', methods=['GET', 'POST'])
 def affiliate(username):
     conn=dbi.connect()
     affil=aff.get_affiliate(conn,username)
