@@ -52,47 +52,47 @@ def login():
         print(list(request.form.keys()))
         if request.form['submit'] == 'login':
             session['username'] = request.form['username']
-            username = session['username']
+            myusername = session['username']
             password=request.form['password']
             print (password)
-            user_password = ddl.get_password(conn, username) ['passwd']
+            user_password = ddl.get_password(conn, myusername) ['passwd']
             print (user_password)
 
             if password == user_password: # check if password is correct
-                is_rep = repre.is_rep(conn, username)
+                is_rep = repre.is_rep(conn, myusername)
                 if is_rep: # check if rep
-                    return redirect(url_for('rep',username=username))
+                    return redirect(url_for('rep',username=myusername))
                 else:
-                    return redirect(url_for('affiliate',username=username))
+                    return redirect(url_for('affiliate',username=myusername))
             else:
                 flash('Username or Password is Incorrect. Please try again.')
                 return redirect(url_for('login'))
         elif request.form['submit'] == 'signup':
             name=request.form['name']
             email=request.form['email']
-            username=request.form['username']
+            myusername=request.form['username']
             password=request.form['password']
             password2=request.form['password2']
             kind= request.form['kind']
             user_list = []
             for user in aff.get_all_affiliates(conn):
                 user_list.append(user['username'])
-                if username in user_list:
+                if myusername in user_list:
                     flash("Username already exists. Please choose another username.")
                     return redirect(url_for('login'))
                 if password != password2: # check is password was re-entered correctly
                     flash('Passwords do not match. Please try again.')
                     return redirect(url_for('login'))
                 else: 
-                    ddl.insert_user(conn,username,name,password,email) # insert user
+                    ddl.insert_user(conn,myusername,name,password,email) # insert user
                     if kind == 'affiliate': # insert affiliate
-                        ddl.insert_affiliate(conn,username,None,None,None,None,None,None)
+                        ddl.insert_affiliate(conn,myusername,None,None,None,None,None,None)
                         flash('Taking you to your profile page. Please add additional information if necessary')
-                        return redirect(url_for('affiliate_update', username = username))
+                        return redirect(url_for('affiliate_update', username = myusername))
                     else: 
-                        ddl.insert_rep(conn,username,name,1) # insert rep
+                        ddl.insert_rep(conn,myusername,name,1) # insert rep
                         flash('Please enter your company details.')
-                        return redirect(url_for('rep_update', username = username))
+                        return redirect(url_for('rep_update', username = myusername))
 
 @app.route('/logout/')
 def logout():
