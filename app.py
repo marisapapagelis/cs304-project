@@ -349,7 +349,7 @@ def comp_insert(username):
         ddl.insert_comp(conn, comp_name, iid, locations)
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
         flash("Please update your company in your personal profile.")
-        return redirect(url_for('rep', username=username))
+        return redirect(url_for('rep-update', username=username))
 
 @app.route('/rep/<username>/update/company/<comp_id>/', methods=['GET', 'POST'])
 def comp_update(username, comp_id):
