@@ -394,14 +394,10 @@ def rep_update(username):
     else: #using POST
         #requesting information inputted by user in form
         name = request.form['name']
-        comp_id = request.form['comp_id']
-        comp_name = request.form['comp_name']
-        print(request.form)
         if request.form['submit'] == 'update': #if user wants to update 
-            ddl.update_rep(conn,username,name,comp_id) 
+            ddl.update_rep(conn,username,name) 
             flash("Rep Profile for " + name + " was updated succesfully!")
-            return render_template('update-rep.html', name = name, 
-            comp_id = comp_id, comp_name = comp_name,username=username)
+            return render_template('update-rep.html', name = name, username=username)
 
         else: #if deleting rep from database
             ddl.delete_rep(conn, username) #deletes movie and checks if deleted

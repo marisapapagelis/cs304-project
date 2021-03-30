@@ -40,10 +40,10 @@ def insert_rep(conn,username,name,comp_id):
     VALUES (%s, %s, %s)''',[username,name,comp_id])
     conn.commit()
 
-def update_rep(conn, username, name, comp_id):
+def update_rep(conn, username, name):
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update company_rep set name = %s,comp_id = %s where username=%s''',
-                        [name, comp_id, username])
+    curs.execute('''update company_rep set name = %s, where username=%s''',
+                        [name, username])
     conn.commit()
 
 def delete_user(conn,username): # works for both affiliate and rep 
