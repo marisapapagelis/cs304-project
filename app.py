@@ -263,9 +263,10 @@ def all_affiliates():
 def affiliate_update(username):  
     conn = dbi.connect()
     affili= aff.get_affiliate(conn,username)
+    user_password = ddl.get_password(conn, username) ['passwd']
     if request.method == 'GET':
         return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major =affili['major'],
-                                gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3'])      
+                                gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], org3=affili['org3'],password=user_password)      
     else: #using POST
     #requesting information inputted by user in form
         print(request.form)
