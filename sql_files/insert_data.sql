@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
-use mpapagel_db; 
+use lmiranda_db; 
 
 --inserting dummy row for company 1 and industry 1
 INSERT INTO industry (ind_name)
@@ -50,30 +50,29 @@ insert into welles_affiliates(username, year, major, gpa)
 values('ng', 2022, 'Music', 3.7);
 
 -- insert industries into industry table
-INSERT INTO industry (ind_name) --2 
+INSERT INTO industry (ind_name)
 VALUES ('Financials'); 
 
-INSERT INTO industry (ind_name) --3
+INSERT INTO industry (ind_name) 
 VALUES ('FinTech');
 
-INSERT INTO industry (ind_name) --4
+INSERT INTO industry (ind_name) 
 VALUES ('Technology');
 
-insert into industry (ind_name) --5
+insert into industry (ind_name) 
 values ('Food/Beverage');
 
 -- insert companies into company table
 INSERT INTO company (comp_name,iid,locations)
-VALUES ('JPMorgan Chase', 2, 'NY, SFO'); --2
+VALUES ('JPMorgan Chase', 2, 'NY, SFO'); 
 
 INSERT INTO company (comp_name,iid,locations)
-VALUES ('Morgan Stanley', 2, 'NY, SFO'); --3
+VALUES ('Morgan Stanley', 2, 'NY, SFO');
 
 insert into company(comp_name, iid, locations)
-values ('Apple', 4, 'NY, SFO, CHI'); --4
-
+values ('Apple', 4, 'NY, SFO, CHI'); 
 insert into company(comp_name, iid, locations)
-values ('Dairy Queen', 5, 'NY, NJ, MA, FL'); --5
+values ('Dairy Queen', 5, 'NY, NJ, MA, FL');
 
 -- insert company representative into company rep table
 INSERT INTO company_rep(username,name,comp_id)

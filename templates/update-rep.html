@@ -22,7 +22,8 @@
             <tr>
                 <td><label for="comp_id">Company Name</label></td>
                     <td><select required name='comp_id'>
-                        <option value="">My Company Is Not Listed.</option>
+                        <option value="">Choose one.</option>
+                        <option value="null">My Company Is Not Listed.</option>
                         {% for comp in comps: %}
                             <option value="{{comp['comp_id']}}">{{comp['comp_name']}}</option>
                         {% endfor %}

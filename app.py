@@ -55,7 +55,7 @@ def login():
             username = session['username']
             password=request.form['password']
             print (password)
-            user_password = aff.get_password(conn, username) ['passwd']
+            user_password = ddl.get_password(conn, username) ['passwd']
             print (user_password)
 
             if password == user_password: # check if password is correct
@@ -102,18 +102,6 @@ def logout():
    session.pop('username', None)
    return redirect(url_for('index'))
 
-@app.route('/resume/<username>')
-def resume(username):
-    conn = dbi.connect()
-    curs = dbi.dict_cursor(conn)
-    numrows = curs.execute(
-        '''select filename from user_resumes where username = %s''',
-        [username])
-    if numrows == 0:
-        flash('No resume for {}'.format(username))
-        return redirect(url_for('index'))
-    row = curs.fetchone()
-    return send_from_directory(app.config['resumes'],row['filename'])
 
 # routes from search bar to appropriate pages
 @app.route('/search/', methods = ['GET'])
@@ -380,8 +368,7 @@ def comp_insert():
         ddl.insert_comp(conn, comp_name, iid, locations)
         # need to fix this
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
-        # return redirect(url_for('rep', username=username))  
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
@@ -395,7 +382,7 @@ def rep_update(username):
         name = request.form['name']
         comp_id = request.form['comp_id']
         password=request.form['password']
-        if len(comp_id)==0:
+        if comp_id=='null':
             flash("Redirecting you to the company insert page.")
             return redirect(url_for('comp_insert', username=username))
         else:
@@ -403,6 +390,7 @@ def rep_update(username):
             ddl.user_update(conn,username,password)
             flash("Rep Profile for " + name + " was updated succesfully!")
             return render_template('update-rep.html', name = name, username=username, comps=comps)
+
 
 '''routes to job insert form'''
 @app.route('/<username>/job/insert/', methods=['GET', 'POST'])
@@ -431,11 +419,25 @@ def job_insert(username):
         
     #return render_template('insert-job.html', title='Insert a Job')
 
+@app.route('/resume/affiliate/<username>/')
+def resume(username):
+    conn = dbi.connect()
+    curs = dbi.dict_cursor(conn)
+    numrows = curs.execute(
+        '''select filename from user_resumes where username = %s''',
+        [username])
+    if numrows == 0:
+        flash('No resume for {}'.format(username))
+        return redirect(url_for('affiliate_update', username = username))
+    row = curs.fetchone()
+    return send_from_directory(app.config['resumes'],row['filename'])
+
+    
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mpapagel_db' # using Luiza's database
+    db_to_use = 'lmiranda_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

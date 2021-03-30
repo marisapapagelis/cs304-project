@@ -30,8 +30,8 @@ def insert_resume(conn,username,filename):
 
 def user_update(conn,username,password): 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update user set password= %s, where username=%s''',
-                        [password, username)
+    curs.execute('''update user set passwd= %s where username=%s''',
+                        [password, username])
     conn.commit()
 
     
