@@ -7,6 +7,7 @@
     <link rel='stylesheet' href="{{ url_for('static', filename = 'style.css') }}" type="text/css">
 </head>
 <body>
+<main>
 <div class = "box">
     <h1> Welcome to DoorToDoor!</h1>
     <p><b>If you are an existing user,</b> please login on the left.</p>
@@ -27,7 +28,7 @@
       <form class="login" method="POST" action="{{url_for('login')}}">
       <p><label>Username: <input type="text" required name="username"></label>
       <br>
-      Password: <input type="text" required name="password"></label>
+      <label>Password: <input type="text" required name="password"></label>
       <br>
         <input type="submit" name = "submit" value="login"></p>
     </form>
@@ -46,18 +47,19 @@
     </label> 
       <p><label>Name: <input type="text" required name="name"></label>
       <br>
-      Email: <input type="text" required name="email"></label>
+      <label>Email: <input type="text" required name="email"></label>
       <br>
-      Username: <input type="text" required name="username"></label>
+      <label>Username: <input type="text" required name="username"></label>
       <br>
-      Password: <input type="text" required name="password"></label>
+      <label>Password: <input type="text" required name="password"></label>
       <br>
-      Enter Password Again: <input type="text" required name="password2"></label>
+      <label>Enter Password Again: <input type="text" required name="password2"></label>
       <br>
         <input type="submit" name = "submit" value="signup"></p>
     </form>
     </div>
 </div>
+</main>
   </body>
 </html>
 
