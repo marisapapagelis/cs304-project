@@ -39,6 +39,10 @@ def index():
     else: 
         return redirect(url_for('login'))
 
+@app.route('/home/', methods = ['GET'])
+def home(): 
+        return render_template('home.html')
+
 @app.route('/login/', methods = ['GET', 'POST'])
 def login():
     conn = dbi.connect()
