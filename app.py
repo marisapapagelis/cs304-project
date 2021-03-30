@@ -329,7 +329,7 @@ def job_update(jid):
             flash('Job Posting for ' + title + ' was deleted successfully')
             return redirect(url_for('company',))
     
-@app.route('/company/update/<comp_id>', methods=['GET', 'POST'])
+@app.route('/company/<comp_id>/update/', methods=['GET', 'POST'])
 def comp_update(comp_id):
     conn = dbi.connect()
     c = comp.get_company(conn,comp_id)
@@ -415,10 +415,11 @@ def job_insert(username):
         status = request.form['status']
         link = request.form['link']
         ddl.insert_job(conn,title,educ,gpa,skills,status,link,comp_id,iid,username)
-        flash("Job Posting for " + title + " has been posted! Add more if you would like.") 
-        return redirect(url_for('job_insert', username=username)) 
-        
-    #return render_template('insert-job.html', title='Insert a Job')
+        # flash("Job Posting for " + title + " has been posted! Add more if you would like.") 
+        # return redirect(url_for('job_insert', username=username)) 
+        flash("Job (" + title + ") was inserted successfully.")
+        return redirect(url_for('home'))
+
 
 @app.route('/resume/affiliate/<username>/')
 def resume(username):
