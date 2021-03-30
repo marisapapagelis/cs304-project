@@ -290,7 +290,6 @@ def affiliate_update(username):
             return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major = major,
                                 gpa = gpa, org1=org1,year=year,org2=org2, org3=org3) 
         else:
-        else:
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
             ddl.delete_user(conn, username)
