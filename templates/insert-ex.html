@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Insert A New Experience</h1>
+
+<form method=POST action="{{url_for('ex_insert', username=username)}}">
+    <table>
+        {% if comps %}
+            <tr>
+                <td><label>Select Company</label></td>
+                    <td><label><select required name='comp_id'>
+                        <option value="">Choose one.</option>
+                        {% for comp in comps: %}
+                            <option value="{{comp['comp_id']}}">{{comp['comp_name']}}</option>
+                        {% endfor %}
+                    </select></label>
+                </td>
+
+                <td><label for="compensation">Compensation</label></td> 
+                <td><input type="text" name="compensation" id="compensation"></td> 
+
+                <td><input type="submit" name="submit" value="Choose"></td>
+            </tr>
+        {% endif %}
+
+        {% if jobs %}
+            <tr>
+                <td><label>Select Job</label></td>
+                    <td><label><select required name='jid'>
+                        <option value="">Choose one.</option>
+                        {% for job in jobs: %}
+                            <option value="{{job['jid']}}">{{job['title']}}</option>
+                        {% endfor %}
+                    </select></label>
+                </td>
+                <td><input type="submit" name="submit" value="submit"></td>
+            </tr>
+        {% endif %}
+        
+    </table>
+</form>
+  
+{% endblock %}
