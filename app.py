@@ -205,6 +205,7 @@ def job(comp_id, jid):
 # routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>/', methods=['GET', 'POST'])
 def affiliate(username):
+
     conn=dbi.connect()
     affil=aff.get_affiliate(conn,username)
     #Assign variables.
@@ -348,7 +349,7 @@ def comp_insert(username):
         ddl.insert_comp(conn, comp_name, iid, locations)
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
         flash("Please update your company in your personal profile.")
-        return redirect(url_for('rep_update', username=username))
+        return redirect(url_for('rep', username=username))
 
 @app.route('/rep/<username>/update/company/<comp_id>/', methods=['GET', 'POST'])
 def comp_update(username, comp_id):
