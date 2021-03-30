@@ -278,7 +278,7 @@ def affiliate_update(username):
             ddl.user_update(conn,username,password)
             flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
             return redirect(url_for('affiliate',username=username))
-        elif request.form['submit'] == 'upload':
+        if request.form['submit'] == 'upload':
             f = request.files['myfile']
             ddl.insert_resume(conn,username,f.filename)
             user_filename = f.filename
@@ -287,7 +287,9 @@ def affiliate_update(username):
             pathname = os.path.join(app.config['resumes'],filename)
             f.save(pathname)    
             flash('resume uploaded successfully')
-            return redirect(url_for('affiliate_update',username=username))
+            return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major = major,
+                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3) 
+        else:
         else:
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
