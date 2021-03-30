@@ -13,12 +13,6 @@
                 <td><label for="name">Affiliate Name</label></td>
                 <td><input name="name" id="name" type="text" value="{{name}}" ></td> 
                 </tr>
-
-                <tr>
-                <td><label for="password">Password</label></td>
-                <td><input name="password" id="password" type="text" value="{{password}}" ></td> 
-                </tr>
-
         
             <tr>
             <td><label for="gpa">GPA</label></td>
@@ -65,7 +59,9 @@
     </form>
 
 {% if username != '' and src != '' %}
-<p>Last upload: {{username}}</p>
-<p> <file src="{{src}}"></p>
+<a href="{{url_for('resume', username=username)}}" download = resume>Last uploaded Resume
+ <file src="{{url_for('resume', username=username)}}">
+</a>
+
 {% endif %}   
 {% endblock %}
