@@ -283,8 +283,10 @@ def affiliate_update(username):
         org1=request.form['org1']
         org2=request.form['org2']
         org3=request.form['org3']
+        password=request.form['password']
         if request.form['submit'] == 'update': #if user wants to update 
             ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
+            ddl.user_update(conn,username,password)
             flash(" Affiliate Profile was updated succesfully!") #really think we should include affiliate name in table
             return redirect(url_for('affiliate',username=username))
         elif request.form['submit'] == 'upload':
@@ -392,11 +394,13 @@ def rep_update(username):
         #requesting information inputted by user in form
         name = request.form['name']
         comp_id = request.form['comp_id']
+        password=request.form['password']
         if len(comp_id)==0:
             flash("Redirecting you to the company insert page.")
             return redirect(url_for('comp_insert', username=username))
         else:
             ddl.update_rep(conn,username, name, comp_id)
+            ddl.user_update(conn,username,password)
             flash("Rep Profile for " + name + " was updated succesfully!")
             return render_template('update-rep.html', name = name, username=username, comps=comps)
 

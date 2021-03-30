@@ -28,7 +28,13 @@ def insert_resume(conn,username,filename):
     on duplicate key update filename = %s;''', [username,filename,filename])
     conn.commit()
 
+def user_update(conn,username,password): 
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''update user set password= %s, where username=%s''',
+                        [password, username)
+    conn.commit()
 
+    
 def delete_rep(conn,username): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from company_rep where username=%s''', [username]) 
