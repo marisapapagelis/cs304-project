@@ -60,10 +60,6 @@ ul {
   background-color: rgb(249, 253, 209);
 }
 
-li {
-  float: center;
-}
-
 li a {
   display: block;
   color: rgb(0, 0, 0);
