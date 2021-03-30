@@ -211,6 +211,7 @@ def affiliate(username):
     org1= affil['org1']
     org2= affil['org2']
     org3= affil['org3']
+    year=affil['year']
     experiences=aff.get_experience(conn,username)
 
     if experiences:
@@ -219,7 +220,7 @@ def affiliate(username):
             e['title']=job['title'] #add job title onto each experience 
 
     return render_template('affiliate-page.html',name = name,
-        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences)
+        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences,year=year)
 
 # routes to company reps page given a unique username
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
