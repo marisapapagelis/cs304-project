@@ -37,9 +37,3 @@ def get_experience(conn,username):
     curs = dbi.dict_cursor(conn)
     curs.execute(''' select experience.username,experience.jid, experience.comp_id, company.comp_name from experience inner join company using (comp_id) where username=%s''', [username])
     return curs.fetchall()
-
-def get_password(conn,username): 
-    #Create cursor to pull data from the user table.
-    curs = dbi.dict_cursor(conn)
-    curs.execute(''' select passwd from user where username=%s''', [username])
-    return curs.fetchone()

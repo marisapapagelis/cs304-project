@@ -24,5 +24,5 @@ def get_all_companies(conn):
     conn = dbi.connect()
     #Create cursor to pull data from the company table.
     curs = dbi.dict_cursor(conn)
-    curs.execute('''select comp_id, comp_name from company order by comp_name asc''')
+    curs.execute('''select comp_id, comp_name from company where not comp_id=1 order by comp_name asc''')
     return curs.fetchall()

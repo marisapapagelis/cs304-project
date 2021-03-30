@@ -11,9 +11,6 @@ VALUES ('None');
 INSERT INTO company (comp_name, iid, locations)
 VALUES ('None',1, 'None');
 
-
-
-
 -- insert users into user table
 INSERT INTO user(username,name,passwd,email) 
 VALUES ('mars', 'Marisa', 'cat1234', 'mpapagel');
@@ -53,64 +50,64 @@ insert into welles_affiliates(username, year, major, gpa)
 values('ng', 2022, 'Music', 3.7);
 
 -- insert industries into industry table
-INSERT INTO industry (ind_name)
-VALUES ('Financials');
+INSERT INTO industry (ind_name) --2 
+VALUES ('Financials'); 
 
-INSERT INTO industry (ind_name)
+INSERT INTO industry (ind_name) --3
 VALUES ('FinTech');
 
-INSERT INTO industry (ind_name)
+INSERT INTO industry (ind_name) --4
 VALUES ('Technology');
 
-insert into industry (ind_name)
+insert into industry (ind_name) --5
 values ('Food/Beverage');
 
 -- insert companies into company table
 INSERT INTO company (comp_name,iid,locations)
-VALUES ('JPMorgan Chase', 1, 'NY, SFO');
+VALUES ('JPMorgan Chase', 2, 'NY, SFO'); --2
 
 INSERT INTO company (comp_name,iid,locations)
-VALUES ('Morgan Stanley', 2, 'NY, SFO');
+VALUES ('Morgan Stanley', 2, 'NY, SFO'); --3
 
 insert into company(comp_name, iid, locations)
-values ('Apple', 3, 'NY, SFO, CHI');
+values ('Apple', 4, 'NY, SFO, CHI'); --4
 
 insert into company(comp_name, iid, locations)
-values ('Dairy Queen', 4, 'NY, NJ, MA, FL');
+values ('Dairy Queen', 5, 'NY, NJ, MA, FL'); --5
 
 -- insert company representative into company rep table
 INSERT INTO company_rep(username,name,comp_id)
 VALUES ('lu1','Luiza', 2);
 
 insert into company_rep(username, name, comp_id)
-values ('styles', 'Harry Styles', 3);
+values ('styles', 'Harry Styles', 4);
 
 insert into company_rep(username, name, comp_id)
-values ('horan', 'Niall Horan', 1);
+values ('horan', 'Niall Horan', 2);
 
 insert into company_rep(username, name, comp_id)
-values ('louis', 'Louis Tomlinson', 2);
+values ('louis', 'Louis Tomlinson', 3);
 
 insert into company_rep(username, name, comp_id)
-values ('liam', 'Liam Payne', 4);
+values ('liam', 'Liam Payne', 5);
 
 insert into company_rep(username, name, comp_id)
-values ('zayn', 'Zayn Malik', 4);
+values ('zayn', 'Zayn Malik', 5);
 
 -- insert job for lu1 into jobs table
 INSERT INTO jobs (username, title, qual1, qual2, qual3, job_status, app_link, comp_id, iid )
 VALUES ('lu1','portfolio analyst', 'BA in Economics', 'Minimum GPA: 3.5', 
-'Familiarity with Excel','applications closed', NULL, 1, 1);
+'Familiarity with Excel','applications closed', NULL, 2, 2);
 
 insert into jobs(username, title, qual1, qual2, qual3, job_status, app_link, comp_id, iid) 
-values ('lu1', 'software engineer', 'BA in computer engineering', 'Minimum GPA: 3.7', 'Java', 'open', NULL, 1, 1);
+values ('lu1', 'software engineer', 'BA in computer engineering', 'Minimum GPA: 3.7', 'Java', 'open', NULL, 2, 2);
 
 insert into jobs(username, title, qual1, qual2, qual3, job_status, app_link, comp_id, iid) 
-values ('styles', 'Apple Music Licensing', 'MBA', NULL, 'Microsoft Office', 'open', NULL, 3, 3);
+values ('styles', 'Apple Music Licensing', 'MBA', NULL, 'Microsoft Office', 'open', NULL, 4, 4);
 
 insert into jobs(username, title, qual1, qual2, qual3, job_status, app_link, comp_id, iid) 
-values ('liam', 'Retail Manager', 'MBA', NULL, 'Microsoft Office', 'closed', NULL, 4, 4);
+values ('liam', 'Retail Manager', 'MBA', NULL, 'Microsoft Office', 'closed', NULL, 5, 5);
 
 -- insert experience for mars into experience table
 INSERT INTO experience (username, jid, comp_id , iid, compensation)
-VALUES ('mars',1,1,1,100000)
+VALUES ('mars',1,2,2,100000)
