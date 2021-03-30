@@ -348,7 +348,6 @@ def comp_update(comp_id):
             ddl.update_comp(conn,comp_id,comp_name,locations) 
             flash("Company Profile (" + comp_name + ") was updated succesfully!")
             return redirect(url_for('company', comp_id=comp_id))
-            #return redirect(url_for('index'))
                 
         else: #if deleting job
             ddl.delete_comp(conn, comp_id) #deletes movie and checks if deleted
@@ -356,7 +355,7 @@ def comp_update(comp_id):
             flash('Job Posting for ' + title + ' was deleted successfully')
             return redirect(url_for('company', comp_id=comp_id))
 
-@app.route('/company/insert/', methods=['GET', 'POST'])
+@app.route('/<username>/company/insert/', methods=['GET', 'POST'])
 def comp_insert():
     conn = dbi.connect()
     inds = ind.get_all_industries(conn)
@@ -370,7 +369,8 @@ def comp_insert():
         ddl.insert_comp(conn, comp_name, iid, locations)
         # need to fix this
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
-        return redirect(url_for('home'))
+        flash("Please update your company in your personal profile.")
+        return redirect(url_for('rep_update', username=username))
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
 def rep_update(username):
@@ -416,10 +416,8 @@ def job_insert(username):
         status = request.form['status']
         link = request.form['link']
         ddl.insert_job(conn,title,educ,gpa,skills,status,link,comp_id,iid,username)
-        # flash("Job Posting for " + title + " has been posted! Add more if you would like.") 
-        # return redirect(url_for('job_insert', username=username)) 
         flash("Job (" + title + ") was inserted successfully.")
-        return redirect(url_for('home'))
+        return redirect(url_for('rep', username=username))
 
 
 @app.route('/resume/affiliate/<username>/')
@@ -435,7 +433,6 @@ def resume(username):
     row = curs.fetchone()
     return send_from_directory(app.config['resumes'],row['filename'])
 
-    
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
