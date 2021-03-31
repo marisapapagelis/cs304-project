@@ -285,10 +285,11 @@ def affiliate_update(username):
             return redirect(url_for('affiliate',username=username))
         if request.form['submit'] == 'upload':
             f = request.files['myfile']
-            ddl.insert_resume(conn,username,f.filename)
-            user_filename = f.filename
+            
+            user_filename = username
             ext = user_filename.split('.')[-1]
             filename = secure_filename('{}.{}'.format(username,ext))
+            ddl.insert_resume(conn,username,filename) 
             pathname = os.path.join(app.config['resumes'],filename)
             f.save(pathname)    
             flash('resume uploaded successfully')
@@ -304,14 +305,11 @@ def affiliate_update(username):
 @app.route('/affiliate/<username>/resume/')
 def resume(username):
     conn = dbi.connect()
-    curs = dbi.dict_cursor(conn)
-    numrows = curs.execute(
-        '''select filename from user_resumes where username = %s''',
-        [username])
-    if numrows == 0:
-        flash('No resume for {}'.format(username))
-        return redirect(url_for('affiliate_update', username = username))
-    row = curs.fetchone()
+    rows = ddl.num_resumes(conn,username)
+    if rows == 0:
+        flash('Sorry, {} has not currently uploaded a resume.'.format(username))
+        return redirect(url_for('affiliate', username = username))
+    row = ddl.select_resume(conn,username)
     return send_from_directory(app.config['resumes'],row['filename'])
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
@@ -474,7 +472,7 @@ def ex_update(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'ngoodman_db' # using Luiza's database
+    db_to_use = 'mbhatia_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
