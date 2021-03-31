@@ -96,6 +96,7 @@ def login():
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
+   flash('You have been logged out')
    return redirect(url_for('index'))
 
 # routes from search bar to appropriate pages
