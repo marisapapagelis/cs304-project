@@ -285,7 +285,6 @@ def affiliate_update(username):
             return redirect(url_for('affiliate',username=username))
         if request.form['submit'] == 'upload':
             f = request.files['myfile']
-            
             user_filename = username
             ext = user_filename.split('.')[-1]
             filename = secure_filename('{}.{}'.format(username,ext))
@@ -294,7 +293,7 @@ def affiliate_update(username):
             f.save(pathname)    
             flash('resume uploaded successfully')
             return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major = major,
-                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3) 
+                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3,password=password) 
         else:
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
@@ -472,7 +471,7 @@ def ex_update(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' # using Luiza's database
+    db_to_use = 'mpapagel_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
