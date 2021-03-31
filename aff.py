@@ -37,3 +37,4 @@ def get_experience(conn,username):
     curs = dbi.dict_cursor(conn)
     curs.execute(''' select experience.username,experience.jid, experience.comp_id, company.comp_name from experience inner join company using (comp_id) where username=%s''', [username])
     return curs.fetchall()
+

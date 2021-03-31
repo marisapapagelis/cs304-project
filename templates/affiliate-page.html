@@ -11,7 +11,7 @@
 <br> Orgs: {{org1}}, {{org2}}, {{org3}}
 
 {% if username != '' and src != '' %}
-<p><a href="{{url_for('resume', username=username)}}"> Last uploaded Resume</a> 
+<p><a href="{{url_for('resume', username=username)}}" download = resume> Last uploaded Resume</a> 
     <p> <file src="{{url_for('resume', username=username)}}"></file> </p>
 {% else %}
     <p>No Resume Uploaded.</p>
@@ -30,9 +30,10 @@
     <p>No Experiences Listed.</p>
 {% endif %}
 
+{% if myuser %}
 <a href="{{url_for('affiliate_update', username=username)}}">Update Your Profile</a>
 <a href="{{url_for('ex_insert', username=username)}}">Insert A New Experience</a>
 <a href="{{url_for('ex_update', username=username)}}">Delete An Experience</a>
-
+{% endif %}
 
 {% endblock %}

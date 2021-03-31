@@ -6,20 +6,6 @@ def insert_comp(conn, comp_name,iid,locations):
                     VALUES (%s, %s, %s);''',[comp_name,iid,locations])  #autoincrement no need for comp_id
     conn.commit()
 
-
-def select_resume(conn,username):
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''select filename from user_resumes where username = %s''', [username])
-    row = curs.fetchone()
-    return row
-
-
-
-def num_resumes(conn,username):
-    curs = dbi.dict_cursor(conn)
-    rows = curs.execute('''select filename from user_resumes where username = %s''', [username])
-    return rows
-
 def delete_comp(conn,comp_id):
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from company where comp_id=%s''', [comp_id]) 
@@ -123,6 +109,7 @@ def user_exists(conn, username):
     curs.execute('''select username from user where username=%s''', [username])  
     curs.fetchone()
 
+
 def get_password(conn,username): 
     #Create cursor to pull data from the user table.
     curs = dbi.dict_cursor(conn)
@@ -130,8 +117,10 @@ def get_password(conn,username):
     return curs.fetchone()
 
 
-
-
+def is_user(username,myusername): #can i do this even if not a sql
+    return username==myusername
+    
+    
 
 
 

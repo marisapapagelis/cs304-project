@@ -51,15 +51,13 @@ def login():
     else:
         print(list(request.form.keys()))
         if request.form['submit'] == 'login':
-            session['username'] = request.form['username']
-            myusername = session['username']
+            myusername = request.form['username']
             password=request.form['password']
-            print (password)
             user_password = ddl.get_password(conn, myusername) ['passwd']
-            print (user_password)
 
             if password == user_password: # check if password is correct
                 is_rep = repre.is_rep(conn, myusername)
+                session['username']=myusername #at this point, trustworthy value. 
                 if is_rep: # check if rep
                     return redirect(url_for('rep',username=myusername))
                 else:
@@ -190,24 +188,26 @@ def job(comp_id, jid):
     app_link = job['app_link']
     
     compensation = jo.get_compensation(conn, jid)
-
-    #need this for job update link on html
     username = jo.get_rep(conn, jid)['username']
-
+    myusername=session['username']
+    #must implement a way to retrive myusername from sessions, if my usert true edit button visible
+    if ddl.is_user(username,myusername) and repre.get_rep(conn,myusername)['comp_id']==comp_id:
+        myuser = True
+    else: 
+        myuser = False
     # must implement a check to see if rep's username matches the session username
-    rep = True #for now, set to True
-    # if no match, then rep should be False
+    # if no match, then myuser should be False, edit button doesn't appear
 
     return render_template('job-page.html', comp_name=comp_name, ind_name=ind_name,
                             jid=jid, status=status, q1=q1, q2=q2,comp_id=comp_id,
-                            q3=q3, app_link=app_link, title=title, rep = rep, username=username, compensation=compensation)
+                            q3=q3, app_link=app_link, title=title, myuser= myuser, username=username, compensation=compensation)
 
 # routes to an affiliates individual page given a unique username
 @app.route('/affiliate/<username>/', methods=['GET', 'POST'])
 def affiliate(username):
-
     conn=dbi.connect()
     affil=aff.get_affiliate(conn,username)
+    myusername = session['username']
     #Assign variables.
     name = affil['name']
     username = affil['username']
@@ -218,24 +218,27 @@ def affiliate(username):
     org3= affil['org3']
     year=affil['year']
     experiences=aff.get_experience(conn,username)
-
+    myuser=ddl.is_user(username,myusername)
     if experiences:
         for e in experiences:
             job = jo.get_job(conn, e['jid']) #get each job based on the jid
             e['title']=job['title'] #add job title onto each experience 
 
     return render_template('affiliate-page.html',name = name,
-        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences,year=year)
+        username=username,gpa=gpa,major=major,org1=org1,org2=org2,org3=org3,experiences=experiences,year=year,myuser=myuser)
 
 # routes to company reps page given a unique username
 @app.route('/rep/<username>/', methods=['GET', 'POST'])
 def rep(username):
     conn=dbi.connect()
+    print(session)
+    myusername = session['username']
     rep = repre.get_rep(conn, username)
     name = rep['name']
     comp_id = rep['comp_id']
     comp_name = comp.get_company(conn,comp_id)['comp_name']
-    return render_template('rep-page.html', username=username, name=name, comp_id=comp_id, comp_name=comp_name)
+    myuser=ddl.is_user(username,myusername)
+    return render_template('rep-page.html', username=username, name=name, comp_id=comp_id, comp_name=comp_name,myuser=myuser)
 
 # routes to page that lists all companies included to date
 @app.route('/all/companies/')
@@ -285,16 +288,15 @@ def affiliate_update(username):
             return redirect(url_for('affiliate',username=username))
         if request.form['submit'] == 'upload':
             f = request.files['myfile']
-            
-            user_filename = username
+            ddl.insert_resume(conn,username,f.filename)
+            user_filename = f.filename
             ext = user_filename.split('.')[-1]
             filename = secure_filename('{}.{}'.format(username,ext))
-            ddl.insert_resume(conn,username,filename) 
             pathname = os.path.join(app.config['resumes'],filename)
             f.save(pathname)    
             flash('resume uploaded successfully')
             return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major = major,
-                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3) 
+                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3,password=password) 
         else:
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
@@ -305,11 +307,14 @@ def affiliate_update(username):
 @app.route('/affiliate/<username>/resume/')
 def resume(username):
     conn = dbi.connect()
-    rows = ddl.num_resumes(conn,username)
-    if rows == 0:
-        flash('Sorry, {} has not currently uploaded a resume.'.format(username))
-        return redirect(url_for('affiliate', username = username))
-    row = ddl.select_resume(conn,username)
+    curs = dbi.dict_cursor(conn)
+    numrows = curs.execute(
+        '''select filename from user_resumes where username = %s''',
+        [username])
+    if numrows == 0:
+        flash('No resume for {}'.format(username))
+        return redirect(url_for('affiliate_update', username = username))
+    row = curs.fetchone()
     return send_from_directory(app.config['resumes'],row['filename'])
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
@@ -317,8 +322,9 @@ def rep_update(username):
     conn = dbi.connect()
     rep = repre.get_rep(conn, username)
     comps = comp.get_all_companies(conn)
+    user_password=ddl.get_password(conn, username) ['passwd']
     if request.method == 'GET':
-        return render_template('update-rep.html', name = rep['name'], username=username, comps=comps)
+        return render_template('update-rep.html', name = rep['name'], username=username, comps=comps, password=user_password)
     else: #using POST
         #requesting information inputted by user in form
         name = request.form['name']
@@ -347,7 +353,7 @@ def comp_insert(username):
         ddl.insert_comp(conn, comp_name, iid, locations)
         flash("Company Profile (" + comp_name + ") was inserted successfully.")
         flash("Please update your company in your personal profile.")
-        return redirect(url_for('rep-update', username=username))
+        return redirect(url_for('rep_update', username=username))
 
 @app.route('/rep/<username>/update/company/<comp_id>/', methods=['GET', 'POST'])
 def comp_update(username, comp_id):
@@ -472,7 +478,7 @@ def ex_update(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-    db_to_use = 'mbhatia_db' # using Luiza's database
+    db_to_use = 'lmiranda_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
