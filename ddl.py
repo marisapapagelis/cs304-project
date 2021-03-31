@@ -1,5 +1,16 @@
 import cs304dbi as dbi
 
+def select_resume(conn,username):
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''select filename from user_resumes where username = %s''', [username])
+    row = curs.fetchone()
+    return row
+
+def num_resumes(conn,username):
+    curs = dbi.dict_cursor(conn)
+    rows = curs.execute('''select filename from user_resumes where username = %s''', [username])
+    return rows
+
 def insert_comp(conn, comp_name,iid,locations): 
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO company(comp_name,iid,locations)  

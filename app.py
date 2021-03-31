@@ -307,14 +307,11 @@ def affiliate_update(username):
 @app.route('/affiliate/<username>/resume/')
 def resume(username):
     conn = dbi.connect()
-    curs = dbi.dict_cursor(conn)
-    numrows = curs.execute(
-        '''select filename from user_resumes where username = %s''',
-        [username])
-    if numrows == 0:
-        flash('No resume for {}'.format(username))
-        return redirect(url_for('affiliate_update', username = username))
-    row = curs.fetchone()
+    rows = ddl.num_resumes(conn,username)
+    if rows == 0:
+        flash('Sorry, {} has not currently uploaded a resume.'.format(username))
+        return redirect(url_for('affiliate', username = username))
+    row = ddl.select_resume(conn,username)
     return send_from_directory(app.config['resumes'],row['filename'])
 
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
@@ -478,11 +475,7 @@ def ex_update(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
-<<<<<<< HEAD
-    db_to_use = 'lmiranda_db' # using Luiza's database
-=======
-    db_to_use = 'mpapagel_db' # using Luiza's database
->>>>>>> e48a8453bdebe28e8328d07ac55923cde60074a6
+    db_to_use = 'mbhatia_db' # using Luiza's database
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
