@@ -288,10 +288,10 @@ def affiliate_update(username):
             return redirect(url_for('affiliate',username=username))
         if request.form['submit'] == 'upload':
             f = request.files['myfile']
-            ddl.insert_resume(conn,username,f.filename)
-            user_filename = f.filename
+            user_filename = username
             ext = user_filename.split('.')[-1]
             filename = secure_filename('{}.{}'.format(username,ext))
+            ddl.insert_resume(conn,username,f.filename)
             pathname = os.path.join(app.config['resumes'],filename)
             f.save(pathname)    
             flash('resume uploaded successfully')
@@ -478,7 +478,11 @@ def ex_update(username):
 def init_db():
     dbi.cache_cnf()
     # setting this variable to mehar's database since that is where we made the ddl
+<<<<<<< HEAD
     db_to_use = 'lmiranda_db' # using Luiza's database
+=======
+    db_to_use = 'mpapagel_db' # using Luiza's database
+>>>>>>> e48a8453bdebe28e8328d07ac55923cde60074a6
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

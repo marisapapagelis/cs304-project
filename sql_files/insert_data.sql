@@ -2,7 +2,7 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
-use ngoodman_db; 
+use mpapagel_db; 
 
 --inserting dummy row for company 1 and industry 1
 INSERT INTO industry (ind_name)
