@@ -41,7 +41,11 @@ def index():
 
 @app.route('/home/', methods = ['GET'])
 def home(): 
-        return render_template('home.html')
+    if len(ddl.is_rep(conn,myusername))!=0:
+        is_rep = True
+    else: 
+        is_rep = False
+    return render_template('base.html', is_rep=is_rep)
 
 @app.route('/login/', methods = ['GET', 'POST'])
 def login():
