@@ -156,11 +156,14 @@ def user_exists(conn, username):
     curs.fetchone()
 
 def get_password(conn,username): 
-    '''Returns the password assosiated with a given username''' 
+    '''Returns the password of a user given its username'''
     curs = dbi.dict_cursor(conn)
     curs.execute(''' select passwd from user where username=%s''', [username])
     return curs.fetchone()
 
+def is_user(username,myusername): 
+    '''checks if username variable equals myusername variable'''
+    return username==myusername
     
     
 
