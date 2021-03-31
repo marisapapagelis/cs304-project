@@ -120,16 +120,10 @@ def user_exists(conn, username):
     curs.execute('''select username from user where username=%s''', [username])  
     curs.fetchone()
 
-
 def get_password(conn,username): 
     #Create cursor to pull data from the user table.
     curs = dbi.dict_cursor(conn)
     curs.execute(''' select passwd from user where username=%s''', [username])
-    return curs.fetchone()
-
-def is_rep(conn, username):
-    curs = dbi.dict_cursor(conn)
-    curs.execute(''' select * from company_rep where username=%s''', [username])
     return curs.fetchone()
 
 def is_user(username,myusername): #can i do this even if not a sql

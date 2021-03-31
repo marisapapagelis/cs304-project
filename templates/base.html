@@ -13,10 +13,10 @@
         <nav>
             <ul>
                 <li><a href="{{url_for('home')}}">Home</a></li>
-                 {% if rep %}
-                    <a href="{{url_for('rep', username = myusername)}}">{{myusername}}</a> 
+                {% if is_rep %}
+                    <li><a href="{{url_for('rep', username = myusername)}}">My Profile</a></li> 
                 {% else %} 
-                    <a href="{{url_for('affiliate', username = myusername)}}">{{myusername}}</a>
+                <li><a href="{{url_for('affiliate', username = myusername)}}">My Profile</a></li> 
                 {% endif %}
                 <li><a href="{{url_for('logout')}}">Logout</a></li>
               </ul>
