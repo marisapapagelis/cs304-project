@@ -1,3 +1,7 @@
+<!-- Luiza, Nina, Marisa, Mehar 
+        CS 304 Final Project
+        Base html.file -->
+        
 <!doctype html>
 <html lang='en'>
 <head>
@@ -8,6 +12,9 @@
 </head>
 <body>
 <main>
+
+<!-- Main Navagation Bar -->
+
 <div class = "nav-box">
     <div id="navigation">
         <nav>
@@ -27,6 +34,8 @@
 
 <h2>"I'll open your door if you open mine."</h2>
 
+<!-- Search Bar -->
+
 <p> Search by person, company, or industry!</p>   
 <form class="search" method="GET" action="{{url_for('search')}}">
     <p><label> Search by Name: <input type="text" required name="query"></label>
@@ -41,6 +50,8 @@
     <input type="submit" value="search"></p>
 </form>
 </div>
+
+<!-- Flash Messages --> 
 
 <div class = "box">
 {% with messages = get_flashed_messages() %}
@@ -57,6 +68,8 @@
 
 </div>
 
+<!-- Quick Browse Navagation Bar -->
+
 <div class = "nav-box">
 <h2>Quick Browse:</h2>
 <ul>
@@ -64,6 +77,10 @@
 <li><a href="{{url_for('all_industries')}}">See All Industries To Date</a></li>
 <li><a href="{{url_for('all_affiliates')}}">See All Affiliates Joined To Date</a></li>
 </ul>
+
+<!-- Validation Section -->
+
+<section>
 <p>
     <img src="{{ url_for('static', filename = 'valid_wave.jpeg') }}" 
     alt="Valid WAVE" width="125" height="40">
@@ -75,6 +92,7 @@
     alt="Valid HTML5" width="125" height="40">
 
 </p>
+</section>
 </div>
 </main>
 </body>

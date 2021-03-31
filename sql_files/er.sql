@@ -113,7 +113,7 @@ create table experience (
 )
 ENGINE = InnoDB;
 
-
+-- create table to store user resumes
 create table user_resumes (
     username varchar(20) not null,
     filename varchar(50),

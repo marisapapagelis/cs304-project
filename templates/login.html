@@ -1,3 +1,7 @@
+<!-- Luiza, Nina, Marisa, Mehar 
+        CS 304 Final Project
+        Login page html file -->
+
 <!doctype html>
 <html lang='en'>
 <head>
@@ -13,6 +17,7 @@
     <p><b>If you are an existing user,</b> please login on the left.</p>
     <p><b> If you are new to DoorToDoor,</b> please create an account on the right. Be sure to specify whether you are a Wellesley Affiliate or a Company Representative to be directed to your appropriate profile creation page. </p>
 
+    <!-- Flash messages -->
     {% with messages = get_flashed_messages() %}
 {% if messages %}
 <div id="messages">
@@ -22,6 +27,8 @@
 </div>
 {% endif %}
 {% endwith %}
+
+<!-- Login box -->
 
     <div id = "leftbox">
       <h2>Login</h2>
@@ -33,6 +40,8 @@
         <input type="submit" name = "submit" value="login"></p>
     </form>
     </div>
+
+    <!-- Sign up box -->
 
     <div id = "rightbox">
       <h2>Sign Up</h2>

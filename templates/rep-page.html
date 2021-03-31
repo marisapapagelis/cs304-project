@@ -1,3 +1,8 @@
+<!-- Luiza, Nina, Marisa, Mehar 
+        CS 304 Final Project
+        Rep page html file
+        Extends base.html -->
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -6,6 +11,7 @@
      
 <p> Representing: <a href="{{url_for('company', comp_id=comp_id)}}">{{comp_name}}</a></p>
 
+<!-- Only a rep can add job posting, update profile, or update company profile -->
 
 {% if myuser %}
 <ul>
