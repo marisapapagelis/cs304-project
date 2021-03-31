@@ -110,3 +110,6 @@ values ('liam', 'Retail Manager', 'MBA', NULL, 'Microsoft Office', 'closed', NUL
 -- insert experience for mars into experience table
 INSERT INTO experience (username, jid, comp_id , iid, compensation)
 VALUES ('mars',1,2,2,100000)
+
+-- inserting resume entry into user resumes table
+insert into user_resumes(username,filename) values ('mehr','mehr.pdf')
