@@ -14,9 +14,9 @@
             <ul>
                 <li><a href="{{url_for('home')}}">Home</a></li>
                 {% if is_rep %}
-                    <li><a href="{{url_for('rep', username = myusername)}}">My Profile</a></li>
-                {% else %}
-                <li><a href="{{url_for('affiliate', username = myusername)}}">My Profile</a></li>
+                    <li><a href="{{url_for('rep', username = myusername)}}">My Profile</a></li> 
+                {% else %} 
+                <li><a href="{{url_for('affiliate', username = myusername)}}">My Profile</a></li> 
                 {% endif %}
                 <li><a href="{{url_for('logout')}}">Logout</a></li>
               </ul>
@@ -27,7 +27,7 @@
 
 <h2>"I'll open your door if you open mine."</h2>
 
-<p> Search by person, company, or industry!</p>
+<p> Search by person, company, or industry!</p>   
 <form class="search" method="GET" action="{{url_for('search')}}">
     <p><label> Search by Name: <input type="text" required name="query"></label>
     <label>kind
@@ -37,7 +37,7 @@
                 <option value="company">company</option>
                 <option value="industry">industry</option>
             </select>
-    </label>
+    </label> 
     <input type="submit" value="search"></p>
 </form>
 </div>
@@ -53,34 +53,29 @@
 {% endif %}
 {% endwith %}
 
-{% block content %} {% endblock %}
+{% block content %} {% endblock %}  
 
 </div>
 
 <div class = "nav-box">
 <h2>Quick Browse:</h2>
-<p><a href="{{url_for('all_companies')}}">See All Companies To Date</a></p>
-<p><a href="{{url_for('all_industries')}}">See All Industries To Date</a></p>
-<p><a href="{{url_for('all_affiliates')}}">See All Affiliates Joined To Date</a></p>
+<ul>
+<li><a href="{{url_for('all_companies')}}">See All Companies To Date</a></li>
+<li><a href="{{url_for('all_industries')}}">See All Industries To Date</a></li>
+<li><a href="{{url_for('all_affiliates')}}">See All Affiliates Joined To Date</a></li>
+</ul>
+<p>
+    <img src="{{ url_for('static', filename = 'valid_wave.jpeg') }}" 
+    alt="Valid WAVE" width="125" height="40">
+
+    <img src="{{ url_for('static', filename = 'valid_CSS.png') }}" 
+    alt="Valid CSS" width="125" height="40">
+
+    <img src="{{ url_for('static', filename = 'valid_HTML5.png') }}" 
+    alt="Valid HTML5" width="125" height="40">
+
+</p>
 </div>
 </main>
-
-
-
-<ul id="iconlist">
-
-<li><a href="https://validator.w3.org/check?uri=referer"><img
-    style="border:0;width:88px;height:31px"
-    src="valid-html5v1.png"
-    alt="Valid HTML 5" height="31" width="88"></a>
-
-    <li><a href="http://jigsaw.w3.org/css-validator/check/referer">
-            <img style="border:0;width:88px;height:31px"
-                src="http://jigsaw.w3.org/css-validator/images/vcss"
-                alt="Valid CSS!" />
-        </a>
-
-</ul>
-
 </body>
 </html>
