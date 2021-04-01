@@ -4,6 +4,7 @@
 # ddl.py file - helper functions for ddl
 
 import cs304dbi as dbi
+import bcrypt
 
 # insert, delete, update COMPANIES
 
@@ -195,14 +196,13 @@ def get_password(conn,username):
 
 # Insert data functions
 
-# def insert_data(conn, myusername, name, password, email):
-#     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-#     hashed_str = hashed.decode('utf-8')
-#     curs = dbi.cursor(conn)
-#     curs.execute('''INSERT INTO user(username, name, hashed, email)
-#                             VALUES(%s,%s,%s,%s)''',[myusername, name, hashed_str, email])
-#     conn.commit()
-
-
-
+def insert_data(conn, myusername, name, password, email):
+    '''Inserts test data with hashed passwords into the user table'''
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    hashed_str = hashed.decode('utf-8')
+    curs = dbi.cursor(conn)
+    curs.execute('''INSERT INTO user(username, name, hashed, email)
+                             VALUES(%s,%s,%s,%s)''',[myusername, name, hashed_str, email])
+    conn.commit()
+    
 

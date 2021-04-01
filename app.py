@@ -28,6 +28,7 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+
 # Configuration for file upload
 app.config['resumes'] = 'resumes'
 app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
@@ -35,6 +36,21 @@ app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
 # Route to home page
 @app.route('/',  methods = ['GET', 'POST'])
 def index():
+    ######################
+    # THE FOLLOWING CODE IS USED BY THE ADMIN TO ENTER TEST DATA. DO NOT UNCOMMENT. 
+    # ONLY NEEDS TO BE RUN THE FIRST TIME USING A DATABASE
+    # To recalibrate test data: first run er.sql, then app.py, then insert_data.sql
+    #conn = dbi.connect()
+    #ddl.insert_data(conn, 'mars', 'Marisa', 'cat1234', 'mpapagel@wellesley.edu')
+    #ddl.insert_data(conn, 'mehr','Mehar', 'dog657', 'mbhatia@wellesley.edu')
+    # ddl.insert_data(conn, 'lu1','Luiza', 'monkey657', 'lmiranda@wellesley.edu')
+    # ddl.insert_data(conn, 'ng', 'Nina', 'puppy', 'ngoodman@wellesley.edu')
+    # ddl.insert_data(conn, 'styles', 'Harry Styles', '1dforever', 'hstyles@1dforever.com')
+    # ddl.insert_data(conn, 'horan', 'Niall Horan', 'im_irish', 'nhoran@1dforever.com')
+    # ddl.insert_data(conn, 'louis', 'Louis Tomlinson', '1d_rox', 'louis@1dforever.com')
+    # ddl.insert_data(conn, 'liam', 'Liam Payne', 'no_payne_no_gain', 'liam@1dforever.com')
+    # ddl.insert_data(conn, 'zayn', 'Zayn Malik', 'drive_u_in_zayn', 'zayn@1dforever.com')
+    ######################
     if request.method=='GET':
         return render_template('main.html',title='DoorToDoor')
     else: 
@@ -562,7 +578,7 @@ def ex_update(username):
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
-    db_to_use = 'lmiranda_db' 
+    db_to_use = 'mpapagel_db' 
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

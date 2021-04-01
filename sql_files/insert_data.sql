@@ -2,6 +2,8 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
+-- RUN APP.PY TO INSERT USERS ONCE BEFORE RUNNING THIS SQL
+
 use mpapagel_db; 
 
 --inserting dummy row for company 1 and industry 1
@@ -9,35 +11,7 @@ INSERT INTO industry (ind_name)
 VALUES ('None');
 
 INSERT INTO company (comp_name, iid, locations)
-VALUES ('None',1, 'None');
-
--- insert users into user table
-INSERT INTO user(username,name, hashed,email) 
-VALUES ('mars', 'Marisa', 'cat1234', 'mpapagel');
-
-INSERT INTO user(username,name,hashed,email) 
-VALUES ('mehr','Mehar', 'dog657', 'mbhatia');
-
-INSERT INTO user(username,name,hashed,email) 
-VALUES ('lu1','Luiza', 'monkey657', 'lmiranda');
-
-insert into user(username, name, hashed, email) 
-values ('ng', 'Nina', 'puppy', 'ngoodman');
-
-insert into user(username, name, hashed, email) 
-values ('styles', 'Harry Styles', '1dforever', 'hstyles@1dforever.com');
-
-insert into user(username, name, hashed, email) 
-values ('horan', 'Niall Horan', 'im_irish', 'nhoran@1dforever.com');
-
-insert into user(username, name, hashed, email) 
-values ('louis', 'Louis Tomlinson', '1d_rox', 'louis@1dforever.com');
-
-insert into user(username, name, hashed, email) 
-values ('liam', 'Liam Payne', 'no_payne_no_gain', 'liam@1dforever.com');
-
-insert into user(username, name, hashed, email) 
-values ('zayn', 'Zayn Malik', 'drive_u_in_zayn', 'zayn@1dforever.com');
+VALUES ('None',1, 'None')
 
 -- insert wellesley affiliates into wellesley affiliate table
 INSERT INTO welles_affiliates (username, year, major, gpa, org1, org2, org3)
