@@ -74,8 +74,7 @@ def login():
             hashed2 = bcrypt.hashpw(password.encode('utf-8'), hashed.encode('utf-8'))
             hashed2_str = hashed2.decode('utf-8')
             if hashed2_str == hashed: #check if password is correct
-                session['username']=myusername 
-                print(session)
+                session['username'] = myusername
                 if is_rep: 
                     # check if a rep to redirect to rep profile page
                     return redirect(url_for('rep',username=myusername))
@@ -108,10 +107,8 @@ def login():
                 # if everything works, create an account for the user
                 else:
                     session['username']=myusername 
-                    print(session) 
                     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
                     hashed_str = hashed.decode('utf-8')
-                    #ddl.insert_user(conn,myusername,name,password,email) # insert user (affiliate and rep)
                     ddl.insert_hashed(conn, myusername, name, hashed_str, email)
                     if kind == 'affiliate': 
                         ddl.insert_affiliate(conn,myusername,None,None,None,None,None,None)
@@ -340,16 +337,17 @@ def all_affiliates():
 def affiliate_update(username):  
     conn = dbi.connect()
     # get session info
-    print(session)
     myusername = session['username'] 
     is_rep = repre.is_rep(conn, myusername)
     affili= aff.get_affiliate(conn,username)
-    #user_password = ddl.get_password(conn, username) ['passwd']
-    user_password = 'fix this'
+    row = ddl.select_hashed(conn, myusername)
+    hashed = row['hashed']
+    hashed2 = bcrypt.hashpw(hashed.encode('utf-8'), hashed.encode('utf-8'))
+    hashed2_str = hashed2.decode('utf-8')
     if request.method == 'GET':
         return render_template('update-affiliate.html', username = affili['username'], name = affili['name'],
          major =affili['major'], gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], 
-         org3=affili['org3'],password=user_password, myusername=myusername, is_rep=is_rep)      
+         org3=affili['org3'],password=hashed, myusername=myusername, is_rep=is_rep)      
     else: 
         major = request.form['major']
         gpa=request.form['gpa']
@@ -360,7 +358,9 @@ def affiliate_update(username):
         password=request.form['password']
         if request.form['submit'] == 'update': #if user wants to update 
             ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
-            # ddl.user_update(conn,username,password)
+            hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_str = hashed.decode('utf-8')
+            ddl.user_update(conn,username,hashed_str) # update password in hashed form
             flash(" Affiliate Profile was updated succesfully!") 
             return redirect(url_for('affiliate',username=username,myusername=myusername, is_rep=is_rep))
         if request.form['submit'] == 'upload': # if user wants to upload resume
@@ -407,10 +407,13 @@ def rep_update(username):
     is_rep = repre.is_rep(conn, myusername)
     rep = repre.get_rep(conn, username)
     comps = comp.get_all_companies(conn)
-    user_password=ddl.get_password(conn, username) ['passwd']
+    row = ddl.select_hashed(conn, myusername)
+    hashed = row['hashed']
+    hashed2 = bcrypt.hashpw(hashed.encode('utf-8'), hashed.encode('utf-8'))
+    hashed2_str = hashed2.decode('utf-8')
     if request.method == 'GET':
         return render_template('update-rep.html', name = rep['name'], username=username, comps=comps, 
-        password=user_password, myusername=myusername, is_rep=is_rep)
+        password=hashed2_str, myusername=myusername, is_rep=is_rep)
     else: 
         #requesting information inputted by user in form
         name = request.form['name']
@@ -421,7 +424,9 @@ def rep_update(username):
             return redirect(url_for('comp_insert', username=username, myusername=myusername, is_rep=is_rep))
         else:
             ddl.update_rep(conn,username, name, comp_id)
-            ddl.user_update(conn,username,password)
+            hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_str = hashed.decode('utf-8')
+            ddl.user_update(conn,username,hashed_str) # update password in hashed form
             flash("Rep Profile for " + name + " was updated succesfully!")
             return redirect(url_for('rep', username=username, myusername=myusername, is_rep=is_rep))
 

@@ -56,11 +56,11 @@ def update_affiliate(conn,username,major,gpa,org1,org2,org3,year):
 
 # insert, update, delete USERS
 
-def user_update(conn,username,password): 
+def user_update(conn,username,hashed2_str): 
     '''Updates user password when given the associated username and new password'''
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update user set passwd= %s where username=%s''',
-                        [password, username])
+    curs.execute('''update user set hashed= %s where username=%s''',
+                        [hashed2_str, username])
     conn.commit()
 
 def delete_user(conn,username): # works for both affiliate and rep
@@ -185,19 +185,10 @@ def insert_resume(conn,username,filename):
     on duplicate key update filename = %s;''', [username,filename,filename])
     conn.commit()
 
-# Password functions
-
-def get_password(conn,username): 
-    '''Returns the password of a user given its username'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute(''' select passwd from user where username=%s''', [username])
-    return curs.fetchone()
-
-
-# Insert data functions
+# Insert test data functions
 
 def insert_data(conn, myusername, name, password, email):
-    '''Inserts test data with hashed passwords into the user table'''
+    '''Inserts test data with hashed password into the user table'''
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     hashed_str = hashed.decode('utf-8')
     curs = dbi.cursor(conn)
