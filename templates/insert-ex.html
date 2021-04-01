@@ -43,8 +43,9 @@
                 <td><input type="submit" name="submit" value="submit"></td>
             </tr>
         {% else %}
-            <p>There are no jobs listed.</p>
-            <a href="{{url_for('affiliate', username=username)}}">Return To Profile</a>
+            <tr>
+            <td><a href="{{url_for('affiliate', username=username)}}">Return To Profile</a></td> 
+            </tr>
         {% endif %}
         
             

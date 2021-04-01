@@ -337,17 +337,19 @@ def affiliate_update(username):
             flash(" Affiliate Profile was updated succesfully!") 
             return redirect(url_for('affiliate',username=username,myusername=myusername, is_rep=is_rep))
         if request.form['submit'] == 'upload': # if user wants to upload resume
-            f = request.files['myfile']
-            user_filename = username
-            ext = user_filename.split('.')[-1]
-            filename = secure_filename('{}.{}'.format(username,ext))
-            ddl.insert_resume(conn,username,f.filename)
-            pathname = os.path.join(app.config['resumes'],filename)
-            f.save(pathname)    
-            flash('resume uploaded successfully')
-            return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], 
-            major = major,gpa = gpa, org1=org1,year=year,org2=org2, org3=org3,password=password,myusername=myusername, 
-            is_rep=is_rep) 
+            f = request.files['myfile'] #sends a request to get the file
+            user_filename = f.filename
+            ext = user_filename.split('.')[-1] #extension of the file
+            if ext == 'pdf': #only pdfs are allowed
+                filename = secure_filename('{}.{}'.format(username,ext))
+                ddl.insert_resume(conn,username,filename) #inserting resume into the user_resumes table
+                pathname = os.path.join(app.config['resumes'],filename) #constructing pathname for resume
+                f.save(pathname)    
+                flash('resume uploaded successfully') #notify user resume is uploaded
+            else: 
+                flash('Please upload a resume in pdf form') #only pdf allowed
+            return render_template('update-affiliate.html', username = affili['username'], name = affili['name'], major = major,
+                                gpa = gpa, org1=org1,year=year,org2=org2, org3=org3,password=password,myusername=myusername, is_rep=is_rep)
         else: # if user wants to delete all their information
             ddl.delete_allexperiences(conn,username) 
             ddl.delete_affiliate(conn, username) 
@@ -359,12 +361,15 @@ def affiliate_update(username):
 @app.route('/affiliate/<username>/resume/')
 def resume(username):
     conn = dbi.connect()
-    rows = ddl.num_resumes(conn,username)
-    if rows == 0:
-        flash('Sorry, {} has not currently uploaded a resume.'.format(username))
-        return redirect(url_for('affiliate', username = username))
-    row = ddl.select_resume(conn,username)
-    return send_from_directory(app.config['resumes'],row['filename'])
+    rows = ddl.num_resumes(conn,username) #uses query to get the number of resumes that exist in database for that username
+    if rows == 0: #if the user does not have a resume in database
+        flash('Sorry, {} has not currently uploaded a resume.'.format(username)) #notify user that the person does not have a resume uploaded
+        return redirect(url_for('affiliate', username = username)) 
+    row = ddl.select_resume(conn,username) #selects the right resume for that username from resume table in database
+    resp = make_response(send_from_directory(app.config['resumes'],row['filename'])) #making a response and modifying the default headers
+    resp.headers['Cache-Control'] = 'no-cache' #to avoid caching resumes
+    return resp #return resp
+    
 
 # routes to the update page for a company representative
 @app.route('/rep/<username>/update/', methods=['GET', 'POST'])
@@ -546,7 +551,7 @@ def ex_update(username):
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
-    db_to_use = 'mpapagel_db' 
+    db_to_use = 'lmiranda_db' 
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 
