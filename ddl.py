@@ -5,26 +5,8 @@
 
 import cs304dbi as dbi
 
-def select_resume(conn,username):
-    '''Returns resume information when given the associated username'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''select filename from user_resumes where username = %s''', [username])
-    row = curs.fetchone()
-    return row
 
-def num_resumes(conn,username):
-    '''Returns the filename of a resume when given the associated username'''
-    curs = dbi.dict_cursor(conn)
-    rows = curs.execute('''select filename from user_resumes where username = %s''', [username])
-    return rows
-
-def insert_resume(conn,username,filename):
-    '''Inserts userrname and filename into the user_resumes table'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''INSERT INTO user_resumes (username,filename) VALUES (%s, %s) 
-    on duplicate key update filename = %s;''', [username,filename,filename])
-    conn.commit()
-
+# COMPANY Helper functions (insert,delete,update)
 def insert_comp(conn, comp_name,iid,locations): 
     '''Inserts companay name, associated industry id, and locations to the company table'''
     curs = dbi.dict_cursor(conn)
@@ -39,6 +21,15 @@ def delete_comp(conn,comp_id):
     curs.execute('''delete from company where comp_id=%s''', [comp_id]) 
     conn.commit()
 
+def update_comp(conn,comp_id,comp_name,locations): 
+    '''Updates company id, company name, and locations of a company in the company table'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''update company set comp_name = %s,locations = %s where comp_id=%s''', 
+                        [comp_name,locations,comp_id])
+    conn.commit()    
+
+
+#AFFILIATE helper functions (insert,delete,update)
 def delete_affiliate(conn,username):
     '''Deletes all affiliate information of a user from the welles_affiliates table 
     when given the associated username'''
@@ -54,13 +45,16 @@ def insert_affiliate(conn,username,year,major,gpa,org1,org2,org3):
     VALUES (%s, %s, %s, %s,%s,%s,%s);''',[username,year,major,gpa,org1,org2,org3])
     conn.commit()
 
-def user_update(conn,username,password): 
-    '''Updates user password when given the associated username and new password'''
+def update_affiliate(conn,username,major,gpa,org1,org2,org3,year):
+    '''Updates the username, major, gpa, orgs, and year of an affiliate in the welles_affiliates
+    table''' 
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update user set passwd= %s where username=%s''',
-                        [password, username])
-    conn.commit()
+    curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s, 
+    year=%s where username=%s''', [major,gpa,org1,org2,org3,year,username])
+    conn.commit()     
 
+
+# Company representitive helper functions
 def delete_rep(conn,username): 
     '''Deletes all company rep information of a company rep from the company rep table when
     given the associated username'''
@@ -83,26 +77,20 @@ def update_rep(conn, username, name, comp_id):
                         [name, comp_id, username])
     conn.commit()
 
+#USER HELPER FUNCTIONS for (INSERT ,update and  DELETE)
+
+def user_update(conn,username,password): 
+    '''Updates user password when given the associated username and new password'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''update user set passwd= %s where username=%s''',
+                        [password, username])
+    conn.commit()
+
+
 def delete_user(conn,username): # works for both affiliate and rep
     '''Deletes user information from the user table when given the associated username''' 
     curs = dbi.dict_cursor(conn)
     curs.execute('''delete from user where username=%s''', [username]) 
-    conn.commit()
-
-def update_comp(conn,comp_id,comp_name,locations): 
-    '''Updates company id, company name, and locations of a company in the company table'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''update company set comp_name = %s,locations = %s where comp_id=%s''', 
-                        [comp_name,locations,comp_id])
-    conn.commit() 
-
-def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username): 
-    '''Inserts the job title, associated qualities, status, application link, company id, industry id
-    and username of a job into the jobs table'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username)
-                    VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s);''',[title,qual1,qual2,qual3,job_status,
-                    app_link,comp_id,iid,username]) 
     conn.commit()
 
 def insert_user(conn,username,name,password,email): 
@@ -110,6 +98,16 @@ def insert_user(conn,username,name,password,email):
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO user(username,name,passwd,email)
                     VALUES (%s, %s, %s, %s);''',[username,name,password,email]) 
+    conn.commit()
+
+#JOB helper functions (insert,update,delete)
+def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username): 
+    '''Inserts the job title, associated qualities, status, application link, company id, industry id
+    and username of a job into the jobs table'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''INSERT INTO jobs(title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username)
+                    VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s);''',[title,qual1,qual2,qual3,job_status,
+                    app_link,comp_id,iid,username]) 
     conn.commit()
 
 def update_job(conn,title,qual1,qual2,qual3,job_status,app_link,jid):
@@ -125,13 +123,7 @@ def delete_job(conn,jid):
     curs.execute('''delete from jobs where jid=%s''', [jid]) 
     conn.commit()
 
-def update_affiliate(conn,username,major,gpa,org1,org2,org3,year):
-    '''Updates the username, major, gpa, orgs, and year of an affiliate in the welles_affiliates
-    table''' 
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s, 
-    year=%s where username=%s''', [major,gpa,org1,org2,org3,year,username])
-    conn.commit() 
+# Experiences  helper functions (insert,update,delete)
 
 def insert_experience(conn,username,jid,comp_id,iid,compensation):
     '''Inserts a username, job id, company id, industry id, and compensation of a job into the 
@@ -147,6 +139,9 @@ def delete_experience(conn,username,jid):
     curs = dbi.dict_cursor(conn)    
     curs.execute('''delete from experience where username=%s and jid=%s''', [username,jid]) 
     conn.commit()
+
+
+#Helper functions for login information
   
 def user_exists(conn, username):
     '''Returns the username of a user when given their username (used to check if a 
@@ -165,7 +160,26 @@ def is_user(username,myusername):
     '''checks if username variable equals myusername variable'''
     return username==myusername
     
-    
 
+# RESUMES
 
+def select_resume(conn,username):
+    '''Returns resume information when given the associated username'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''select filename from user_resumes where username = %s''', [username])
+    row = curs.fetchone()
+    return row
+
+def num_resumes(conn,username):
+    '''Returns the filename of a resume when given the associated username'''
+    curs = dbi.dict_cursor(conn)
+    rows = curs.execute('''select filename from user_resumes where username = %s''', [username])
+    return rows
+
+def insert_resume(conn,username,filename):
+    '''Inserts userrname and filename into the user_resumes table'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''INSERT INTO user_resumes (username,filename) VALUES (%s, %s) 
+    on duplicate key update filename = %s;''', [username,filename,filename])
+    conn.commit()
 
