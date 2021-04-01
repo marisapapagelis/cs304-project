@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 import cs304dbi as dbi
+import bcrypt
 import comp 
 import jo 
 import aff 
@@ -51,10 +52,14 @@ def login():
         if request.form['submit'] == 'login':
             myusername = request.form['username']
             password=request.form['password']
-            user_password = ddl.get_password(conn, myusername) ['passwd']
-            if password == user_password: # check if password is correct
-                is_rep = repre.is_rep(conn, myusername)
+            is_rep = repre.is_rep(conn, myusername)
+            row = ddl.select_hashed(conn, myusername)
+            hashed = row['hashed']
+            hashed2 = bcrypt.hashpw(password.encode('utf-8'), hashed.encode('utf-8'))
+            hashed2_str = hashed2.decode('utf-8')
+            if hashed2_str == hashed: #check if password is correct
                 session['username']=myusername 
+                print(session)
                 if is_rep: 
                     # check if a rep to redirect to rep profile page
                     return redirect(url_for('rep',username=myusername))
@@ -85,9 +90,13 @@ def login():
                     flash('Passwords do not match. Please try again.')
                     return redirect(url_for('login'))
                 # if everything works, create an account for the user
-                else: 
-                    ddl.insert_user(conn,myusername,name,password,email) # insert user (affiliate and rep)
-                    # if an affiliate, insert to affiliate table
+                else:
+                    session['username']=myusername 
+                    print(session) 
+                    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                    hashed_str = hashed.decode('utf-8')
+                    #ddl.insert_user(conn,myusername,name,password,email) # insert user (affiliate and rep)
+                    ddl.insert_hashed(conn, myusername, name, hashed_str, email)
                     if kind == 'affiliate': 
                         ddl.insert_affiliate(conn,myusername,None,None,None,None,None,None)
                         flash('Taking you to your profile page. Please add additional information if necessary')
@@ -315,10 +324,12 @@ def all_affiliates():
 def affiliate_update(username):  
     conn = dbi.connect()
     # get session info
+    print(session)
     myusername = session['username'] 
     is_rep = repre.is_rep(conn, myusername)
     affili= aff.get_affiliate(conn,username)
-    user_password = ddl.get_password(conn, username) ['passwd']
+    #user_password = ddl.get_password(conn, username) ['passwd']
+    user_password = 'fix this'
     if request.method == 'GET':
         return render_template('update-affiliate.html', username = affili['username'], name = affili['name'],
          major =affili['major'], gpa = affili['gpa'], org1=affili['org1'],year=affili['year'],org2=affili['org2'], 
@@ -333,7 +344,7 @@ def affiliate_update(username):
         password=request.form['password']
         if request.form['submit'] == 'update': #if user wants to update 
             ddl.update_affiliate(conn,username,major,gpa,org1,org2,org3,year)
-            ddl.user_update(conn,username,password)
+            # ddl.user_update(conn,username,password)
             flash(" Affiliate Profile was updated succesfully!") 
             return redirect(url_for('affiliate',username=username,myusername=myusername, is_rep=is_rep))
         if request.form['submit'] == 'upload': # if user wants to upload resume
