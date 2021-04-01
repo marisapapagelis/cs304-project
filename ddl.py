@@ -5,8 +5,8 @@
 
 import cs304dbi as dbi
 
+# insert, delete, update COMPANIES
 
-# COMPANY Helper functions (insert,delete,update)
 def insert_comp(conn, comp_name,iid,locations): 
     '''Inserts companay name, associated industry id, and locations to the company table'''
     curs = dbi.dict_cursor(conn)
@@ -26,10 +26,10 @@ def update_comp(conn,comp_id,comp_name,locations):
     curs = dbi.dict_cursor(conn)
     curs.execute('''update company set comp_name = %s,locations = %s where comp_id=%s''', 
                         [comp_name,locations,comp_id])
-    conn.commit()    
+    conn.commit()
 
+# insert, update, delete AFFILIATES
 
-#AFFILIATE helper functions (insert,delete,update)
 def delete_affiliate(conn,username):
     '''Deletes all affiliate information of a user from the welles_affiliates table 
     when given the associated username'''
@@ -51,16 +51,31 @@ def update_affiliate(conn,username,major,gpa,org1,org2,org3,year):
     curs = dbi.dict_cursor(conn)
     curs.execute('''update welles_affiliates set major = %s,gpa = %s,org1 = %s,org2=%s, org3=%s, 
     year=%s where username=%s''', [major,gpa,org1,org2,org3,year,username])
-    conn.commit()     
+    conn.commit() 
 
+# insert, update, delete USERS
 
-# Company representitive helper functions
-def delete_rep(conn,username): 
-    '''Deletes all company rep information of a company rep from the company rep table when
-    given the associated username'''
+def user_update(conn,username,password): 
+    '''Updates user password when given the associated username and new password'''
     curs = dbi.dict_cursor(conn)
-    curs.execute('''delete from company_rep where username=%s''', [username]) 
+    curs.execute('''update user set passwd= %s where username=%s''',
+                        [password, username])
     conn.commit()
+
+def delete_user(conn,username): # works for both affiliate and rep
+    '''Deletes user information from the user table when given the associated username''' 
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''delete from user where username=%s''', [username]) 
+    conn.commit() 
+
+def insert_hashed(conn, myusername, name, hashed_str, email):
+    '''Inserts username, name, hashed password, and email of a user into the user table'''
+    curs = dbi.cursor(conn)
+    curs.execute('''INSERT INTO user(username, name, hashed, email)
+                            VALUES(%s,%s,%s,%s)''',[myusername, name, hashed_str, email])
+    conn.commit()
+
+# insert, update, delete COMPANY REPRESENTATIVES
 
 def insert_rep(conn,username,name,comp_id):
     '''Inserts username, name, and company id of a company representative into the 
@@ -77,30 +92,15 @@ def update_rep(conn, username, name, comp_id):
                         [name, comp_id, username])
     conn.commit()
 
-#USER HELPER FUNCTIONS for (INSERT ,update and  DELETE)
-
-def user_update(conn,username,password): 
-    '''Updates user password when given the associated username and new password'''
+def delete_rep(conn,username): 
+    '''Deletes all company rep information of a company rep from the company rep table when
+    given the associated username'''
     curs = dbi.dict_cursor(conn)
-    curs.execute('''update user set passwd= %s where username=%s''',
-                        [password, username])
+    curs.execute('''delete from company_rep where username=%s''', [username]) 
     conn.commit()
 
+# insert, update, delete JOBS
 
-def delete_user(conn,username): # works for both affiliate and rep
-    '''Deletes user information from the user table when given the associated username''' 
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''delete from user where username=%s''', [username]) 
-    conn.commit()
-
-def insert_user(conn,username,name,password,email): 
-    '''Inserts username, name, password, and email of a user into the user table'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''INSERT INTO user(username,name,passwd,email)
-                    VALUES (%s, %s, %s, %s);''',[username,name,password,email]) 
-    conn.commit()
-
-#JOB helper functions (insert,update,delete)
 def insert_job(conn,title,qual1,qual2,qual3,job_status,app_link,comp_id,iid,username): 
     '''Inserts the job title, associated qualities, status, application link, company id, industry id
     and username of a job into the jobs table'''
@@ -123,7 +123,7 @@ def delete_job(conn,jid):
     curs.execute('''delete from jobs where jid=%s''', [jid]) 
     conn.commit()
 
-# Experiences  helper functions (insert,update,delete)
+# insert, delete EXPERIENCE (cannot update - just delete and make a new one)
 
 def insert_experience(conn,username,jid,comp_id,iid,compensation):
     '''Inserts a username, job id, company id, industry id, and compensation of a job into the 
@@ -140,8 +140,7 @@ def delete_experience(conn,username,jid):
     curs.execute('''delete from experience where username=%s and jid=%s''', [username,jid]) 
     conn.commit()
 
-
-#Helper functions for login information
+# Additional USER functions
   
 def user_exists(conn, username):
     '''Returns the username of a user when given their username (used to check if a 
@@ -150,18 +149,20 @@ def user_exists(conn, username):
     curs.execute('''select username from user where username=%s''', [username])  
     curs.fetchone()
 
-def get_password(conn,username): 
-    '''Returns the password of a user given its username'''
-    curs = dbi.dict_cursor(conn)
-    curs.execute(''' select passwd from user where username=%s''', [username])
-    return curs.fetchone()
-
 def is_user(username,myusername): 
     '''checks if username variable equals myusername variable'''
     return username==myusername
-    
 
-# RESUMES
+def select_hashed(conn, username):
+    '''selects username and hashed password from user table given a username'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''SELECT username,hashed
+                      FROM user
+                      WHERE username = %s''', [username])
+    row = curs.fetchone()
+    return row 
+
+# RESUME functions
 
 def select_resume(conn,username):
     '''Returns resume information when given the associated username'''
@@ -182,4 +183,26 @@ def insert_resume(conn,username,filename):
     curs.execute('''INSERT INTO user_resumes (username,filename) VALUES (%s, %s) 
     on duplicate key update filename = %s;''', [username,filename,filename])
     conn.commit()
+
+# Password functions
+
+def get_password(conn,username): 
+    '''Returns the password of a user given its username'''
+    curs = dbi.dict_cursor(conn)
+    curs.execute(''' select passwd from user where username=%s''', [username])
+    return curs.fetchone()
+
+
+# Insert data functions
+
+# def insert_data(conn, myusername, name, password, email):
+#     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+#     hashed_str = hashed.decode('utf-8')
+#     curs = dbi.cursor(conn)
+#     curs.execute('''INSERT INTO user(username, name, hashed, email)
+#                             VALUES(%s,%s,%s,%s)''',[myusername, name, hashed_str, email])
+#     conn.commit()
+
+
+
 
