@@ -18,7 +18,7 @@ drop table if exists user;
 create table user(
     username varchar(20) not null, 
     name varchar(30), 
-    passwd varchar(30),
+    hashed char(60),
     email varchar(50),
     primary key(username)
 )

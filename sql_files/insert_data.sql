@@ -12,31 +12,31 @@ INSERT INTO company (comp_name, iid, locations)
 VALUES ('None',1, 'None');
 
 -- insert users into user table
-INSERT INTO user(username,name,passwd,email) 
+INSERT INTO user(username,name, hashed,email) 
 VALUES ('mars', 'Marisa', 'cat1234', 'mpapagel');
 
-INSERT INTO user(username,name,passwd,email) 
+INSERT INTO user(username,name,hashed,email) 
 VALUES ('mehr','Mehar', 'dog657', 'mbhatia');
 
-INSERT INTO user(username,name,passwd,email) 
+INSERT INTO user(username,name,hashed,email) 
 VALUES ('lu1','Luiza', 'monkey657', 'lmiranda');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('ng', 'Nina', 'puppy', 'ngoodman');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('styles', 'Harry Styles', '1dforever', 'hstyles@1dforever.com');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('horan', 'Niall Horan', 'im_irish', 'nhoran@1dforever.com');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('louis', 'Louis Tomlinson', '1d_rox', 'louis@1dforever.com');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('liam', 'Liam Payne', 'no_payne_no_gain', 'liam@1dforever.com');
 
-insert into user(username, name, passwd, email) 
+insert into user(username, name, hashed, email) 
 values ('zayn', 'Zayn Malik', 'drive_u_in_zayn', 'zayn@1dforever.com');
 
 -- insert wellesley affiliates into wellesley affiliate table
