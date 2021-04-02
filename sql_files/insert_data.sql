@@ -2,9 +2,9 @@
 -- CS 304 Final Project 
 -- Insert Sample Data 
 
--- RUN APP.PY TO INSERT USERS ONCE BEFORE RUNNING THIS SQL
+-- RUN APP.PY TO INSERT USERS ONCE BEFORE RUNNING THIS SQL FILE
 
-use mpapagel_db; 
+use lmiranda_db; 
 
 --inserting dummy row for company 1 and industry 1
 INSERT INTO industry (ind_name)

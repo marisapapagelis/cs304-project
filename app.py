@@ -68,6 +68,10 @@ def login():
         if request.form['submit'] == 'login':
             myusername = request.form['username']
             password=request.form['password']
+            print(ddl.check_user(conn, myusername))
+            if ddl.check_user(conn, myusername) == False: 
+                flash('Username does not exist. Please sign up.')
+                return redirect(url_for('login'))
             is_rep = repre.is_rep(conn, myusername)
             row = ddl.select_hashed(conn, myusername)
             hashed = row['hashed']
@@ -76,10 +80,10 @@ def login():
             if hashed2_str == hashed: #check if password is correct
                 session['username'] = myusername
                 if is_rep: 
-                    # check if a rep to redirect to rep profile page
+                # check if a rep to redirect to rep profile page
                     return redirect(url_for('rep',username=myusername))
                 else:
-                    # if not a rep, redirect to user profile page
+                # if not a rep, redirect to user profile page
                     return redirect(url_for('affiliate',username=myusername))
             else:
                 # if no match, username or password is incorrect
@@ -583,7 +587,7 @@ def ex_update(username):
 @app.before_first_request
 def init_db():
     dbi.cache_cnf()
-    db_to_use = 'mpapagel_db' 
+    db_to_use = 'lmiranda_db' 
     dbi.use(db_to_use)
     print('will connect to {}'.format(db_to_use))
 

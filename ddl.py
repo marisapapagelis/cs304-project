@@ -150,6 +150,12 @@ def user_exists(conn, username):
     curs.execute('''select username from user where username=%s''', [username])  
     curs.fetchone()
 
+def check_user(conn, myusername):
+    '''Returns a boolean whether the user exists in the database given their username'''
+    curs = dbi.dict_cursor(conn)
+    user = curs.execute("select username from user where username =%s", [myusername])
+    return (user == 1) # true if user exists, false otherwise
+
 def is_user(username,myusername): 
     '''checks if username variable equals myusername variable'''
     return username==myusername
@@ -195,5 +201,7 @@ def insert_data(conn, myusername, name, password, email):
     curs.execute('''INSERT INTO user(username, name, hashed, email)
                              VALUES(%s,%s,%s,%s)''',[myusername, name, hashed_str, email])
     conn.commit()
+
+
     
 
