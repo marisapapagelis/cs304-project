@@ -471,10 +471,9 @@ def comp_update(username, comp_id):
             ddl.update_comp(conn,comp_id,comp_name,locations) 
             flash("Company Profile (" + comp_name + ") was updated succesfully!")
             return redirect(url_for('company', comp_id=comp_id, myusername=myusername, is_rep=is_rep))            
-        else: #if deleting job
-            ddl.delete_comp(conn, comp_id) #deletes movie and checks if deleted
+        else: #if deleting company
+            ddl.delete_comp(conn, comp_id) 
             flash("Company Profile (" + title + ") was deleted successfully.")
-            flash('Job Posting for ' + title + ' was deleted successfully')
             return redirect(url_for('company', comp_id=comp_id, myusername=myusername, is_rep=is_rep))
 
 # routes to a page for a rep to insert a job
