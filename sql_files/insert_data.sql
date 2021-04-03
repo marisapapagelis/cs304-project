@@ -4,14 +4,14 @@
 
 -- RUN APP.PY TO INSERT USERS ONCE BEFORE RUNNING THIS SQL FILE
 
-use lmiranda_db; 
+use mpapagel_db; 
 
 --inserting dummy row for company 1 and industry 1
 INSERT INTO industry (ind_name)
 VALUES ('None');
 
 INSERT INTO company (comp_name, iid, locations)
-VALUES ('None',1, 'None')
+VALUES ('None',1, 'None');
 
 -- insert wellesley affiliates into wellesley affiliate table
 INSERT INTO welles_affiliates (username, year, major, gpa, org1, org2, org3)
